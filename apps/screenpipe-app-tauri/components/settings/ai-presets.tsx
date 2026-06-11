@@ -14,6 +14,7 @@ export const searchIndex: SettingsField[] = [
 ];
 import { open as openUrl } from "@tauri-apps/plugin-shell";
 import { fetch as tauriFetch } from "@tauri-apps/plugin-http";
+import { ComingSoonBadge } from "@/components/ui/coming-soon";
 import { homeDir, join } from "@tauri-apps/api/path";
 import { Button } from "../ui/button";
 import {
@@ -1507,27 +1508,21 @@ const AISection = ({
                       <CommandGroup heading={models?.some((m) => m.free) ? "Included with Screenpipe" : "Available Models"}>
                         {models?.filter((m) => !m.free).map((model) => {
                           const costLabel = model.cost_tier === 'low' ? '$' : model.cost_tier === 'medium' ? '$$' : model.cost_tier === 'high' ? '$$$' : model.cost_tier === 'very_high' ? '$$$$' : '';
+                          // Pro cloud models (Opus 4.8, Fable 5) are server-bound and
+                          // deferred in this fork. Render them disabled with a
+                          // "coming soon" pill instead of an upsell/checkout.
+                          const isProCloudModel =
+                            (model.provider === "screenpipe" || model.provider === "screenpipe-cloud") &&
+                            (model.id === "claude-opus-4-8" || model.id === "claude-fable-5");
                           return (
                           <CommandItem
                             key={model.id}
                             value={model.id}
-                            onSelect={async () => {
+                            disabled={isProCloudModel}
+                            className={isProCloudModel ? "opacity-60 cursor-not-allowed" : undefined}
+                            onSelect={() => {
                               if (model.id === "claude-opus-4-8" && !settings.user?.cloud_subscribed) {
-                                if (!settings.user?.token) {
-                                  await commands.openLoginWindow();
-                                } else {
-                                  try {
-                                    const res = await fetch("https://screenpi.pe/api/cloud-sync/checkout", {
-                                      method: "POST",
-                                      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${settings.user.token}` },
-                                      body: JSON.stringify({ tier: "pro", billingPeriod: "monthly", userId: settings.user.id, email: settings.user.email }),
-                                    });
-                                    const data = await res.json();
-                                    if (data.url) await openUrl(data.url);
-                                  } catch (e) {
-                                    console.error("checkout failed:", e);
-                                  }
-                                }
+                                // Pro cloud model: deferred in this fork — selecting is a no-op.
                                 return;
                               }
                               updateSettingsPreset({ model: model.id });
@@ -1536,7 +1531,10 @@ const AISection = ({
                           >
                             <div className="flex flex-col gap-0.5 w-full">
                               <div className="flex items-center justify-between">
-                                <span className="font-medium">{model.name}</span>
+                                <span className="font-medium flex items-center gap-1.5">
+                                  {model.name}
+                                  {isProCloudModel && <ComingSoonBadge />}
+                                </span>
                                 <div className="flex items-center gap-1 ml-2">
                                   {costLabel && <Badge variant="outline" className="text-[10px]">{costLabel}</Badge>}
                                   {model.speed === "fast" && <Badge variant="outline" className="text-[10px]">fast</Badge>}
@@ -2123,15 +2121,6 @@ useEffect(() => {
         });
         return;
       }
-      if (presetToRemove?.provider === "screenpipe-cloud" && settings.user?.cloud_subscribed) {
-        toast({
-          title: "Cannot delete cloud preset",
-          description: "This preset is included with your Business subscription",
-          variant: "destructive",
-        });
-        return;
-      }
-
       const checkIfDefault = settings.aiPresets.find(
         (preset) => preset.id === id
       )?.defaultPreset;

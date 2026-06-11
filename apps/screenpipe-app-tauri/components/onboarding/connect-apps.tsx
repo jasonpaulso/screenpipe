@@ -10,7 +10,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { commands } from "@/lib/utils/tauri";
 import { useSettings } from "@/lib/hooks/use-settings";
 import { localFetch } from "@/lib/api";
-import { openUrl } from "@tauri-apps/plugin-opener";
 import { readTextFile, writeFile, mkdir } from "@tauri-apps/plugin-fs";
 import { homeDir, join, dirname } from "@tauri-apps/api/path";
 import { platform } from "@tauri-apps/plugin-os";
@@ -377,7 +376,6 @@ function IntegrationCard({
   displayName,
   errorMessage,
   onConnect,
-  onUpgradeToPro,
 }: {
   integration: Integration;
   isPro: boolean;
@@ -385,7 +383,6 @@ function IntegrationCard({
   displayName: string | null;
   errorMessage: string | null;
   onConnect: () => void;
-  onUpgradeToPro: () => void;
 }) {
   const isLocked = integration.isPro && !isPro;
   const isConnected = state === "connected";
@@ -408,12 +405,9 @@ function IntegrationCard({
           >
             <Lock className="w-5 h-5 text-foreground/70" strokeWidth={1.5} />
           </motion.div>
-          <button
-            onClick={onUpgradeToPro}
-            className="font-mono text-[9px] text-foreground/55 hover:text-foreground transition-colors underline underline-offset-2"
-          >
-            upgrade to pro →
-          </button>
+          <span className="font-mono text-[9px] text-foreground/55 leading-none">
+            coming soon
+          </span>
         </div>
       )}
 
@@ -597,50 +591,6 @@ export default function ConnectApps({ handleNextSlide }: ConnectAppsProps) {
     setCardStates((prev) => ({ ...prev, [key]: state }));
   }, []);
 
-  const handleUpgradeToPro = useCallback(async () => {
-    if (!settings.user?.id || !settings.user?.token) {
-      await commands.openLoginWindow();
-      return;
-    }
-
-    posthog.capture("onboarding_upgrade_clicked", {
-      source: "connect_apps",
-      user_type: isPro ? "pro" : "free",
-    });
-
-    try {
-      const response = await fetch("https://screenpi.pe/api/cloud-sync/checkout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${settings.user.token}`,
-        },
-        body: JSON.stringify({
-          tier: "pro",
-          billingPeriod: "yearly",
-          userId: settings.user.id,
-          email: settings.user.email,
-        }),
-      });
-
-      const data = await response.json();
-      if (data.url) {
-        await openUrl(data.url);
-      } else {
-        await openUrl("https://screenpipe.com/billing");
-        return;
-      }
-    } catch (error) {
-      console.error("failed to start onboarding checkout:", error);
-      await openUrl("https://screenpipe.com/billing");
-      return;
-    }
-
-    // The background interval (above) already polls loadUser every 8s —
-    // it will detect the activated subscription automatically once Stripe
-    // webhook fires and /api/user returns cloud_subscribed: true.
-  }, [isPro, settings.user, loadUser]);
-
   const handleConnect = useCallback(
     async (integration: Integration) => {
       // Pro gate — locked cards show upsell inline, connect button is never shown for them
@@ -803,28 +753,10 @@ export default function ConnectApps({ handleNextSlide }: ConnectAppsProps) {
               displayName={displayNames[integration.cardKey] ?? null}
               errorMessage={errorMessages[integration.cardKey] ?? null}
               onConnect={() => handleConnect(integration)}
-              onUpgradeToPro={handleUpgradeToPro}
             />
           </motion.div>
         ))}
       </div>
-
-      {!isPro && (
-        <motion.p
-          className="font-mono text-[9px] text-muted-foreground/30 mt-3 text-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-        >
-          notion unlocks with{" "}
-          <button
-            onClick={handleUpgradeToPro}
-            className="underline underline-offset-2 hover:text-muted-foreground/50 transition-colors"
-          >
-            screenpipe pro
-          </button>
-        </motion.p>
-      )}
 
       {/* Actions */}
       <div className="mt-5 flex flex-col items-center gap-2 w-full">

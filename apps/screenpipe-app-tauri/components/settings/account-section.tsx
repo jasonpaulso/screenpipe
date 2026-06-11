@@ -24,16 +24,14 @@ import {
   UserCog,
   ExternalLinkIcon,
   Sparkles,
-  Zap,
-  Shield,
   RefreshCw,
-  Lock,
 } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 import { open as openUrl } from "@tauri-apps/plugin-shell";
 import { commands } from "@/lib/utils/tauri";
 import { planDisplayName } from "@/lib/app-entitlement";
 import { Card } from "../ui/card";
+import { ComingSoonBadge } from "@/components/ui/coming-soon";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { onOpenUrl } from "@tauri-apps/plugin-deep-link";
@@ -65,7 +63,6 @@ function syncErrorDescription(e: unknown): string {
 export function AccountSection() {
   const { settings, updateSettings, loadUser } = useSettings();
   const { isServerDown } = useHealthCheck();
-  const [annual, setAnnual] = useState(true);
   const [pipeSyncing, setPipeSyncing] = useState(false);
   const [memoriesSyncing, setMemoriesSyncing] = useState(false);
   const [connectionsSyncing, setConnectionsSyncing] = useState(false);
@@ -121,87 +118,13 @@ export function AccountSection() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [settings.user?.token, updateSettings]);
 
-  const handleCheckout = async () => {
-    if (!settings.user?.id) {
-      await commands.openLoginWindow();
-      return;
-    }
-    if (!settings.user?.cloud_subscribed) {
-      posthog.capture("cloud_plan_selected", { plan: "pro", interval: annual ? "year" : "month" });
-      try {
-        // New subscription checkout ($50/mo Pro). Pass the Clerk token so the
-        // session pins customer_email + metadata.user_id to this account — the
-        // webhook then links the sub even if a different email is used at Stripe.
-        const response = await fetch("https://screenpi.pe/api/subscription/checkout", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            plan: "pro",
-            interval: annual ? "year" : "month",
-            token: settings.user?.token,
-            returnUrl: "https://screenpipe.com/account",
-            origin: "app-account-section",
-          }),
-        });
-        const data = await response.json();
-        if (data.url) {
-          openUrl(data.url);
+  // Business/cloud checkout is deferred in this fork — the cloud features it
+  // unlocked are server-bound and not re-implemented locally yet. This is kept
+  // only because the "tray-upgrade" event listener below still references it;
+  // it is intentionally a no-op that does NOT open Stripe/billing.
+  const handleCheckout = async () => {};
 
-          // Poll for subscription status with exponential backoff after checkout
-          let pollCount = 0;
-          const maxPolls = 60;
-          let delay = 2000;
-          let pollTimer: ReturnType<typeof setTimeout> | null = null;
-          const poll = async () => {
-            pollCount++;
-            try {
-              const subResponse = await fetch(
-                `https://screenpi.pe/api/cloud-sync/subscription?userId=${settings.user?.id}&email=${encodeURIComponent(settings.user?.email || "")}`,
-                {
-                  headers: { Authorization: `Bearer ${settings.user?.token}` },
-                }
-              );
-              if (subResponse.ok) {
-                const subData = await subResponse.json();
-                // Treat trialing subscriptions as active (API returns hasSubscription: false for trials)
-                const subStatus = subData.subscription?.status;
-                const isActive = subData.hasSubscription || subStatus === "trialing" || subStatus === "active";
-                if (isActive) {
-                  updateSettings({
-                    user: { ...settings.user!, cloud_subscribed: true },
-                  });
-                  toast({
-                    title: "subscription activated",
-                    description: "welcome to screenpipe business!",
-                  });
-                  return; // stop polling
-                }
-              }
-            } catch (e) {
-              console.error("polling error:", e);
-            }
-            if (pollCount < maxPolls) {
-              delay = Math.min(delay * 1.5, 30000);
-              pollTimer = setTimeout(poll, delay);
-            }
-          };
-          pollTimer = setTimeout(poll, delay);
-        } else {
-          throw new Error(data.error || "failed to create checkout");
-        }
-      } catch (error) {
-        toast({
-          title: "failed to start checkout",
-          description: String(error),
-          variant: "destructive",
-        });
-      }
-    }
-  };
-
-  // Auto-trigger checkout when tray "Upgrade to Business" is clicked
+  // Previously auto-triggered checkout on tray "Upgrade to Business"; now a no-op.
   const handleCheckoutRef = useRef(handleCheckout);
   handleCheckoutRef.current = handleCheckout;
   useEffect(() => {
@@ -509,68 +432,6 @@ export function AccountSection() {
             </Button>
           </Card>
 
-          {/* Pro upsell — collapsed, secondary */}
-          <details className="group">
-            <summary className="flex items-center gap-2 cursor-pointer text-sm text-muted-foreground hover:text-foreground transition-colors">
-              <Sparkles className="h-4 w-4" />
-              Optional: upgrade to Screenpipe Business
-              <span className="text-xs ml-auto group-open:hidden">show details</span>
-            </summary>
-            <Card className="mt-3 p-5">
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <Sparkles className="h-5 w-5" />
-                    <h3 className="text-lg font-semibold">Screenpipe Business</h3>
-                  </div>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-2xl font-bold">{annual ? "$42" : "$50"}</span>
-                    <span className="text-muted-foreground text-sm">/month</span>
-                    <button
-                      type="button"
-                      onClick={() => setAnnual((a) => !a)}
-                      className="ml-1 text-[10px] font-mono text-muted-foreground underline underline-offset-2 hover:text-foreground"
-                    >
-                      {annual ? "billed annually · save $100 · pay monthly" : "switch to annual · save $100"}
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 text-sm mb-4">
-                <div className="flex items-center gap-2 text-foreground">
-                  <Shield className="h-3.5 w-3.5 shrink-0" />
-                  encrypted cloud sync — 50GB, 3 devices
-                </div>
-                <div className="flex items-center gap-2 text-foreground">
-                  <Zap className="h-3.5 w-3.5 shrink-0" />
-                  cloud transcription — higher quality, saves 2-3GB RAM
-                </div>
-                <div className="flex items-center gap-2 text-foreground">
-                  <Sparkles className="h-3.5 w-3.5 shrink-0" />
-                  100x more AI queries
-                </div>
-                <div className="flex items-center gap-2 text-foreground">
-                  <Sparkles className="h-3.5 w-3.5 shrink-0" />
-                  priority support
-                </div>
-                <div className="flex items-center gap-2 text-foreground">
-                  <RefreshCw className="h-3.5 w-3.5 shrink-0" />
-                  encrypted pipe sync across devices
-                </div>
-              </div>
-
-              <Button
-                className="w-full bg-foreground text-background hover:bg-background hover:text-foreground transition-colors duration-150"
-                size="lg"
-                onClick={handleCheckout}
-              >
-                login & upgrade to business
-                <ExternalLinkIcon className="w-4 h-4 ml-2" />
-              </Button>
-            </Card>
-          </details>
-
           {/* Locked pipe sync toggle — not logged in */}
           <Card className="p-4 opacity-75">
             <div className="flex items-center justify-between">
@@ -582,13 +443,7 @@ export function AccountSection() {
               </div>
               <div className="flex items-center gap-2">
                 <Switch disabled checked={false} />
-                <button
-                  onClick={() => commands.openLoginWindow()}
-                  className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium flex items-center gap-1 hover:bg-primary/20 transition-colors cursor-pointer"
-                >
-                  <Lock className="h-3 w-3" />
-                  Business
-                </button>
+                <ComingSoonBadge />
               </div>
             </div>
           </Card>
@@ -609,77 +464,11 @@ export function AccountSection() {
                 </span>
               </div>
               <p className="text-sm text-muted-foreground mt-2">
-                local capture, search &amp; timeline. add cloud sync, cloud AI &amp; 50+
-                integrations with Business below.
+                local capture, search &amp; timeline. cloud sync, cloud AI &amp; 50+
+                integrations are coming soon.
               </p>
             </Card>
           )}
-
-          {/* Business plan card with animated border */}
-          <div className="group relative rounded-lg p-[1px] overflow-hidden">
-            {/* Animated spinning border — oversized rotated square with conic gradient */}
-            <div
-              className="absolute inset-[-100%] animate-[spin-border_4s_linear_infinite]"
-              style={{
-                background: "conic-gradient(from 0deg, transparent 0%, transparent 35%, hsl(var(--foreground)) 50%, transparent 65%, transparent 100%)",
-              }}
-            />
-            {/* Inner card */}
-            <Card className="relative p-5 bg-background border-0">
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <Sparkles className="h-5 w-5" />
-                    <h3 className="text-lg font-semibold">Screenpipe Business</h3>
-                  </div>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-2xl font-bold">{annual ? "$42" : "$50"}</span>
-                    <span className="text-muted-foreground text-sm">/month</span>
-                    <button
-                      type="button"
-                      onClick={() => setAnnual((a) => !a)}
-                      className="ml-1 text-[10px] font-mono text-muted-foreground underline underline-offset-2 hover:text-foreground"
-                    >
-                      {annual ? "billed annually · save $100 · pay monthly" : "switch to annual · save $100"}
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 text-sm mb-4">
-                <div className="flex items-center gap-2 text-foreground">
-                  <Shield className="h-3.5 w-3.5 shrink-0" />
-                  encrypted cloud sync — 50GB, 3 devices
-                </div>
-                <div className="flex items-center gap-2 text-foreground">
-                  <Zap className="h-3.5 w-3.5 shrink-0" />
-                  cloud transcription — higher quality, saves 2-3GB RAM
-                </div>
-                <div className="flex items-center gap-2 text-foreground">
-                  <Sparkles className="h-3.5 w-3.5 shrink-0" />
-                  100x more AI queries
-                </div>
-                <div className="flex items-center gap-2 text-foreground">
-                  <Sparkles className="h-3.5 w-3.5 shrink-0" />
-                  priority support
-                </div>
-                <div className="flex items-center gap-2 text-foreground">
-                  <RefreshCw className="h-3.5 w-3.5 shrink-0" />
-                  encrypted pipe sync across devices
-                </div>
-              </div>
-
-              <Button
-                className="w-full bg-foreground text-background hover:bg-background hover:text-foreground transition-colors duration-150"
-                size="lg"
-                onClick={handleCheckout}
-              >
-                upgrade to business
-                <ExternalLinkIcon className="w-4 h-4 ml-2" />
-              </Button>
-
-            </Card>
-          </div>
 
           {/* Locked pipe sync toggle — gated to Business (cloud) */}
           <Card className="p-4 opacity-75">
@@ -692,13 +481,7 @@ export function AccountSection() {
               </div>
               <div className="flex items-center gap-2">
                 <Switch disabled checked={false} />
-                <button
-                  onClick={handleCheckout}
-                  className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium flex items-center gap-1 hover:bg-primary/20 transition-colors cursor-pointer"
-                >
-                  <Lock className="h-3 w-3" />
-                  Business
-                </button>
+                <ComingSoonBadge />
               </div>
             </div>
           </Card>
@@ -713,13 +496,6 @@ export function AccountSection() {
             </div>
           )}
 
-          {/* CSS animation for spinning border */}
-          <style>{`
-            @keyframes spin-border {
-              from { transform: rotate(0deg); }
-              to { transform: rotate(360deg); }
-            }
-          `}</style>
         </>
       )}
 

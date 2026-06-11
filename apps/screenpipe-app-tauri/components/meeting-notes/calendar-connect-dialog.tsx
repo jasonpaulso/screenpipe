@@ -9,7 +9,6 @@ import {
   Check,
   Link2,
   Loader2,
-  Lock,
   Monitor,
   Plus,
 } from "lucide-react";
@@ -24,7 +23,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { commands, type IcsCalendarEntry } from "@/lib/utils/tauri";
 import { getStore, saveAndEncrypt, useSettings } from "@/lib/hooks/use-settings";
-import { openUrl } from "@tauri-apps/plugin-opener";
+import { ComingSoonButton } from "@/components/ui/coming-soon";
 import { cn } from "@/lib/utils";
 
 export type CalendarProviderId = "native" | "google" | "ics";
@@ -324,7 +323,7 @@ function GoogleCalendarConnect({
         const msg = String(result.error ?? "");
         setStatusText(
           msg.toLowerCase().includes("pro subscription")
-            ? "OAuth integrations require Business. Upgrade to connect."
+            ? "Google Calendar integration is coming soon — a local alternative is on the way."
             : msg || "Google Calendar was not connected.",
         );
       } else {
@@ -345,15 +344,7 @@ function GoogleCalendarConnect({
       </p>
       {!isPro ? (
         <div className="flex flex-col gap-1.5">
-          <Button disabled className="w-full gap-2 rounded-none opacity-60">
-            <Lock className="h-3.5 w-3.5" />pro required
-          </Button>
-          <button
-            onClick={() => openUrl("https://screenpi.pe/onboarding")}
-            className="text-xs text-muted-foreground hover:text-foreground underline self-start"
-          >
-            upgrade to pro to connect
-          </button>
+          <ComingSoonButton label="coming soon" className="w-full rounded-none" />
         </div>
       ) : (
         <Button onClick={connect} disabled={busy} className="w-full rounded-none">

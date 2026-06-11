@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { ComingSoonBadge } from "@/components/ui/coming-soon";
 import { useToast } from "@/components/ui/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Lock, CloudUpload, AlertTriangle, Loader2, Play } from "lucide-react";
@@ -184,42 +185,7 @@ export function ArchiveSettings() {
     }
   };
 
-  const handleCheckout = async () => {
-    if (!settings.user?.id) {
-      await commands.openLoginWindow();
-      return;
-    }
-    try {
-      const response = await fetch(
-        "https://screenpi.pe/api/cloud-sync/checkout",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${settings.user?.token}`,
-          },
-          body: JSON.stringify({
-            tier: "pro",
-            billingPeriod: "monthly",
-            userId: settings.user?.id,
-            email: settings.user?.email,
-          }),
-        }
-      );
-      const data = await response.json();
-      if (data.url) {
-        openUrl(data.url);
-      }
-    } catch (error) {
-      toast({
-        title: "Failed to start checkout",
-        description: String(error),
-        variant: "destructive",
-      });
-    }
-  };
-
-  // Not a pro user — show upgrade prompt
+  // Not a pro user — cloud archive is a deferred server-bound feature.
   if (!isProUser) {
     return (
       <div className="space-y-6">
@@ -233,22 +199,17 @@ export function ArchiveSettings() {
           </button>
         </p>
         <div className="flex items-center gap-2">
-            <Badge variant="secondary" className="text-[10px]">
-              pro
-            </Badge>
+          <ComingSoonBadge />
         </div>
 
         <Card>
           <CardContent className="p-5">
-            <div className="flex items-center gap-3 mb-3">
+            <div className="flex items-center gap-3">
               <Lock className="h-5 w-5 text-muted-foreground" />
               <p className="text-sm text-muted-foreground">
-                Cloud archive is available with Screenpipe Pro.
+                Cloud archive is coming soon. A local alternative is on the way.
               </p>
             </div>
-            <Button size="sm" onClick={handleCheckout}>
-              {isLoggedIn ? "Upgrade to pro" : "Log in to upgrade"}
-            </Button>
           </CardContent>
         </Card>
       </div>

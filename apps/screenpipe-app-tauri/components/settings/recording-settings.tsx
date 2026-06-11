@@ -120,7 +120,6 @@ import posthog from "posthog-js";
 import { Language } from "@/lib/language";
 import { open } from "@tauri-apps/plugin-dialog";
 import { ToastAction } from "@/components/ui/toast";
-import { open as openUrl } from "@tauri-apps/plugin-shell";
 import { listen } from "@tauri-apps/api/event";
 import { getMediaFile } from "@/lib/actions/video-actions";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -129,6 +128,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { MeetingAppsPicker } from "./meeting-apps-picker";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { ComingSoonBadge } from "@/components/ui/coming-soon";
 import { useSqlAutocomplete } from "@/lib/hooks/use-sql-autocomplete";
 import * as Sentry from "@sentry/react";
 import { defaultOptions } from "tauri-plugin-sentry-api";
@@ -239,7 +239,7 @@ const getAudioFallbackMessage = (reason: AudioEngineFallbackReason) => {
     case "notLoggedIn":
       return "You are not logged in, so audio is being transcribed locally.";
     case "notSubscribed":
-      return "Screenpipe Cloud requires an active subscription, so audio is being transcribed locally.";
+      return "Screenpipe Cloud is coming soon, so audio is being transcribed locally.";
     case "missingDeepgramKey":
       return "Deepgram has no API key configured, so audio is being transcribed locally.";
   }
@@ -2195,28 +2195,11 @@ export function RecordingSettings() {
       return;
     }
 
-    // If trying to use cloud but not subscribed
+    // If trying to use cloud but not subscribed: Screenpipe Cloud is a
+    // server-bound feature we haven't re-enabled in this fork. No checkout,
+    // no billing — just keep the previous engine. The <SelectItem> stays
+    // disabled and surfaces a "coming soon" badge instead.
     if (value === "screenpipe-cloud" && !settings.user?.cloud_subscribed) {
-      try {
-        const response = await fetch("https://screenpi.pe/api/cloud-sync/checkout", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${settings.user?.token}`,
-          },
-          body: JSON.stringify({
-            tier: "pro",
-            billingPeriod: "monthly",
-            userId: settings.user?.id,
-            email: settings.user?.email,
-          }),
-        });
-        const data = await response.json();
-        openUrl(data.url || "https://screenpipe.com/billing");
-      } catch {
-        openUrl("https://screenpipe.com/billing");
-      }
-      // Revert back to previous value in the Select component
       return;
     }
 
@@ -2552,7 +2535,11 @@ Your screen is a pipe. Everything you see, hear, and type flows through it. Scre
                     <SelectGroup>
                       <SelectLabel className="text-[10px] text-muted-foreground/70 uppercase tracking-wider">cloud</SelectLabel>
                       <SelectItem value="screenpipe-cloud" disabled={!settings.user?.cloud_subscribed}>
-                        Screenpipe Cloud {!settings.user?.cloud_subscribed && "(pro)"}{hwCapability?.recommendedEngine === "screenpipe-cloud" && " ★"}
+                        <span className="inline-flex items-center gap-1.5">
+                          Screenpipe Cloud
+                          {!settings.user?.cloud_subscribed && <ComingSoonBadge />}
+                          {hwCapability?.recommendedEngine === "screenpipe-cloud" && " ★"}
+                        </span>
                       </SelectItem>
                       <SelectItem value="deepgram">Deepgram</SelectItem>
                     </SelectGroup>
@@ -2613,16 +2600,7 @@ Your screen is a pipe. Everything you see, hear, and type flows through it. Scre
                       </Button>
                     )}
                     {audioEngineResolution.fallbackReason === "notSubscribed" && (
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        className="h-7 px-2 text-xs"
-                        data-testid="audio-engine-fallback-upgrade"
-                        onClick={() => openUrl("https://screenpipe.com/billing")}
-                      >
-                        Upgrade
-                      </Button>
+                      <ComingSoonBadge />
                     )}
                     <Button
                       type="button"
@@ -2948,16 +2926,23 @@ Your screen is a pipe. Everything you see, hear, and type flows through it. Scre
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="selected-engine">Current transcription engine</SelectItem>
-                      <SelectItem value="screenpipe-cloud">screenpipe cloud live</SelectItem>
+                      <SelectItem
+                        value="screenpipe-cloud"
+                        disabled={!settings.user?.cloud_subscribed}
+                      >
+                        <span className="inline-flex items-center gap-1.5">
+                          screenpipe cloud live
+                          {!settings.user?.cloud_subscribed && <ComingSoonBadge />}
+                        </span>
+                      </SelectItem>
                       <SelectItem value="deepgram-live">Direct Deepgram live</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 {(settings.meetingLiveTranscriptionProvider ?? "selected-engine") === "screenpipe-cloud" &&
-                  !settings.user?.token &&
-                  !settings.user?.id && (
+                  !settings.user?.cloud_subscribed && (
                   <p className="text-xs text-muted-foreground">
-                    Log in to screenpipe cloud to use the cloud live provider.
+                    Screenpipe cloud live is coming soon — a local alternative is on the way.
                   </p>
                 )}
                 {(settings.meetingLiveTranscriptionProvider ?? "selected-engine") === "selected-engine" &&

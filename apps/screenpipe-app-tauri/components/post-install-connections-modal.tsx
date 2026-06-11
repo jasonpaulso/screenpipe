@@ -14,10 +14,10 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Check, ChevronDown, ChevronRight, Loader2, Lock } from "lucide-react";
+import { Check, ChevronDown, ChevronRight, Loader2 } from "lucide-react";
 import { commands } from "@/lib/utils/tauri";
 import { useSettings } from "@/lib/hooks/use-settings";
-import { openUrl } from "@tauri-apps/plugin-opener";
+import { ComingSoonButton } from "@/components/ui/coming-soon";
 import {
   ConnectionCredentialForm,
   IntegrationIcon,
@@ -241,15 +241,7 @@ export function PostInstallConnectionsModal({
                     <div className="px-3 pb-3 border-t border-border pt-3">
                       {!isPro && !status?.configured ? (
                         <div className="flex flex-col gap-1.5">
-                          <Button disabled size="sm" className="gap-1.5 text-xs opacity-60">
-                            <Lock className="h-3 w-3" />pro required
-                          </Button>
-                          <button
-                            onClick={() => openUrl("https://screenpipe.com/onboarding")}
-                            className="text-[10px] text-muted-foreground hover:text-foreground underline"
-                          >
-                            upgrade to pro to connect
-                          </button>
+                          <ComingSoonButton label="coming soon" />
                         </div>
                       ) : (
                         <Button

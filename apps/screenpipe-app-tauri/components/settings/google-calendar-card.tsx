@@ -9,16 +9,15 @@ import { Button } from "@/components/ui/button";
 import {
   AlertTriangle,
   Loader2,
-  Lock,
   Plus,
   RefreshCw,
   Users,
   LogOut,
 } from "lucide-react";
+import { ComingSoonButton } from "@/components/ui/coming-soon";
 import { commands } from "@/lib/utils/tauri";
 import { useSettings } from "@/lib/hooks/use-settings";
 import { notifyConnectionsUpdated } from "@/lib/connections-events";
-import { openUrl } from "@tauri-apps/plugin-opener";
 import { toast } from "@/components/ui/use-toast";
 import posthog from "posthog-js";
 import { localFetch } from "@/lib/api";
@@ -169,9 +168,9 @@ export function GoogleCalendarCard({ onConnected, onDisconnected }: { onConnecte
         const msg = String(res.error ?? "");
         const isProGate = msg.toLowerCase().includes("pro subscription");
         toast({
-          title: isProGate ? "business required" : "google calendar connect failed",
+          title: isProGate ? "coming soon" : "google calendar connect failed",
           description: isProGate
-            ? "OAuth integrations need Business. Upgrade to connect Google Calendar."
+            ? "Google Calendar integration is coming soon — a local alternative is on the way."
             : msg || "Unknown error",
           variant: "destructive",
         });
@@ -255,15 +254,7 @@ export function GoogleCalendarCard({ onConnected, onDisconnected }: { onConnecte
                 )}
                 {!isPro ? (
                   <div className="flex flex-col gap-1.5">
-                    <Button disabled size="sm" className="gap-1.5 h-7 text-xs opacity-60">
-                      <Lock className="h-3 w-3" />pro required
-                    </Button>
-                    <button
-                      onClick={() => openUrl("https://screenpi.pe/onboarding")}
-                      className="text-[10px] text-muted-foreground hover:text-foreground underline self-start"
-                    >
-                      upgrade to pro to connect
-                    </button>
+                    <ComingSoonButton label="coming soon" />
                   </div>
                 ) : (
                   <Button

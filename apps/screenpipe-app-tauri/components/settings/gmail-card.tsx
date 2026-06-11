@@ -6,11 +6,11 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Loader2, Lock, LogOut, Mail, Plus } from "lucide-react";
+import { Loader2, LogOut, Mail, Plus } from "lucide-react";
 import { commands } from "@/lib/utils/tauri";
 import { useSettings } from "@/lib/hooks/use-settings";
 import { notifyConnectionsUpdated } from "@/lib/connections-events";
-import { openUrl } from "@tauri-apps/plugin-opener";
+import { ComingSoonButton } from "@/components/ui/coming-soon";
 import posthog from "posthog-js";
 import { GoogleOAuthUnverifiedAppHint } from "./google-oauth-unverified-app-hint";
 
@@ -153,15 +153,7 @@ export function GmailCard() {
             {/* Connect / Add account button */}
             {!isPro && !connected ? (
               <div className="flex flex-col gap-1.5">
-                <Button disabled size="sm" className="gap-1.5 h-7 text-xs opacity-60">
-                  <Lock className="h-3 w-3" />pro required
-                </Button>
-                <button
-                  onClick={() => openUrl("https://screenpipe.com/onboarding")}
-                  className="text-[10px] text-muted-foreground hover:text-foreground underline"
-                >
-                  upgrade to pro to connect
-                </button>
+                <ComingSoonButton label="coming soon" />
               </div>
             ) : (
               <div className="space-y-2">

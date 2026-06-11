@@ -21,6 +21,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { ComingSoon, ComingSoonBadge } from "@/components/ui/coming-soon";
 import {
   Check,
   ChevronsUpDown,
@@ -493,24 +494,17 @@ export function AIProviderConfig({
           piAvailable ? "grid-cols-3" : "grid-cols-4"
         )}>
           {piAvailable && (
-            <Button
-              type="button"
-              disabled={!settings?.user?.token}
-              variant={selectedProvider === "screenpipe-cloud" ? "default" : "outline"}
-              className="flex h-8 items-center justify-center gap-1.5 text-xs px-3"
-              onClick={() => {
-                setSelectedProvider("screenpipe-cloud");
-                setFormData({
-                  ...formData,
-                  provider: "screenpipe-cloud",
-                  url: "",
-                  model: "auto",
-                });
-              }}
-            >
-              <Icons.terminal className="h-3.5 w-3.5" />
-              <span>screenpipe cloud</span>
-            </Button>
+            <ComingSoon reason="coming soon — building a local alternative">
+              <Button
+                type="button"
+                disabled
+                variant="outline"
+                className="flex h-8 w-full items-center justify-center gap-1.5 text-xs px-3"
+              >
+                <Icons.terminal className="h-3.5 w-3.5" />
+                <span>screenpipe cloud</span>
+              </Button>
+            </ComingSoon>
           )}
 
           <Button
@@ -1366,9 +1360,6 @@ export const AIPresetsSelector = ({
 
     // Prevent deletion of screenpipe-cloud preset for Pro subscribers
     if (preset.provider === "screenpipe-cloud" && settings.user?.cloud_subscribed) {
-      toast.error("Cannot delete cloud preset", {
-        description: "This preset is included with your Business subscription",
-      });
       return;
     }
     if (preset.defaultPreset) {
@@ -1395,21 +1386,9 @@ export const AIPresetsSelector = ({
           <div className="flex items-center gap-2 p-2 text-sm bg-muted border border-border rounded-lg">
             <AlertTriangle className="h-4 w-4 text-muted-foreground shrink-0" />
             <span className="text-foreground flex-1">
-              Login required to use Screenpipe Cloud
+              Screenpipe Cloud is coming soon
             </span>
-            {showLoginCta && (
-              <Button
-                variant="outline"
-                size="sm"
-                className="shrink-0 h-7 text-xs border-border hover:bg-muted"
-                onClick={async () => {
-                  await commands.showWindow({ Home: { page: "account" } });
-                }}
-              >
-                <LogIn className="h-3 w-3 mr-1" />
-                Login
-              </Button>
-            )}
+            <ComingSoonBadge />
           </div>
         )}
         <div className="flex w-full items-center gap-2">
@@ -1692,6 +1671,7 @@ export const AIPresetsSelector = ({
                                 variant="ghost"
                                 size="icon"
                                 className="h-6 w-6 shrink-0"
+                                disabled={preset.provider === "screenpipe-cloud" && settings.user?.cloud_subscribed === true}
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   handleRemovePreset(preset);
