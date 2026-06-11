@@ -4,6 +4,7 @@
 
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
+  E2E_FORCE_BILLING_GATE_KEY,
   hasAppEntitlement,
   hasCloudEntitlement,
   needsAppEntitlementRefresh,
@@ -26,13 +27,15 @@ describe("app entitlement", () => {
   beforeEach(() => {
     vi.useFakeTimers();
     vi.setSystemTime(NOW);
-    vi.stubEnv("TAURI_ENV_DEBUG", "false");
-    vi.stubEnv("NEXT_PUBLIC_SCREENPIPE_DEV_BILLING_BYPASS", "false");
+    // Fork: the billing gate is bypassed unconditionally in source, so force it
+    // ON here (the only supported override) to exercise the real entitlement
+    // logic these tests assert on.
+    window.localStorage.setItem(E2E_FORCE_BILLING_GATE_KEY, "1");
   });
 
   afterEach(() => {
     vi.useRealTimers();
-    vi.unstubAllEnvs();
+    window.localStorage.removeItem(E2E_FORCE_BILLING_GATE_KEY);
   });
 
   it("allows fresh active app access", () => {

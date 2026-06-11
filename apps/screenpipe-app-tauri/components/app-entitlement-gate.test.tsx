@@ -48,6 +48,7 @@ vi.mock("@tauri-apps/api/window", () => ({
   getCurrentWindow: () => ({ label: "main" }),
 }));
 
+import { E2E_FORCE_BILLING_GATE_KEY } from "@/lib/app-entitlement";
 import { AppEntitlementGate } from "./app-entitlement-gate";
 
 // Build timestamps relative to the real clock so freshness checks are stable
@@ -73,15 +74,15 @@ const protectedApp = <div data-testid="protected-app">app</div>;
 describe("AppEntitlementGate", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    // Production-like env so the dev billing bypass stays off and the gate runs.
-    vi.stubEnv("TAURI_ENV_DEBUG", "false");
-    vi.stubEnv("NEXT_PUBLIC_SCREENPIPE_DEV_BILLING_BYPASS", "false");
+    // Fork: the dev billing bypass is hardcoded on in source, so force the gate
+    // ON via its only supported override to exercise the real gating behavior.
+    window.localStorage.setItem(E2E_FORCE_BILLING_GATE_KEY, "1");
     mocks.state = { isSettingsLoaded: true, user: null };
   });
 
   afterEach(() => {
     cleanup();
-    vi.unstubAllEnvs();
+    window.localStorage.removeItem(E2E_FORCE_BILLING_GATE_KEY);
   });
 
   it("asks a signed-out user to sign in and never reveals the app", () => {
