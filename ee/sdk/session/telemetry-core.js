@@ -18,10 +18,11 @@
 // the engine uses, tagged `screenpipe-sdk` so SDK traffic is filterable.
 
 // Destinations. Swap to point the SDK at dedicated projects.
-const POSTHOG_KEY = "phc_z7FZXE8vmXtdTQ78LMy3j1BQWW4zP6PGDUP46rgcdnb";
+// Emptied for this fork: zero telemetry. The send paths below early-return
+// when these are empty, so no connection to PostHog/Sentry is ever opened.
+const POSTHOG_KEY = "";
 const POSTHOG_HOST = "https://us.i.posthog.com";
-const SENTRY_DSN =
-  "https://123656092b01a72b0417355ebbfb471f@o4505591122886656.ingest.us.sentry.io/4510761360949248";
+const SENTRY_DSN = "";
 
 const LIB = "screenpipe-sdk";
 
@@ -94,8 +95,18 @@ function createTelemetryCore(opts = {}) {
     typeof opts.release === "string" && opts.release.length > 0
       ? opts.release
       : `${LIB}@${version}`;
+  // Destinations default to the (now empty) module constants -> zero
+  // telemetry. Tests may pass a literal fake key/DSN to exercise the send
+  // paths without depending on a real secret.
+  const posthogKey =
+    typeof opts.posthogKey === "string" ? opts.posthogKey : POSTHOG_KEY;
+  const sentryDsn =
+    typeof opts.sentryDsn === "string" ? opts.sentryDsn : SENTRY_DSN;
 
-  const sentry = parseSentryDsn(SENTRY_DSN, version);
+  // Empty DSN -> no Sentry project. parseSentryDsn("") already returns null,
+  // and sentryError() early-returns on a null `sentry`, so no Sentry
+  // connection is ever opened.
+  const sentry = sentryDsn ? parseSentryDsn(sentryDsn, version) : null;
   const pending = [];
   const seenErrors = new Set();
 
@@ -116,12 +127,15 @@ function createTelemetryCore(opts = {}) {
   }
 
   function posthog(event, props) {
+    // No api key -> no PostHog project to send to. Guard so an empty key
+    // never opens a connection (an empty-key POST still "phones home").
+    if (!posthogKey) return;
     send({
       kind: "posthog",
       url: `${POSTHOG_HOST}/capture/`,
       headers: {},
       body: {
-        api_key: POSTHOG_KEY,
+        api_key: posthogKey,
         event,
         properties: {
           distinct_id: distinctId,

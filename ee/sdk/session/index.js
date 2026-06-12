@@ -160,6 +160,10 @@ function createScreenpipeSession(options = {}) {
     appName: options.appName,
     release: options.release,
     transport: options.telemetryTransport,
+    // Destination overrides (literal fakes in tests). Default empty -> zero
+    // telemetry.
+    posthogKey: options.telemetryPosthogKey,
+    sentryDsn: options.telemetrySentryDsn,
   });
 
   let recorder = null;

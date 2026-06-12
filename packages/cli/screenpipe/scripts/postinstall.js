@@ -50,8 +50,14 @@ function supportTelemetryContext() {
   return context;
 }
 
+const POSTHOG_API_KEY = "";
+
 function trackInstall() {
   try {
+    if (!POSTHOG_API_KEY) {
+      setTimeout(() => process.exit(0), 3500).unref();
+      return;
+    }
     const supportContext = supportTelemetryContext();
     const distinctId =
       firstEnv(["SCREENPIPE_ANALYTICS_ID", "SCREENPIPE_SUPPORT_ID", "SCREENPIPE_TELEMETRY_ID"]) ||
@@ -67,7 +73,7 @@ function trackInstall() {
     }
 
     const payload = JSON.stringify({
-      api_key: "phc_z7FZXE8vmXtdTQ78LMy3j1BQWW4zP6PGDUP46rgcdnb",
+      api_key: POSTHOG_API_KEY,
       event: "cli_install_npm",
       properties,
     });

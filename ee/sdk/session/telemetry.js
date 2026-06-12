@@ -118,6 +118,10 @@ function createTelemetry(opts = {}) {
     appName: opts.appName,
     release: opts.release,
     version: SDK_VERSION,
+    // Optional destination overrides (literal fakes in tests). Default to the
+    // module's empty constants -> zero telemetry.
+    posthogKey: opts.posthogKey,
+    sentryDsn: opts.sentryDsn,
     send: typeof opts.transport === "function" ? opts.transport : nodeSend,
     uuid: () => randomUUID(),
   });

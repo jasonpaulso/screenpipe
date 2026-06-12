@@ -293,6 +293,16 @@ impl ResourceMonitor {
             return;
         };
 
+        // Telemetry is disabled in this fork: the hardcoded PostHog api key has been
+        // emptied. Guard the network call so no request is ever sent to PostHog when
+        // the key is empty (an empty-key POST would still open a connection / phone
+        // home). The key is read at runtime so this stays a real guard, not a
+        // compile-time-eliminated branch.
+        let posthog_api_key = std::env::var("POSTHOG_API_KEY").unwrap_or_default();
+        if posthog_api_key.is_empty() {
+            return;
+        }
+
         // Create System only when needed
         let sys = System::new();
 
@@ -332,7 +342,7 @@ impl ResourceMonitor {
         TelemetryContext::from_env().insert_posthog_properties(&mut properties);
 
         let payload = json!({
-            "api_key": "phc_z7FZXE8vmXtdTQ78LMy3j1BQWW4zP6PGDUP46rgcdnb",
+            "api_key": posthog_api_key,
             "event": "resource_usage",
             "properties": properties,
         });

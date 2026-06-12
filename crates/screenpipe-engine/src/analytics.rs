@@ -11,7 +11,7 @@ use sysinfo::{System, SystemExt};
 #[cfg(target_os = "macos")]
 use tracing::warn;
 
-const POSTHOG_API_KEY: &str = "phc_z7FZXE8vmXtdTQ78LMy3j1BQWW4zP6PGDUP46rgcdnb";
+const POSTHOG_API_KEY: &str = "";
 const POSTHOG_HOST: &str = "https://us.i.posthog.com";
 
 static TELEMETRY_ENABLED: AtomicBool = AtomicBool::new(false);
@@ -61,6 +61,11 @@ pub fn get_distinct_id() -> &'static str {
 
 /// Capture an analytics event
 pub async fn capture_event(event: &str, properties: Value) {
+    // Fork: telemetry stripped — POSTHOG_API_KEY is empty, so never POST.
+    #[allow(clippy::const_is_empty)]
+    if POSTHOG_API_KEY.is_empty() {
+        return;
+    }
     if !TELEMETRY_ENABLED.load(Ordering::SeqCst) {
         return;
     }

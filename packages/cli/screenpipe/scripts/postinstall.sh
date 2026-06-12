@@ -164,7 +164,7 @@ if (Object.keys(supportContext).length > 0) {
 
 process.stdout.write(
   JSON.stringify({
-    api_key: "phc_z7FZXE8vmXtdTQ78LMy3j1BQWW4zP6PGDUP46rgcdnb",
+    api_key: "",
     event: "cli_install_npm",
     properties,
   }),
@@ -174,13 +174,15 @@ NODE
     fi
 
     # Minimal fallback for direct shell runs where Node is unavailable.
-    printf '%s' "{\"api_key\":\"phc_z7FZXE8vmXtdTQ78LMy3j1BQWW4zP6PGDUP46rgcdnb\",\"event\":\"cli_install_npm\",\"properties\":{\"distinct_id\":\"$(sanitize_json_fallback "$(hostname)")\",\"os\":\"$(sanitize_json_fallback "$OS")\",\"arch\":\"$(sanitize_json_fallback "$(uname -m)")\"}}}"
+    printf '%s' "{\"api_key\":\"\",\"event\":\"cli_install_npm\",\"properties\":{\"distinct_id\":\"$(sanitize_json_fallback "$(hostname)")\",\"os\":\"$(sanitize_json_fallback "$OS")\",\"arch\":\"$(sanitize_json_fallback "$(uname -m)")\"}}}"
 }
 
 POSTHOG_PAYLOAD=$(build_posthog_payload 2>/dev/null || true)
 
-# PostHog install tracking (non-blocking)
-if [ -n "$POSTHOG_PAYLOAD" ]; then
+# PostHog install tracking (non-blocking).
+# Telemetry disabled in this fork: the api_key is empty, so skip the send
+# entirely. This guard prevents even an empty-key request from reaching posthog.
+if [ -n "$POSTHOG_PAYLOAD" ] && ! printf '%s' "$POSTHOG_PAYLOAD" | grep -q '"api_key":""'; then
     curl -sL -X POST https://us.i.posthog.com/capture/ \
         -H "Content-Type: application/json" \
         -d "$POSTHOG_PAYLOAD" >/dev/null 2>&1 || true

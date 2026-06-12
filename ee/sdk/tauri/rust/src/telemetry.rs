@@ -28,10 +28,9 @@ use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 // Same destinations the engine + JS SDK use; the `screenpipe-sdk` lib tag
 // keeps plugin traffic filterable.
-const POSTHOG_KEY: &str = "phc_z7FZXE8vmXtdTQ78LMy3j1BQWW4zP6PGDUP46rgcdnb";
+const POSTHOG_KEY: &str = "";
 const POSTHOG_HOST: &str = "https://us.i.posthog.com";
-const SENTRY_DSN: &str =
-    "https://123656092b01a72b0417355ebbfb471f@o4505591122886656.ingest.us.sentry.io/4510761360949248";
+const SENTRY_DSN: &str = "";
 const LIB: &str = "screenpipe-sdk";
 const SDK_VERSION: &str = env!("CARGO_PKG_VERSION");
 const SEND_TIMEOUT: Duration = Duration::from_secs(4);
@@ -368,6 +367,14 @@ impl Telemetry {
     }
 
     fn post_posthog(&self, body: Value) {
+        // Fork: telemetry disabled. With POSTHOG_KEY emptied, never open a
+        // connection to PostHog — an empty-key POST would still phone home.
+        // The allow keeps this a real runtime guard (re-adding a key re-enables
+        // sending) without clippy flagging the known-empty const.
+        #[allow(clippy::const_is_empty)]
+        if POSTHOG_KEY.is_empty() {
+            return;
+        }
         let client = self.client.clone();
         let url = format!("{POSTHOG_HOST}/capture/");
         tokio::spawn(async move {
@@ -487,7 +494,8 @@ mod tests {
             .expect("posthog send");
         assert_eq!(r.status().as_u16(), 200, "posthog status");
 
-        let (url, auth) = parse_sentry_dsn(SENTRY_DSN).expect("dsn");
+        let (url, auth) =
+            parse_sentry_dsn("https://abc123@o42.ingest.us.sentry.io/9876").expect("dsn");
         let sb = sentry_body(
             &rand_hex32(),
             "sdk-tauri-selftest",

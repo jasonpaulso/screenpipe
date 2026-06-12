@@ -507,7 +507,7 @@ async fn main() {
     let app_version = env!("CARGO_PKG_VERSION");
     let sentry_guard = if !telemetry_disabled {
         Some(sentry::init((
-            "https://da4edafe2c8e5e8682505945695ecad7@o4505591122886656.ingest.us.sentry.io/4510761355116544",
+            "",
             sentry::ClientOptions {
                 release: Some(format!("screenpipe-app@{}", app_version).into()),
                 send_default_pii: false,
@@ -1089,7 +1089,7 @@ async fn main() {
             info!("Local data directory: {}", base_dir.display());
 
             // PostHog analytics setup
-            let posthog_api_key = "phc_z7FZXE8vmXtdTQ78LMy3j1BQWW4zP6PGDUP46rgcdnb".to_string();
+            let posthog_api_key = "".to_string();
             let interval_hours = 6;
 
             // Store setup and initialization - must be done first
@@ -1668,7 +1668,11 @@ async fn main() {
             let email = store.user.email.unwrap_or_default();
             let local_api = crate::recording::local_api_context_from_app(&app_handle);
 
-            if is_analytics_enabled {
+            // Forked build sends ZERO telemetry: the PostHog key is empty, so
+            // skip starting analytics entirely. An empty-key POST still opens a
+            // connection to posthog (still "phoning home"), so we gate the send
+            // on a non-empty key here rather than relying on emptying alone.
+            if is_analytics_enabled && !posthog_api_key.is_empty() {
                 match start_analytics(
                     unique_id,
                     email,

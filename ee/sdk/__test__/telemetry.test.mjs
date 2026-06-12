@@ -20,6 +20,12 @@ import {
 } from "../session/telemetry.js";
 import { createScreenpipeSession } from "../session/index.js";
 
+// Literal fake destinations. The real key/DSN are stripped to "" in this
+// fork (zero telemetry); tests inject these fakes so the routing/PII send
+// paths still get exercised without depending on a real secret.
+const FAKE_POSTHOG_KEY = "phc_testfake000000000000000000000000000000";
+const FAKE_SENTRY_DSN = "https://abc123@o42.ingest.us.sentry.io/9876";
+
 function collector() {
   const sent = [];
   return {
@@ -88,18 +94,28 @@ test("userId becomes the distinct id; otherwise anonymous", () => {
 
 test("initialized() emits a PostHog identify ping tagged with userId", () => {
   const c = collector();
-  const tel = createTelemetry({ userId: "u1", transport: c.transport });
+  const tel = createTelemetry({
+    userId: "u1",
+    transport: c.transport,
+    posthogKey: FAKE_POSTHOG_KEY,
+    sentryDsn: FAKE_SENTRY_DSN,
+  });
   tel.initialized();
   const ev = c.posthog("sdk_session_initialized");
   assert.equal(ev.length, 1);
   assert.equal(ev[0].body.properties.distinct_id, "u1");
   assert.equal(ev[0].body.properties.$lib, "screenpipe-sdk");
-  assert.equal(ev[0].body.api_key.startsWith("phc_"), true);
+  assert.equal(ev[0].body.api_key, FAKE_POSTHOG_KEY);
 });
 
 test("lifecycle events route to PostHog with scrubbed props", () => {
   const c = collector();
-  const tel = createTelemetry({ userId: "u1", transport: c.transport });
+  const tel = createTelemetry({
+    userId: "u1",
+    transport: c.transport,
+    posthogKey: FAKE_POSTHOG_KEY,
+    sentryDsn: FAKE_SENTRY_DSN,
+  });
 
   tel.track("recording_started", {});
   assert.equal(c.posthog("sdk_recording_started").length, 1);
@@ -126,7 +142,12 @@ test("lifecycle events route to PostHog with scrubbed props", () => {
 
 test("noisy / PII-bearing events are NOT forwarded to PostHog", () => {
   const c = collector();
-  const tel = createTelemetry({ userId: "u1", transport: c.transport });
+  const tel = createTelemetry({
+    userId: "u1",
+    transport: c.transport,
+    posthogKey: FAKE_POSTHOG_KEY,
+    sentryDsn: FAKE_SENTRY_DSN,
+  });
   tel.track("app_switched", {
     focused: { appName: "1Password", windowTitle: "secret vault" },
   });
@@ -138,7 +159,12 @@ test("noisy / PII-bearing events are NOT forwarded to PostHog", () => {
 
 test("error events go to Sentry (with userId) and a message-free PostHog count", () => {
   const c = collector();
-  const tel = createTelemetry({ userId: "u1", transport: c.transport });
+  const tel = createTelemetry({
+    userId: "u1",
+    transport: c.transport,
+    posthogKey: FAKE_POSTHOG_KEY,
+    sentryDsn: FAKE_SENTRY_DSN,
+  });
   tel.track("error", {
     component: "start",
     name: "Error",
@@ -164,7 +190,12 @@ test("error events go to Sentry (with userId) and a message-free PostHog count",
 
 test("identical errors are de-duped in Sentry within a session", () => {
   const c = collector();
-  const tel = createTelemetry({ userId: "u1", transport: c.transport });
+  const tel = createTelemetry({
+    userId: "u1",
+    transport: c.transport,
+    posthogKey: FAKE_POSTHOG_KEY,
+    sentryDsn: FAKE_SENTRY_DSN,
+  });
   const err = { component: "stop", name: "Error", message: "boom" };
   tel.track("error", err);
   tel.track("error", err);
@@ -178,6 +209,8 @@ test("opt-out sends nothing and flush resolves", async () => {
     userId: "u1",
     telemetry: false,
     transport: c.transport,
+    posthogKey: FAKE_POSTHOG_KEY,
+    sentryDsn: FAKE_SENTRY_DSN,
   });
   assert.equal(tel.enabled, false);
   tel.initialized();
@@ -236,6 +269,8 @@ test("createScreenpipeSession forwards lifecycle to the injected transport", asy
       outputDir: dir,
       userId: "user-xyz",
       telemetryTransport: c.transport,
+      telemetryPosthogKey: FAKE_POSTHOG_KEY,
+      telemetrySentryDsn: FAKE_SENTRY_DSN,
       // keep the watchers quiet so the only events are lifecycle ones
       eventIntervals: { focusWatcherMs: 100000, framesProgressMs: 100000, permissionsPollMs: 0 },
     });

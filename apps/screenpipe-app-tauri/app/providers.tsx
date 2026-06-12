@@ -122,10 +122,14 @@ export const Providers = forwardRef<
   }, []);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    // Telemetry disabled in this fork: empty key + guard so posthog.init is
+    // never called and no connection is opened to posthog. posthog.capture()
+    // calls elsewhere safely no-op while posthog stays uninitialized.
+    const POSTHOG_KEY = "";
+    if (typeof window !== "undefined" && POSTHOG_KEY) {
       const isDebug = process.env.TAURI_ENV_DEBUG === "true";
       if (isDebug) return;
-      posthog.init("phc_z7FZXE8vmXtdTQ78LMy3j1BQWW4zP6PGDUP46rgcdnb", {
+      posthog.init(POSTHOG_KEY, {
         api_host: "https://us.i.posthog.com",
         person_profiles: "identified_only",
         capture_pageview: false,
