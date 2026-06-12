@@ -6,10 +6,10 @@
 //!
 //! Compiles on both macOS and Windows because both heavy dependencies
 //! already abstract the OS:
-//!   - `screenpipe_screen::SafeMonitor::capture_image` → sck-rs on
+//!   - `daimonion_screen::SafeMonitor::capture_image` → sck-rs on
 //!     macOS, xcap on Windows. Already ar_pool-wrapped on macOS
 //!     internally (see the 2026-04-22 autorelease leak fix).
-//!   - `screenpipe_core::video::start_ffmpeg_process` → same ffmpeg
+//!   - `daimonion_core::video::start_ffmpeg_process` → same ffmpeg
 //!     sidecar pipeline the desktop app uses (x265 → MP4).
 //!
 //! There is no platform-specific logic in the SDK itself.
@@ -18,26 +18,26 @@ use crate::{PermissionStatus, RecorderOptions, UiCaptureOptions};
 use anyhow::{anyhow, Context, Result};
 use chrono::Utc;
 use crossbeam_channel::RecvTimeoutError;
-use screenpipe_a11y::config::UiCaptureConfig;
-use screenpipe_a11y::events::{EventData, UiEvent};
-use screenpipe_a11y::platform::UiRecorder;
-use screenpipe_a11y::tree::{
+use daimonion_a11y::config::UiCaptureConfig;
+use daimonion_a11y::events::{EventData, UiEvent};
+use daimonion_a11y::platform::UiRecorder;
+use daimonion_a11y::tree::{
     create_tree_walker, SkipReason, TreeSnapshot, TreeWalkResult, TreeWalkerConfig,
 };
-use screenpipe_capture::paired_capture::{paired_capture, CaptureContext};
-use screenpipe_config::DbConfig;
-use screenpipe_core::video::{finish_ffmpeg_process, start_ffmpeg_process, write_frame_to_ffmpeg};
-use screenpipe_db::DatabaseManager;
-use screenpipe_screen::capture_screenshot_by_window::WindowFilters;
-use screenpipe_screen::frame_comparison::{FrameComparer, FrameComparisonConfig};
-use screenpipe_screen::monitor::{list_monitors_detailed, SafeMonitor};
-use screenpipe_screen::snapshot_writer::SnapshotWriter;
+use daimonion_capture::paired_capture::{paired_capture, CaptureContext};
+use daimonion_config::DbConfig;
+use daimonion_core::video::{finish_ffmpeg_process, start_ffmpeg_process, write_frame_to_ffmpeg};
+use daimonion_db::DatabaseManager;
+use daimonion_screen::capture_screenshot_by_window::WindowFilters;
+use daimonion_screen::frame_comparison::{FrameComparer, FrameComparisonConfig};
+use daimonion_screen::monitor::{list_monitors_detailed, SafeMonitor};
+use daimonion_screen::snapshot_writer::SnapshotWriter;
 use std::io::Cursor;
 use std::path::PathBuf;
 use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
 use std::sync::{Arc, RwLock as StdRwLock};
 use std::time::Instant;
-use screenpipe_a11y::platform::RecordingHandle;
+use daimonion_a11y::platform::RecordingHandle;
 use tokio::process::{Child, ChildStdin};
 use tokio::sync::{broadcast, Mutex};
 use tokio::task::JoinHandle;
@@ -1139,7 +1139,7 @@ pub async fn request_permissions() -> Result<PermissionStatus> {
 mod tests {
     use super::*;
     use chrono::Utc;
-    use screenpipe_a11y::events::EventData;
+    use daimonion_a11y::events::EventData;
 
     // ────────────────────────────────────────────────────────────────────
     //  derive_mp4_output_path

@@ -13,7 +13,7 @@
 //!  3. Use access_token directly as Bearer token for OpenAI API
 //!
 //! Tokens are stored in the `secrets` table (encrypted with AES-256-GCM,
-//! key in OS keychain) via `screenpipe_secrets::SecretStore`.
+//! key in OS keychain) via `daimonion_secrets::SecretStore`.
 
 use base64::{engine::general_purpose::URL_SAFE_NO_PAD, Engine as _};
 use serde::{Deserialize, Serialize};
@@ -58,8 +58,8 @@ pub struct ChatGptOAuthStatus {
 /// full chain (e.g. `database is locked`, `connection refused`, `unable
 /// to open database file`) reaches the log instead of the generic
 /// top-level wrapper.
-async fn open_secret_store() -> Result<screenpipe_secrets::SecretStore, String> {
-    let data_dir = screenpipe_core::paths::default_screenpipe_data_dir();
+async fn open_secret_store() -> Result<daimonion_secrets::SecretStore, String> {
+    let data_dir = daimonion_core::paths::default_screenpipe_data_dir();
     let db_path = data_dir.join("db.sqlite");
     let db_url = format!("sqlite:{}?mode=rwc", db_path.display());
 
@@ -72,7 +72,7 @@ async fn open_secret_store() -> Result<screenpipe_secrets::SecretStore, String> 
         _ => None,
     };
 
-    screenpipe_secrets::SecretStore::new(pool, secret_key)
+    daimonion_secrets::SecretStore::new(pool, secret_key)
         .await
         .map_err(|e| format!("failed to init secret store: {:#}", e))
 }

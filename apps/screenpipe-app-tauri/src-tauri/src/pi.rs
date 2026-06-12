@@ -6,7 +6,7 @@
 //!
 //! Manages the pi coding agent via RPC mode (stdin/stdout JSON protocol).
 
-use screenpipe_core::agents::pi::screenpipe_cloud_models;
+use daimonion_core::agents::pi::screenpipe_cloud_models;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use specta::Type;
@@ -503,7 +503,7 @@ fn parse_where_output(stdout: &str) -> Option<String> {
 /// Find pi executable
 /// Returns the screenpipe-managed pi install directory (`~/.screenpipe/pi-agent/`).
 fn pi_local_install_dir() -> Option<PathBuf> {
-    Some(screenpipe_core::paths::default_screenpipe_data_dir().join("pi-agent"))
+    Some(daimonion_core::paths::default_screenpipe_data_dir().join("pi-agent"))
 }
 
 fn pi_package_dir(install_dir: &Path) -> PathBuf {
@@ -944,7 +944,7 @@ fn find_pi_executable() -> Option<String> {
 /// Ensure the screenpipe skills exist in the project's .pi/skills directory.
 /// Delegates to screenpipe-core's canonical implementation.
 fn ensure_screenpipe_skill(project_dir: &str) -> Result<(), String> {
-    use screenpipe_core::agents::pi::PiExecutor;
+    use daimonion_core::agents::pi::PiExecutor;
     PiExecutor::ensure_screenpipe_skill(std::path::Path::new(project_dir))
         .map_err(|e| format!("Failed to install screenpipe skills: {}", e))
 }
@@ -1582,7 +1582,7 @@ pub async fn pi_start_inner(
             let new_path = {
                 let mut path = new_path;
                 let bash_result =
-                    tokio::task::spawn_blocking(screenpipe_core::agents::pi::ensure_bash_available)
+                    tokio::task::spawn_blocking(daimonion_core::agents::pi::ensure_bash_available)
                         .await
                         .unwrap_or_else(|e| {
                             warn!("bash setup task panicked (non-fatal): {:?}", e);
@@ -1716,7 +1716,7 @@ pub async fn pi_start_inner(
     // Auto-auth the agent's `curl localhost:3030/...` calls via a bash
     // shim sourced from $BASH_ENV on every subshell. See bash_env.rs in
     // screenpipe-core.
-    if let Ok(p) = screenpipe_core::agents::bash_env::ensure_wrapper_in_default_dir() {
+    if let Ok(p) = daimonion_core::agents::bash_env::ensure_wrapper_in_default_dir() {
         cmd.env("BASH_ENV", p);
     }
 
@@ -2581,7 +2581,7 @@ pub async fn pi_update_config(
     );
 
     // Resolve the chat project directory
-    let project_dir = screenpipe_core::paths::default_screenpipe_data_dir()
+    let project_dir = daimonion_core::paths::default_screenpipe_data_dir()
         .join("pi-chat")
         .to_string_lossy()
         .to_string();
@@ -2702,7 +2702,7 @@ pub fn ensure_pi_installed_background() {
         let _ = std::thread::Builder::new()
             .name("bash-setup".to_string())
             .spawn(|| {
-                screenpipe_core::agents::pi::ensure_bash_available();
+                daimonion_core::agents::pi::ensure_bash_available();
             });
     }
 

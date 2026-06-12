@@ -541,8 +541,8 @@ fn fallback_local_api_config(cached_key: Option<String>) -> serde_json::Value {
 #[tauri::command]
 #[specta::specta]
 pub async fn regenerate_api_auth_key(app_handle: tauri::AppHandle) -> Result<String, String> {
-    let data_dir = screenpipe_core::paths::default_screenpipe_data_dir();
-    let key = screenpipe_engine::auth_key::regenerate_api_auth_key(&data_dir)
+    let data_dir = daimonion_core::paths::default_screenpipe_data_dir();
+    let key = daimonion_engine::auth_key::regenerate_api_auth_key(&data_dir)
         .await
         .map_err(|e| e.to_string())?;
     persist_api_auth_key_to_settings(&app_handle, &key)?;
@@ -554,8 +554,8 @@ pub async fn regenerate_api_auth_key(app_handle: tauri::AppHandle) -> Result<Str
 #[tauri::command]
 #[specta::specta]
 pub async fn set_api_auth_key(app_handle: tauri::AppHandle, key: String) -> Result<(), String> {
-    let data_dir = screenpipe_core::paths::default_screenpipe_data_dir();
-    screenpipe_engine::auth_key::set_api_auth_key(&data_dir, &key)
+    let data_dir = daimonion_core::paths::default_screenpipe_data_dir();
+    daimonion_engine::auth_key::set_api_auth_key(&data_dir, &key)
         .await
         .map_err(|e| e.to_string())?;
     persist_api_auth_key_to_settings(&app_handle, &key)
@@ -634,7 +634,7 @@ pub fn get_enterprise_license_key() -> Option<String> {
     }
 
     // Fallback: ~/.screenpipe/enterprise.json (manually entered by employee)
-    let user_path = screenpipe_core::paths::default_screenpipe_data_dir().join("enterprise.json");
+    let user_path = daimonion_core::paths::default_screenpipe_data_dir().join("enterprise.json");
     if user_path.exists() {
         info!(
             "enterprise: checking user config at {}",
@@ -715,7 +715,7 @@ fn read_enterprise_key_from_path(path: &std::path::Path) -> Option<String> {
 #[tauri::command]
 #[specta::specta]
 pub fn save_enterprise_license_key(license_key: String) -> Result<(), String> {
-    let dir = screenpipe_core::paths::default_screenpipe_data_dir();
+    let dir = daimonion_core::paths::default_screenpipe_data_dir();
     std::fs::create_dir_all(&dir).map_err(|e| format!("failed to create dir: {}", e))?;
 
     let path = dir.join("enterprise.json");
@@ -743,7 +743,7 @@ pub fn save_enterprise_license_key(license_key: String) -> Result<(), String> {
 #[tauri::command]
 #[specta::specta]
 pub fn get_enterprise_team_api_token() -> Option<String> {
-    let path = screenpipe_core::paths::default_screenpipe_data_dir().join("enterprise.json");
+    let path = daimonion_core::paths::default_screenpipe_data_dir().join("enterprise.json");
     let raw = std::fs::read_to_string(&path).ok()?;
     let parsed: serde_json::Value = serde_json::from_str(&raw).ok()?;
     parsed
@@ -767,7 +767,7 @@ pub fn get_enterprise_team_api_token() -> Option<String> {
 #[tauri::command]
 #[specta::specta]
 pub fn get_cloud_token() -> Option<String> {
-    let path = screenpipe_core::paths::default_screenpipe_data_dir().join("auth.json");
+    let path = daimonion_core::paths::default_screenpipe_data_dir().join("auth.json");
     let raw = std::fs::read_to_string(&path).ok()?;
     let parsed: serde_json::Value = serde_json::from_str(&raw).ok()?;
     parsed
@@ -824,7 +824,7 @@ pub fn save_enterprise_team_config(
     license_active: Option<bool>,
     team_api_token: Option<String>,
 ) -> Result<(), String> {
-    let dir = screenpipe_core::paths::default_screenpipe_data_dir();
+    let dir = daimonion_core::paths::default_screenpipe_data_dir();
     std::fs::create_dir_all(&dir).map_err(|e| format!("failed to create dir: {}", e))?;
 
     let path = dir.join("enterprise.json");
@@ -1447,7 +1447,7 @@ pub async fn get_disk_usage(
 ) -> Result<serde_json::Value, String> {
     let screenpipe_dir_path = match data_dir {
         Some(d) if !d.is_empty() && d != "default" => std::path::PathBuf::from(d),
-        _ => screenpipe_core::paths::default_screenpipe_data_dir(),
+        _ => daimonion_core::paths::default_screenpipe_data_dir(),
     };
 
     match crate::disk_usage::disk_usage(&screenpipe_dir_path, force_refresh.unwrap_or(false)).await
@@ -2053,8 +2053,8 @@ pub async fn enable_keychain_encryption() -> Result<KeychainStatus, String> {
         "Keychain access denied or unavailable. Credentials will remain unencrypted.".to_string()
     })?;
 
-    let data_dir = screenpipe_core::paths::default_screenpipe_data_dir();
-    if let Err(e) = screenpipe_secrets::mark_encryption_enabled(&data_dir) {
+    let data_dir = daimonion_core::paths::default_screenpipe_data_dir();
+    if let Err(e) = daimonion_secrets::mark_encryption_enabled(&data_dir) {
         tracing::warn!("failed to write .encrypt-store flag: {}", e);
     }
 
@@ -2062,7 +2062,7 @@ pub async fn enable_keychain_encryption() -> Result<KeychainStatus, String> {
     let db_url = format!("sqlite:{}?mode=rwc", db_path.display());
 
     if let Ok(pool) = sqlx::SqlitePool::connect(&db_url).await {
-        if let Ok(store) = screenpipe_secrets::SecretStore::new(pool, Some(key)).await {
+        if let Ok(store) = daimonion_secrets::SecretStore::new(pool, Some(key)).await {
             match store.reencrypt_unencrypted_secrets(&key).await {
                 Ok(count) if count > 0 => {
                     tracing::info!("re-encrypted {} secrets after keychain opt-in", count);
@@ -2083,7 +2083,7 @@ pub async fn enable_keychain_encryption() -> Result<KeychainStatus, String> {
 #[tauri::command]
 #[specta::specta]
 pub async fn disable_keychain_encryption() -> Result<KeychainStatus, String> {
-    let data_dir = screenpipe_core::paths::default_screenpipe_data_dir();
+    let data_dir = daimonion_core::paths::default_screenpipe_data_dir();
     let db_path = data_dir.join("db.sqlite");
     let db_url = format!("sqlite:{}?mode=rwc", db_path.display());
 
@@ -2091,7 +2091,7 @@ pub async fn disable_keychain_encryption() -> Result<KeychainStatus, String> {
         let pool = sqlx::SqlitePool::connect(&db_url).await.map_err(|e| {
             format!("failed to open secret database before disabling encryption: {e}")
         })?;
-        let plain_store = screenpipe_secrets::SecretStore::new(pool.clone(), None)
+        let plain_store = daimonion_secrets::SecretStore::new(pool.clone(), None)
             .await
             .map_err(|e| format!("failed to open secret store: {e}"))?;
         let encrypted_count = plain_store
@@ -2119,7 +2119,7 @@ pub async fn disable_keychain_encryption() -> Result<KeychainStatus, String> {
                 }
             };
 
-            let encrypted_store = screenpipe_secrets::SecretStore::new(pool, Some(key))
+            let encrypted_store = daimonion_secrets::SecretStore::new(pool, Some(key))
                 .await
                 .map_err(|e| format!("failed to open encrypted secret store: {e}"))?;
             match encrypted_store.decrypt_encrypted_secrets().await {
@@ -2135,7 +2135,7 @@ pub async fn disable_keychain_encryption() -> Result<KeychainStatus, String> {
         }
     }
 
-    screenpipe_secrets::mark_encryption_disabled(&data_dir)
+    daimonion_secrets::mark_encryption_disabled(&data_dir)
         .map_err(|e| format!("failed to remove .encrypt-store flag: {e}"))?;
     if let Err(e) = crate::secrets::delete_key() {
         tracing::warn!("failed to delete keychain key on opt-out: {}", e);
@@ -3053,7 +3053,7 @@ pub async fn perform_ocr_on_image(
     image_base64: String,
 ) -> Result<String, String> {
     use crate::store::SettingsStore;
-    use screenpipe_screen::OcrEngine;
+    use daimonion_screen::OcrEngine;
 
     use base64::Engine;
     let image_data = base64::engine::general_purpose::STANDARD
@@ -3068,7 +3068,7 @@ pub async fn perform_ocr_on_image(
         .flatten()
         .unwrap_or_default();
 
-    let languages: Vec<screenpipe_core::Language> = store
+    let languages: Vec<daimonion_core::Language> = store
         .recording
         .languages
         .iter()
@@ -3100,10 +3100,10 @@ pub async fn perform_ocr_on_image(
 
     let (text, _text_json, _confidence) = match ocr_engine {
         #[cfg(target_os = "macos")]
-        OcrEngine::AppleNative => screenpipe_screen::perform_ocr_apple(&img, &languages),
-        OcrEngine::Tesseract => screenpipe_screen::perform_ocr_tesseract(&img, languages),
+        OcrEngine::AppleNative => daimonion_screen::perform_ocr_apple(&img, &languages),
+        OcrEngine::Tesseract => daimonion_screen::perform_ocr_tesseract(&img, languages),
         #[cfg(target_os = "windows")]
-        OcrEngine::WindowsNative => screenpipe_screen::perform_ocr_windows(&img, &languages)
+        OcrEngine::WindowsNative => daimonion_screen::perform_ocr_windows(&img, &languages)
             .await
             .map_err(|e| format!("windows ocr failed: {}", e))?,
         _ => return Err("unsupported ocr engine".to_string()),
@@ -3275,7 +3275,7 @@ pub struct CacheFile {
 #[tauri::command]
 #[specta::specta]
 pub async fn list_cache_files() -> Result<Vec<CacheFile>, String> {
-    let data_dir = screenpipe_core::paths::default_screenpipe_data_dir();
+    let data_dir = daimonion_core::paths::default_screenpipe_data_dir();
     let home_dir = dirs::home_dir().ok_or("no home directory")?;
     let mut files = Vec::new();
 

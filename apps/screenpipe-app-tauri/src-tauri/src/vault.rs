@@ -11,7 +11,7 @@ use tauri::Manager;
 #[tauri::command]
 #[specta::specta]
 pub async fn vault_status(_app: AppHandle) -> Result<String, String> {
-    let data_dir = screenpipe_core::paths::default_screenpipe_data_dir();
+    let data_dir = daimonion_core::paths::default_screenpipe_data_dir();
     if !data_dir.join("vault.meta").exists() {
         return Ok("none".to_string());
     }
@@ -22,7 +22,7 @@ pub async fn vault_status(_app: AppHandle) -> Result<String, String> {
     // (handles crash during lock where sentinel wasn't written yet)
     let db_path = data_dir.join("db.sqlite");
     if db_path.exists() {
-        if let Ok(true) = screenpipe_vault::crypto::is_encrypted_file(&db_path) {
+        if let Ok(true) = daimonion_vault::crypto::is_encrypted_file(&db_path) {
             return Ok("locked".to_string());
         }
     }
@@ -34,9 +34,9 @@ pub async fn vault_status(_app: AppHandle) -> Result<String, String> {
 #[tauri::command]
 #[specta::specta]
 pub async fn vault_unlock(_app: AppHandle, password: String) -> Result<(), String> {
-    use screenpipe_vault::crypto;
+    use daimonion_vault::crypto;
 
-    let screenpipe_dir = screenpipe_core::paths::default_screenpipe_data_dir();
+    let screenpipe_dir = daimonion_core::paths::default_screenpipe_data_dir();
 
     // Read vault metadata and verify password
     let meta_path = screenpipe_dir.join("vault.meta");
@@ -96,14 +96,14 @@ pub async fn vault_unlock(_app: AppHandle, password: String) -> Result<(), Strin
     tokio::spawn(async move {
         if data_dir.exists() {
             let (tx, _rx) =
-                tokio::sync::watch::channel(screenpipe_vault::migration::MigrationProgress {
+                tokio::sync::watch::channel(daimonion_vault::migration::MigrationProgress {
                     total_files: 0,
                     processed_files: 0,
                     total_bytes: 0,
                     processed_bytes: 0,
                 });
             if let Err(e) =
-                screenpipe_vault::migration::decrypt_data_dir(&screenpipe_dir, &data_dir, key, tx)
+                daimonion_vault::migration::decrypt_data_dir(&screenpipe_dir, &data_dir, key, tx)
                     .await
             {
                 tracing::error!("background data decrypt failed: {}", e);

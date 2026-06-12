@@ -13,7 +13,7 @@ use crate::store::IcsCalendarEntry;
 use crate::store::IcsCalendarSettingsStore;
 use chrono::{DateTime, Utc};
 use futures::StreamExt;
-use screenpipe_connect::ics_calendar::{
+use daimonion_connect::ics_calendar::{
     parse_ics_to_events as parse_shared_ics_to_events, IcsCalendarEventItem,
 };
 use std::collections::HashMap;
@@ -120,7 +120,7 @@ pub async fn start_ics_calendar_poller(app: AppHandle) {
                 let all_events: Vec<_> = unique_events.into_values().collect();
 
                 if !all_events.is_empty() {
-                    if let Err(e) = screenpipe_events::send_event("calendar_events", all_events) {
+                    if let Err(e) = daimonion_events::send_event("calendar_events", all_events) {
                         debug!("ics_calendar: failed to send events: {}", e);
                     }
                 }

@@ -79,7 +79,7 @@ pub struct RecorderOptions {
     pub ui_capture: Option<UiCaptureOptions>,
 }
 
-/// Mirrors [`screenpipe_a11y::config::UiCaptureConfig`] for the bits that
+/// Mirrors [`daimonion_a11y::config::UiCaptureConfig`] for the bits that
 /// drive paired-capture triggers. Each `None` field preserves the
 /// corresponding library default — see the module doc on each toggle
 /// for trigger implications.

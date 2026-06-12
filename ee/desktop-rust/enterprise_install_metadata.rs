@@ -70,7 +70,7 @@ fn read_enterprise_json_metadata_locations(metadata: &mut EnterpriseInstallMetad
         }
     }
 
-    let user_path = screenpipe_core::paths::default_screenpipe_data_dir().join("enterprise.json");
+    let user_path = daimonion_core::paths::default_screenpipe_data_dir().join("enterprise.json");
     read_enterprise_json_metadata(&user_path, metadata);
 }
 

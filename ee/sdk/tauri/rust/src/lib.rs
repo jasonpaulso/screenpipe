@@ -1013,7 +1013,7 @@ async fn screenpipe_dispose(state: State<'_, Arc<ScreenpipeState>>) -> Result<bo
 /// [`SCREENPIPE_EVENT_CHANNEL`]. Mirrors `SCREENPIPE_EVENTS` from the
 /// Node SDK so renderers can allow-list without redeclaring.
 #[tauri::command]
-async fn screenpipe_events() -> Result<Vec<&'static str>, String> {
+async fn daimonion_events() -> Result<Vec<&'static str>, String> {
     Ok(SCREENPIPE_EVENTS.to_vec())
 }
 
@@ -1048,7 +1048,7 @@ pub fn init<R: Runtime>(config: ScreenpipeConfig) -> TauriPlugin<R> {
             screenpipe_snapshot,
             screenpipe_reveal,
             screenpipe_dispose,
-            screenpipe_events,
+            daimonion_events,
             screenpipe_identify,
         ])
         .setup(move |app, _api| {

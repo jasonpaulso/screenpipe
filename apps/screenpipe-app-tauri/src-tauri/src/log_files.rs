@@ -90,7 +90,7 @@ pub async fn get_log_files(app: AppHandle) -> Result<Vec<LogFile>, String> {
 }
 
 pub fn get_data_dir(app: &AppHandle) -> anyhow::Result<PathBuf> {
-    let default_path = screenpipe_core::paths::default_screenpipe_data_dir();
+    let default_path = daimonion_core::paths::default_screenpipe_data_dir();
 
     let data_dir = match get_store(app, None) {
         Ok(store) => {
@@ -118,5 +118,5 @@ pub fn get_data_dir(app: &AppHandle) -> anyhow::Result<PathBuf> {
 }
 
 pub fn get_screenpipe_data_dir(_app: &AppHandle) -> anyhow::Result<PathBuf> {
-    Ok(screenpipe_core::paths::default_screenpipe_data_dir())
+    Ok(daimonion_core::paths::default_screenpipe_data_dir())
 }

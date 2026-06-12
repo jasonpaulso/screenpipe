@@ -10,8 +10,8 @@
 
 use crate::store::SettingsStore;
 use base64::Engine;
-use screenpipe_connect::connections::all_integrations;
-use screenpipe_connect::oauth::{self, PendingOAuth, OAUTH_REDIRECT_URI, PENDING_OAUTH};
+use daimonion_connect::connections::all_integrations;
+use daimonion_connect::oauth::{self, PendingOAuth, OAUTH_REDIRECT_URI, PENDING_OAUTH};
 use serde::{Deserialize, Serialize};
 use tauri::AppHandle;
 use tauri_plugin_opener::OpenerExt;
@@ -40,8 +40,8 @@ pub struct OAuthInstanceInfo {
 // SecretStore helper
 // ---------------------------------------------------------------------------
 
-async fn open_secret_store() -> Option<screenpipe_secrets::SecretStore> {
-    let data_dir = screenpipe_core::paths::default_screenpipe_data_dir();
+async fn open_secret_store() -> Option<daimonion_secrets::SecretStore> {
+    let data_dir = daimonion_core::paths::default_screenpipe_data_dir();
     let db_path = data_dir.join("db.sqlite");
     let db_url = format!("sqlite:{}?mode=rwc", db_path.display());
     let pool = sqlx::SqlitePool::connect(&db_url).await.ok()?;
@@ -49,7 +49,7 @@ async fn open_secret_store() -> Option<screenpipe_secrets::SecretStore> {
         crate::secrets::KeyResult::Found(k) => Some(k),
         _ => None,
     };
-    screenpipe_secrets::SecretStore::new(pool, secret_key)
+    daimonion_secrets::SecretStore::new(pool, secret_key)
         .await
         .ok()
 }

@@ -5,7 +5,7 @@
 //! Tauri commands for managing the macOS Process Tap per-app exclusion list.
 //!
 //! The exclusion list itself is owned by the audio engine
-//! (`screenpipe_audio::core::process_tap`) and read from a JSON file on
+//! (`daimonion_audio::core::process_tap`) and read from a JSON file on
 //! every tap rebuild. These commands are a thin file-IO bridge for the
 //! Settings UI panel — the engine never goes through them, so the file
 //! remains a valid single source of truth even if the UI is bypassed

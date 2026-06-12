@@ -4,7 +4,7 @@
 
 use log::{error, info, warn};
 use reqwest::Client;
-use screenpipe_engine::telemetry_context::TelemetryContext;
+use daimonion_engine::telemetry_context::TelemetryContext;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use std::path::PathBuf;

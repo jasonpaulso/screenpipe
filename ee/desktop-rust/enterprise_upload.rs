@@ -12,9 +12,9 @@
 
 use base64::{engine::general_purpose::STANDARD as BASE64, Engine};
 use reqwest::header::HeaderMap;
-use screenpipe_core::sync::crypto::compute_checksum;
-use screenpipe_sync::pipeline::{TicketedConfig, TicketedPipeline};
-use screenpipe_sync::{
+use daimonion_core::sync::crypto::compute_checksum;
+use daimonion_sync::pipeline::{TicketedConfig, TicketedPipeline};
+use daimonion_sync::{
     BodyEncryptor, ChaCha20Poly1305Encryptor, KeyRecipientConfig as SyncKeyRecipientConfig,
     SyncError, KEY_SIZE,
 };
@@ -449,7 +449,7 @@ pub fn encrypt_direct_upload_batch(
     // Translate the generic descriptor to the screenpipe wire shape. The
     // two are structurally identical today; keeping a thin conversion
     // here means the wire contract is owned by THIS module — a future
-    // additive field on `screenpipe_sync::EncryptionDescriptor` doesn't
+    // additive field on `daimonion_sync::EncryptionDescriptor` doesn't
     // accidentally leak into the ingest manifest until we choose to map
     // it.
     let recipients_wire: Vec<DirectUploadKeyRecipient> = encrypted
@@ -555,7 +555,7 @@ pub async fn upload_direct_readable_batch(
 }
 
 /// Glue between the screenpipe ingest wire format and
-/// `screenpipe_sync::TicketedPipeline`. The pipeline does ticket → PUT →
+/// `daimonion_sync::TicketedPipeline`. The pipeline does ticket → PUT →
 /// complete with backoff; this fn just builds the JSON shapes the
 /// screenpipe control plane expects and maps errors back into the
 /// enterprise-sync error taxonomy.
@@ -671,7 +671,7 @@ mod tests {
     // by an independent ChaCha20-Poly1305 caller. If the two libraries
     // ever drift (or our encryptor mis-flows the nonce/key), this test
     // breaks loudly before any customer sees corrupt ciphertext.
-    use screenpipe_core::sync::crypto::decrypt;
+    use daimonion_core::sync::crypto::decrypt;
 
     fn direct_cfg() -> DirectUploadConfig {
         DirectUploadConfig {

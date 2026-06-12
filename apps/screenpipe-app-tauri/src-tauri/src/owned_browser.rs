@@ -31,7 +31,7 @@
 //! through `additional_browser_args` on Windows.
 
 use async_trait::async_trait;
-use screenpipe_connect::connections::browser::{EvalResult, OwnedWebviewHandle};
+use daimonion_connect::connections::browser::{EvalResult, OwnedWebviewHandle};
 use serde::Serialize;
 use std::collections::HashMap;
 use std::path::PathBuf;
@@ -782,7 +782,7 @@ impl OwnedWebviewHandle for TauriOwnedHandle {
 pub fn spawn_install_when_ready(
     app: AppHandle,
     screenpipe_dir: PathBuf,
-    owned_browser: std::sync::Arc<screenpipe_connect::connections::browser::OwnedBrowser>,
+    owned_browser: std::sync::Arc<daimonion_connect::connections::browser::OwnedBrowser>,
 ) {
     tauri::async_runtime::spawn(async move {
         // A short retry loop covers the cold-start case where install() is

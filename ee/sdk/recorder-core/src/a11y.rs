@@ -9,7 +9,7 @@
 //! ~250ms on heavy pages, so the JS-facing method hops into spawn_blocking.
 
 use anyhow::Result;
-use screenpipe_a11y::tree::{create_tree_walker, TreeWalkResult, TreeWalkerConfig};
+use daimonion_a11y::tree::{create_tree_walker, TreeWalkResult, TreeWalkerConfig};
 
 pub struct FocusedWindow {
     pub app_name: String,

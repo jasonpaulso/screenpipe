@@ -385,7 +385,7 @@ async fn main() {
     // See `crates/screenpipe-engine/src/cli/db.rs`.
     if std::env::var("SCREENPIPE_IGNORE_DB_LOCK").ok().as_deref() != Some("1") {
         let lock_path =
-            screenpipe_core::paths::default_screenpipe_data_dir().join(".db_recovery.lock");
+            daimonion_core::paths::default_screenpipe_data_dir().join(".db_recovery.lock");
         if let Ok(metadata) = std::fs::metadata(&lock_path) {
             let stale = metadata
                 .modified()
@@ -474,7 +474,7 @@ async fn main() {
     }
 
     // Check if telemetry is disabled via store setting (analyticsEnabled) or offline mode
-    let store_path = screenpipe_core::paths::default_screenpipe_data_dir().join("store.bin");
+    let store_path = daimonion_core::paths::default_screenpipe_data_dir().join("store.bin");
     let store_json = std::fs::read(&store_path).ok().and_then(|data| {
         if data.len() >= 8 && &data[..8] == b"SPSTORE1" {
             // Encrypted store — try to decrypt with keychain key
@@ -483,7 +483,7 @@ async fn main() {
                 secrets::KeyResult::Found(k) => k,
                 _ => return None,
             };
-            let plain = screenpipe_vault::crypto::decrypt_small(&data[8..], &key).ok()?;
+            let plain = daimonion_vault::crypto::decrypt_small(&data[8..], &key).ok()?;
             serde_json::from_slice::<serde_json::Value>(&plain).ok()
         } else {
             serde_json::from_slice::<serde_json::Value>(&data).ok()
@@ -615,7 +615,7 @@ async fn main() {
     // is the common case — truncating loses the message we most need to diagnose.
     // Previous panic moves to last-panic.log.prev; new file starts empty.
     {
-        let log_dir = screenpipe_core::paths::default_screenpipe_data_dir();
+        let log_dir = daimonion_core::paths::default_screenpipe_data_dir();
         let cur = log_dir.join("last-panic.log");
         let prev = log_dir.join("last-panic.log.prev");
         if cur.exists() {
@@ -673,7 +673,7 @@ async fn main() {
         // Write to a crash log file — this survives abort() since we fsync
         // Critical for diagnosing panics inside tao's extern "C" callbacks
         // (send_event, did_finish_launching) where panic_cannot_unwind → abort()
-        let log_dir = screenpipe_core::paths::default_screenpipe_data_dir();
+        let log_dir = daimonion_core::paths::default_screenpipe_data_dir();
         let crash_path = log_dir.join("last-panic.log");
         // Append instead of truncate — when panic_cannot_unwind fires after
         // the original panic, both messages are preserved in the file.
@@ -910,7 +910,7 @@ async fn main() {
     #[cfg(target_os = "macos")]
     let app = app.plugin(tauri_nspanel::init());
 
-    let sync_scheduler = screenpipe_connect::sync_scheduler::SyncScheduler::new();
+    let sync_scheduler = daimonion_connect::sync_scheduler::SyncScheduler::new();
 
     let app = app.manage(recording_state)
         .manage(pi_state)
@@ -1006,12 +1006,12 @@ async fn main() {
             let base_dir = get_base_dir(app_handle, None)
                 .unwrap_or_else(|e| {
                     eprintln!("Failed to get base dir, using fallback: {}", e);
-                    screenpipe_core::paths::default_screenpipe_data_dir()
+                    daimonion_core::paths::default_screenpipe_data_dir()
                 });
 
             // Set up rolling file appender
             let log_dir = get_screenpipe_data_dir(app.handle())
-                .unwrap_or_else(|_| screenpipe_core::paths::default_screenpipe_data_dir());
+                .unwrap_or_else(|_| daimonion_core::paths::default_screenpipe_data_dir());
             let file_appender = RollingFileAppender::builder()
                 .rotation(Rotation::DAILY)
                 .filename_prefix("screenpipe-app")
@@ -1174,7 +1174,7 @@ async fn main() {
                         id: Some(store.recording.analytics_id.clone()),
                         ..Default::default()
                     }));
-                    let telemetry_context = screenpipe_engine::telemetry_context::TelemetryContext::from_env();
+                    let telemetry_context = daimonion_engine::telemetry_context::TelemetryContext::from_env();
                     for (key, value) in telemetry_context.pairs() {
                         scope.set_tag(key, value);
                     }
@@ -1253,7 +1253,7 @@ async fn main() {
                     let engine = match store_for_download.recording.audio_transcription_engine.as_str() {
                         "deepgram" | "screenpipe-cloud" => None, // Cloud engines don't need local model
                         _ => {
-                            use screenpipe_audio::core::engine::AudioTranscriptionEngine;
+                            use daimonion_audio::core::engine::AudioTranscriptionEngine;
                             Some(std::sync::Arc::new(match store_for_download.recording.audio_transcription_engine.as_str() {
                                 "whisper-tiny" => AudioTranscriptionEngine::WhisperTiny,
                                 "whisper-tiny-quantized" => AudioTranscriptionEngine::WhisperTinyQuantized,
@@ -1269,7 +1269,7 @@ async fn main() {
                     if let Some(engine) = engine {
                         let engine_clone = engine.clone();
                         tokio::task::spawn_blocking(move || {
-                            match screenpipe_audio::transcription::whisper::model::download_whisper_model(engine_clone) {
+                            match daimonion_audio::transcription::whisper::model::download_whisper_model(engine_clone) {
                                 Ok(path) => info!("whisper model pre-download complete: {:?}", path),
                                 Err(e) => warn!("whisper model pre-download failed (will retry at server start): {}", e),
                             }
@@ -1279,22 +1279,22 @@ async fn main() {
                     // Download small ONNX models in parallel — these complete in seconds
                     let (_silero_result, _seg_result, _emb_result) = tokio::join!(
                         async {
-                            match screenpipe_audio::vad::silero::SileroVad::ensure_model_downloaded().await {
+                            match daimonion_audio::vad::silero::SileroVad::ensure_model_downloaded().await {
                                 Ok(p) => info!("silero vad model pre-download complete: {:?}", p),
                                 Err(e) => warn!("silero vad pre-download failed (will retry): {}", e),
                             }
                         },
                         async {
-                            match screenpipe_audio::speaker::models::get_or_download_model(
-                                screenpipe_audio::speaker::models::PyannoteModel::Segmentation
+                            match daimonion_audio::speaker::models::get_or_download_model(
+                                daimonion_audio::speaker::models::PyannoteModel::Segmentation
                             ).await {
                                 Ok(p) => info!("segmentation model pre-download complete: {:?}", p),
                                 Err(e) => warn!("segmentation pre-download failed (will retry): {}", e),
                             }
                         },
                         async {
-                            match screenpipe_audio::speaker::models::get_or_download_model(
-                                screenpipe_audio::speaker::models::PyannoteModel::Embedding
+                            match daimonion_audio::speaker::models::get_or_download_model(
+                                daimonion_audio::speaker::models::PyannoteModel::Embedding
                             ).await {
                                 Ok(p) => info!("embedding model pre-download complete: {:?}", p),
                                 Err(e) => warn!("embedding pre-download failed (will retry): {}", e),
@@ -1416,7 +1416,7 @@ async fn main() {
             // let vault_is_locked = data_dir.join(".vault_locked").exists()
             //     || (data_dir.join("vault.meta").exists()
             //         && data_dir.join("db.sqlite").exists()
-            //         && screenpipe_vault::crypto::is_encrypted_file(&data_dir.join("db.sqlite")).unwrap_or(false));
+            //         && daimonion_vault::crypto::is_encrypted_file(&data_dir.join("db.sqlite")).unwrap_or(false));
             // if vault_is_locked {
             //     info!("Vault is locked — skipping server start, waiting for unlock");
             //     let _ = app_handle.emit("vault-locked-on-startup", ());
@@ -1452,7 +1452,7 @@ async fn main() {
                 let app_for_owned = app_handle.clone();
                 let pipe_agent_events =
                     crate::agent_event_emitter::PipeAgentEventEmitter::new(app_for_pipe);
-                let on_pipe_output: Option<screenpipe_core::pipes::OnPipeOutputLine> = Some(
+                let on_pipe_output: Option<daimonion_core::pipes::OnPipeOutputLine> = Some(
                     std::sync::Arc::new(move |pipe_name: &str, exec_id: i64, line: &str| {
                         pipe_agent_events.emit_line(pipe_name, exec_id, line);
                     }),
@@ -1480,7 +1480,7 @@ async fn main() {
                                 } else {
                                     Some(store_clone.recording.api_key.clone())
                                 };
-                                match screenpipe_engine::auth_key::resolve_api_auth_key(
+                                match daimonion_engine::auth_key::resolve_api_auth_key(
                                     &data_dir_clone,
                                     settings_key_opt.as_deref(),
                                 )
@@ -1562,7 +1562,7 @@ async fn main() {
                             // listening for `window-focused` events instead of giving
                             // up after a fixed budget.
                             let owned_browser =
-                                screenpipe_connect::connections::browser::OwnedBrowser::default_instance();
+                                daimonion_connect::connections::browser::OwnedBrowser::default_instance();
                             crate::owned_browser::spawn_install_when_ready(
                                 app_for_owned.clone(),
                                 config.data_dir.clone(),

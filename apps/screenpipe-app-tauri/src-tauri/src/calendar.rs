@@ -61,7 +61,7 @@ pub async fn calendar_status() -> Result<CalendarStatus, String> {
     #[cfg(target_os = "macos")]
     {
         use eventkit::AuthorizationStatus;
-        use screenpipe_connect::calendar::ScreenpipeCalendar;
+        use daimonion_connect::calendar::ScreenpipeCalendar;
 
         let auth_status = ScreenpipeCalendar::authorization_status();
         let status_str = format!("{}", auth_status);
@@ -94,7 +94,7 @@ pub async fn calendar_status() -> Result<CalendarStatus, String> {
 
     #[cfg(target_os = "windows")]
     {
-        use screenpipe_connect::calendar_windows::ScreenpipeCalendar;
+        use daimonion_connect::calendar_windows::ScreenpipeCalendar;
 
         let result = tokio::task::spawn_blocking(|| {
             match ScreenpipeCalendar::new() {
@@ -185,7 +185,7 @@ pub async fn calendar_reset_permission(app: tauri::AppHandle) -> Result<String, 
         let stderr = String::from_utf8_lossy(&output.stderr).trim().to_string();
         if output.status.success() {
             tokio::task::spawn_blocking(|| {
-                let cal = screenpipe_connect::calendar::ScreenpipeCalendar::new();
+                let cal = daimonion_connect::calendar::ScreenpipeCalendar::new();
                 cal.reset();
             })
             .await
@@ -219,7 +219,7 @@ pub async fn calendar_reset_permission(app: tauri::AppHandle) -> Result<String, 
 pub async fn calendar_authorize() -> Result<String, String> {
     #[cfg(target_os = "macos")]
     {
-        use screenpipe_connect::calendar::ScreenpipeCalendar;
+        use daimonion_connect::calendar::ScreenpipeCalendar;
         let result = tokio::task::spawn_blocking(|| {
             let cal = ScreenpipeCalendar::new();
             cal.request_access()
@@ -261,7 +261,7 @@ pub async fn calendar_get_events(
 ) -> Result<Vec<CalendarEventItem>, String> {
     #[cfg(target_os = "macos")]
     {
-        use screenpipe_connect::calendar::ScreenpipeCalendar;
+        use daimonion_connect::calendar::ScreenpipeCalendar;
 
         let hb = hours_back.unwrap_or(1);
         let ha = hours_ahead.unwrap_or(2);
@@ -277,7 +277,7 @@ pub async fn calendar_get_events(
 
     #[cfg(target_os = "windows")]
     {
-        use screenpipe_connect::calendar_windows::ScreenpipeCalendar;
+        use daimonion_connect::calendar_windows::ScreenpipeCalendar;
 
         let hb = hours_back.unwrap_or(1);
         let ha = hours_ahead.unwrap_or(2);
@@ -304,7 +304,7 @@ pub async fn calendar_get_events(
 pub async fn calendar_get_current_meeting() -> Result<Vec<CalendarEventItem>, String> {
     #[cfg(target_os = "macos")]
     {
-        use screenpipe_connect::calendar::ScreenpipeCalendar;
+        use daimonion_connect::calendar::ScreenpipeCalendar;
 
         tokio::task::spawn_blocking(|| {
             let cal = ScreenpipeCalendar::new();
@@ -317,7 +317,7 @@ pub async fn calendar_get_current_meeting() -> Result<Vec<CalendarEventItem>, St
 
     #[cfg(target_os = "windows")]
     {
-        use screenpipe_connect::calendar_windows::ScreenpipeCalendar;
+        use daimonion_connect::calendar_windows::ScreenpipeCalendar;
 
         tokio::task::spawn_blocking(|| {
             let cal = ScreenpipeCalendar::new()?;
@@ -349,7 +349,7 @@ pub async fn start_calendar_events_publisher() {
     loop {
         let items: Vec<CalendarEventItem> = collect_calendar_events().await;
 
-        if let Err(e) = screenpipe_events::send_event("calendar_events", items) {
+        if let Err(e) = daimonion_events::send_event("calendar_events", items) {
             debug!("calendar publisher: failed to send event: {}", e);
         }
 
@@ -360,7 +360,7 @@ pub async fn start_calendar_events_publisher() {
 async fn collect_calendar_events() -> Vec<CalendarEventItem> {
     #[cfg(target_os = "macos")]
     {
-        use screenpipe_connect::calendar::ScreenpipeCalendar;
+        use daimonion_connect::calendar::ScreenpipeCalendar;
 
         // Allow reads once access was granted this session, even if the OS's
         // cached status still lags (macOS 26 reports a stale non-FullAccess
@@ -393,7 +393,7 @@ async fn collect_calendar_events() -> Vec<CalendarEventItem> {
 
     #[cfg(target_os = "windows")]
     {
-        use screenpipe_connect::calendar_windows::ScreenpipeCalendar;
+        use daimonion_connect::calendar_windows::ScreenpipeCalendar;
 
         match tokio::task::spawn_blocking(|| {
             let cal = ScreenpipeCalendar::new()?;
@@ -431,7 +431,7 @@ async fn collect_calendar_events() -> Vec<CalendarEventItem> {
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
 #[cfg(target_os = "macos")]
-fn calendar_event_to_item(event: screenpipe_connect::calendar::CalendarEvent) -> CalendarEventItem {
+fn calendar_event_to_item(event: daimonion_connect::calendar::CalendarEvent) -> CalendarEventItem {
     let start_display = event.start_local.format("%-I:%M %p").to_string();
     let end_display = event.end_local.format("%-I:%M %p").to_string();
 
@@ -453,7 +453,7 @@ fn calendar_event_to_item(event: screenpipe_connect::calendar::CalendarEvent) ->
 
 #[cfg(target_os = "windows")]
 fn calendar_event_to_item_win(
-    event: screenpipe_connect::calendar_windows::CalendarEvent,
+    event: daimonion_connect::calendar_windows::CalendarEvent,
 ) -> CalendarEventItem {
     let start_display = event.start_local.format("%-I:%M %p").to_string();
     let end_display = event.end_local.format("%-I:%M %p").to_string();

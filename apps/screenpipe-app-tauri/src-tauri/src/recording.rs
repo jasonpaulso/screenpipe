@@ -13,7 +13,7 @@ use crate::config;
 use crate::permissions::do_permissions_check;
 use crate::server_core::ServerCore;
 use crate::store::SettingsStore;
-use screenpipe_engine::RecordingConfig;
+use daimonion_engine::RecordingConfig;
 use serde::{Deserialize, Serialize};
 use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
 use std::sync::Arc;
@@ -193,14 +193,14 @@ pub struct AudioDeviceInfo {
 
 pub async fn get_available_audio_devices() -> Result<Vec<AudioDeviceInfo>, String> {
     debug!("Getting available audio devices");
-    let devices = screenpipe_audio::core::device::list_audio_devices()
+    let devices = daimonion_audio::core::device::list_audio_devices()
         .await
         .map_err(|e| format!("Failed to list audio devices: {}", e))?;
 
-    let default_input = screenpipe_audio::core::device::default_input_device()
+    let default_input = daimonion_audio::core::device::default_input_device()
         .map(|d| d.to_string())
         .ok();
-    let default_output = screenpipe_audio::core::device::default_output_device()
+    let default_output = daimonion_audio::core::device::default_output_device()
         .await
         .map(|d| d.to_string())
         .ok();
@@ -237,7 +237,7 @@ pub async fn get_boot_phase() -> crate::health::BootPhaseSnapshot {
 
 pub async fn get_available_monitors() -> Result<Vec<MonitorDevice>, String> {
     debug!("Getting available monitors");
-    let monitors = screenpipe_screen::monitor::list_monitors().await;
+    let monitors = daimonion_screen::monitor::list_monitors().await;
 
     if monitors.is_empty() {
         return Err("No monitors found".to_string());
@@ -804,7 +804,7 @@ pub async fn spawn_screenpipe(
         } else {
             Some(store.recording.api_key.clone())
         };
-        match screenpipe_engine::auth_key::resolve_api_auth_key(
+        match daimonion_engine::auth_key::resolve_api_auth_key(
             &data_dir,
             settings_key_opt.as_deref(),
         )
@@ -835,14 +835,14 @@ pub async fn spawn_screenpipe(
     //
     // `spawn_install_when_ready` survives tray-only mode by listening for
     // `window-focused` events instead of giving up after a fixed budget.
-    let owned_browser = screenpipe_connect::connections::browser::OwnedBrowser::default_instance();
+    let owned_browser = daimonion_connect::connections::browser::OwnedBrowser::default_instance();
     crate::owned_browser::spawn_install_when_ready(
         app_for_owned,
         recording_config.data_dir.clone(),
         owned_browser.clone(),
     );
     let pipe_agent_events = crate::agent_event_emitter::PipeAgentEventEmitter::new(app_for_pipe);
-    let on_pipe_output: Option<screenpipe_core::pipes::OnPipeOutputLine> = Some(
+    let on_pipe_output: Option<daimonion_core::pipes::OnPipeOutputLine> = Some(
         std::sync::Arc::new(move |pipe_name: &str, exec_id: i64, line: &str| {
             pipe_agent_events.emit_line(pipe_name, exec_id, line);
         }),

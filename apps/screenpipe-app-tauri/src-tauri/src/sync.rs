@@ -8,7 +8,7 @@ use crate::recording::{local_api_context_from_app, LocalApiContext};
 use crate::store::{CloudArchiveSettingsStore, CloudSyncSettingsStore, SettingsStore};
 use base64::{engine::general_purpose::STANDARD as BASE64, Engine};
 use chrono::Utc;
-use screenpipe_core::sync::{get_or_create_machine_id, SyncClientConfig, SyncManager};
+use daimonion_core::sync::{get_or_create_machine_id, SyncClientConfig, SyncManager};
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 use tauri::{AppHandle, State};
@@ -54,7 +54,7 @@ impl Default for SyncState {
     }
 }
 
-// Machine ID is now provided by screenpipe_core::sync::get_or_create_machine_id
+// Machine ID is now provided by daimonion_core::sync::get_or_create_machine_id
 
 /// Sync status response.
 #[derive(Debug, Clone, Serialize, Deserialize, specta::Type)]

@@ -40,7 +40,7 @@ pub fn start(app: AppHandle) {
     let audio_app = app.clone();
     tauri::async_runtime::spawn(async move {
         let mut sub =
-            screenpipe_events::subscribe_to_event::<StallEvent>("meeting_streaming_audio_stall");
+            daimonion_events::subscribe_to_event::<StallEvent>("meeting_streaming_audio_stall");
         while let Some(event) = sub.next().await {
             handle_audio_stall(&audio_app, event.data);
         }
@@ -48,7 +48,7 @@ pub fn start(app: AppHandle) {
 
     let transcript_app = app;
     tauri::async_runtime::spawn(async move {
-        let mut sub = screenpipe_events::subscribe_to_event::<StallEvent>(
+        let mut sub = daimonion_events::subscribe_to_event::<StallEvent>(
             "meeting_streaming_transcript_stall",
         );
         while let Some(event) = sub.next().await {

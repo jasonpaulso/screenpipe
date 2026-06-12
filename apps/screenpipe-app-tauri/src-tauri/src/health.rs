@@ -983,7 +983,7 @@ pub async fn start_health_check(app: tauri::AppHandle) -> Result<()> {
                     // cooldowns once so degraded recording is re-detected from scratch.
                     // Only reset once per wake event to avoid suppressing the counter
                     // for the entire 30s wake window.
-                    let woke = screenpipe_engine::sleep_monitor::recently_woke_from_sleep();
+                    let woke = daimonion_engine::sleep_monitor::recently_woke_from_sleep();
                     if woke && !wake_reset_done {
                         wake_reset_done = true;
                         consecutive_audio_stall = 0;

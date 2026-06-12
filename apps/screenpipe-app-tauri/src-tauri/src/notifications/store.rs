@@ -22,7 +22,7 @@ pub struct NotificationHistoryEntry {
 }
 
 fn path() -> PathBuf {
-    screenpipe_core::paths::default_screenpipe_data_dir().join("notifications.json")
+    daimonion_core::paths::default_screenpipe_data_dir().join("notifications.json")
 }
 
 pub fn read_all() -> Vec<NotificationHistoryEntry> {

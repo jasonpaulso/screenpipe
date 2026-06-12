@@ -172,7 +172,7 @@ pub fn start(app: AppHandle) {
     let cache_initialized_for_sub = Arc::clone(&cache_initialized);
     tauri::async_runtime::spawn(async move {
         let mut sub =
-            screenpipe_events::subscribe_to_event::<Vec<CalendarEventSignal>>("calendar_events");
+            daimonion_events::subscribe_to_event::<Vec<CalendarEventSignal>>("calendar_events");
         while let Some(event) = sub.next().await {
             let mut guard = calendar_events_for_sub.write().await;
             *guard = event
@@ -194,7 +194,7 @@ pub fn start(app: AppHandle) {
     let prewarm_suppressed = Arc::clone(&suppressed_titles);
     tauri::async_runtime::spawn(async move {
         let mut sub =
-            screenpipe_events::subscribe_to_event::<MeetingPrewarmEvent>("meeting_about_to_start");
+            daimonion_events::subscribe_to_event::<MeetingPrewarmEvent>("meeting_about_to_start");
         while let Some(event) = sub.next().await {
             if !meeting_notifications_enabled(&prewarm_app) {
                 debug!("meeting prewarm: notification skipped by preference");
@@ -252,7 +252,7 @@ pub fn start(app: AppHandle) {
     let cache_initialized_for_started = Arc::clone(&cache_initialized);
     tauri::async_runtime::spawn(async move {
         let mut sub =
-            screenpipe_events::subscribe_to_event::<MeetingStartedEvent>("meeting_started");
+            daimonion_events::subscribe_to_event::<MeetingStartedEvent>("meeting_started");
 
         while let Some(event) = sub.next().await {
             if !meeting_notifications_enabled(&app) {
@@ -352,7 +352,7 @@ pub fn start(app: AppHandle) {
 
 fn forward_screenpipe_event(app: AppHandle, source: &'static str, target: &'static str) {
     tauri::async_runtime::spawn(async move {
-        let mut sub = screenpipe_events::subscribe_to_event::<serde_json::Value>(source);
+        let mut sub = daimonion_events::subscribe_to_event::<serde_json::Value>(source);
         while let Some(event) = sub.next().await {
             if let Err(err) = app.emit(target, event.data) {
                 debug!("meeting live notes: failed to emit {target}: {err}");

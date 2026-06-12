@@ -61,7 +61,7 @@ pub async fn start_google_calendar_publisher(app: AppHandle) {
                     let count = events.len();
                     let items: Vec<CalendarEventItem> =
                         events.into_iter().map(into_calendar_event_item).collect();
-                    if let Err(e) = screenpipe_events::send_event("calendar_events", items) {
+                    if let Err(e) = daimonion_events::send_event("calendar_events", items) {
                         debug!("google calendar publisher: failed to send: {e}");
                     } else {
                         debug!("google calendar publisher: published {count} events");

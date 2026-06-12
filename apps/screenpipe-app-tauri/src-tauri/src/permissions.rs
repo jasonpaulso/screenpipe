@@ -245,7 +245,7 @@ mod accessibility {
 
 #[cfg(target_os = "macos")]
 fn check_accessibility_permission() -> OSPermissionStatus {
-    core_to_os_status(screenpipe_core::permissions::check_accessibility())
+    core_to_os_status(daimonion_core::permissions::check_accessibility())
 }
 
 #[cfg(target_os = "macos")]
@@ -273,12 +273,12 @@ impl OSPermissionStatus {
 }
 
 /// Convert core permission status to the Tauri app's OSPermissionStatus
-fn core_to_os_status(status: screenpipe_core::permissions::PermissionStatus) -> OSPermissionStatus {
+fn core_to_os_status(status: daimonion_core::permissions::PermissionStatus) -> OSPermissionStatus {
     match status {
-        screenpipe_core::permissions::PermissionStatus::NotNeeded => OSPermissionStatus::NotNeeded,
-        screenpipe_core::permissions::PermissionStatus::NotDetermined => OSPermissionStatus::Empty,
-        screenpipe_core::permissions::PermissionStatus::Granted => OSPermissionStatus::Granted,
-        screenpipe_core::permissions::PermissionStatus::Denied => OSPermissionStatus::Denied,
+        daimonion_core::permissions::PermissionStatus::NotNeeded => OSPermissionStatus::NotNeeded,
+        daimonion_core::permissions::PermissionStatus::NotDetermined => OSPermissionStatus::Empty,
+        daimonion_core::permissions::PermissionStatus::Granted => OSPermissionStatus::Granted,
+        daimonion_core::permissions::PermissionStatus::Denied => OSPermissionStatus::Denied,
     }
 }
 
@@ -301,7 +301,7 @@ impl OSPermissionsCheck {
 #[tauri::command(async)]
 #[specta::specta]
 pub fn check_microphone_permission() -> OSPermissionStatus {
-    core_to_os_status(screenpipe_core::permissions::check_microphone())
+    core_to_os_status(daimonion_core::permissions::check_microphone())
 }
 
 /// Check only screen recording permission (no dialog trigger)
@@ -309,7 +309,7 @@ pub fn check_microphone_permission() -> OSPermissionStatus {
 #[tauri::command(async)]
 #[specta::specta]
 pub fn check_screen_recording_permission() -> OSPermissionStatus {
-    core_to_os_status(screenpipe_core::permissions::check_screen_recording_tauri())
+    core_to_os_status(daimonion_core::permissions::check_screen_recording_tauri())
 }
 
 /// Check only accessibility permission
@@ -317,7 +317,7 @@ pub fn check_screen_recording_permission() -> OSPermissionStatus {
 #[tauri::command(async)]
 #[specta::specta]
 pub fn check_accessibility_permission_cmd() -> OSPermissionStatus {
-    core_to_os_status(screenpipe_core::permissions::check_accessibility())
+    core_to_os_status(daimonion_core::permissions::check_accessibility())
 }
 
 /// Check Input Monitoring permission (macOS only).
@@ -331,7 +331,7 @@ pub fn check_accessibility_permission_cmd() -> OSPermissionStatus {
 pub fn check_input_monitoring_permission_cmd() -> OSPermissionStatus {
     #[cfg(target_os = "macos")]
     {
-        if screenpipe_a11y::check_input_monitoring() {
+        if daimonion_a11y::check_input_monitoring() {
             OSPermissionStatus::Granted
         } else {
             // The TCC preflight API doesn't distinguish NotDetermined from
@@ -364,7 +364,7 @@ pub async fn request_input_monitoring_permission() -> OSPermissionStatus {
     #[cfg(target_os = "macos")]
     {
         use std::process::Command;
-        if screenpipe_a11y::check_input_monitoring() {
+        if daimonion_a11y::check_input_monitoring() {
             return OSPermissionStatus::Granted;
         }
         // Open the Input Monitoring pane first so when the OS prompt
@@ -377,7 +377,7 @@ pub async fn request_input_monitoring_permission() -> OSPermissionStatus {
         // Triggers the native consent prompt the first time the process
         // calls it. Subsequent calls are no-ops if denied — the user has
         // to enable from System Settings, which we just opened.
-        if screenpipe_a11y::request_input_monitoring() {
+        if daimonion_a11y::request_input_monitoring() {
             OSPermissionStatus::Granted
         } else {
             OSPermissionStatus::Denied
@@ -399,7 +399,7 @@ pub async fn check_permission(permission: OSPermission) -> OSPermissionStatus {
             OSPermission::Microphone => check_microphone_permission(),
             OSPermission::Accessibility => check_accessibility_permission(),
             OSPermission::InputMonitoring => {
-                if screenpipe_a11y::check_input_monitoring() {
+                if daimonion_a11y::check_input_monitoring() {
                     OSPermissionStatus::Granted
                 } else {
                     OSPermissionStatus::Denied
@@ -464,7 +464,7 @@ pub async fn reset_permission(app: tauri::AppHandle, permission: OSPermission) -
 
         if matches!(permission, OSPermission::Calendar) {
             tokio::task::spawn_blocking(|| {
-                let cal = screenpipe_connect::calendar::ScreenpipeCalendar::new();
+                let cal = daimonion_connect::calendar::ScreenpipeCalendar::new();
                 cal.reset();
             })
             .await
@@ -682,7 +682,7 @@ const CHROMIUM_BROWSERS: &[ChromiumBrowserInfo] = &[
 pub fn check_coreaudio_process_tap_available() -> bool {
     #[cfg(target_os = "macos")]
     {
-        screenpipe_audio::core::process_tap::is_process_tap_available()
+        daimonion_audio::core::process_tap::is_process_tap_available()
     }
     #[cfg(not(target_os = "macos"))]
     {

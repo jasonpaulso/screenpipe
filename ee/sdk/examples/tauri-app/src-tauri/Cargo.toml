@@ -1,5 +1,5 @@
 [package]
-name = "screenpipe-tauri-example"
+name = "daimonion-tauri-example"
 version = "0.1.0"
 edition = "2021"
 publish = false
@@ -13,5 +13,5 @@ publish = false
 tauri-build = { version = "2", features = [] }
 
 [dependencies]
-screenpipe-tauri = { path = "../../../tauri/rust" }
+daimonion-tauri = { path = "../../../tauri/rust" }
 tauri = { version = "2", features = [] }

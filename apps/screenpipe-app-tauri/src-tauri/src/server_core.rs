@@ -12,13 +12,13 @@ use std::path::PathBuf;
 use std::sync::Arc;
 use std::time::Duration;
 
-use screenpipe_audio::core::device::resolve_audio_devices_for_capture;
-use screenpipe_audio::core::engine::AudioTranscriptionEngine;
-use screenpipe_audio::transcription::stt::{
+use daimonion_audio::core::device::resolve_audio_devices_for_capture;
+use daimonion_audio::core::engine::AudioTranscriptionEngine;
+use daimonion_audio::transcription::stt::{
     OpenAICompatibleConfig, DEFAULT_OPENAI_COMPATIBLE_ENDPOINT, DEFAULT_OPENAI_COMPATIBLE_MODEL,
 };
-use screenpipe_db::DatabaseManager;
-use screenpipe_engine::{
+use daimonion_db::DatabaseManager;
+use daimonion_engine::{
     analytics, hot_frame_cache::HotFrameCache, power::PowerManagerHandle, server::bind_listener,
     start_power_manager_with_pref, start_sleep_monitor, RecordingConfig, ResourceMonitor, SCServer,
 };
@@ -29,18 +29,18 @@ use tracing::{error, info, warn};
 /// The HTTP server, pipes, and DB live here.
 pub struct ServerCore {
     pub db: Arc<DatabaseManager>,
-    pub audio_manager: Arc<screenpipe_audio::audio_manager::AudioManager>,
+    pub audio_manager: Arc<daimonion_audio::audio_manager::AudioManager>,
     pub hot_frame_cache: Arc<HotFrameCache>,
-    pub vision_metrics: Arc<screenpipe_screen::PipelineMetrics>,
+    pub vision_metrics: Arc<daimonion_screen::PipelineMetrics>,
     pub power_manager: Arc<PowerManagerHandle>,
-    pub pipe_manager: Arc<tokio::sync::Mutex<screenpipe_core::pipes::PipeManager>>,
+    pub pipe_manager: Arc<tokio::sync::Mutex<daimonion_core::pipes::PipeManager>>,
     pub manual_meeting: Arc<tokio::sync::RwLock<Option<i64>>>,
     /// Shared HD-recording controller. Lives on ServerCore (not the per-
     /// capture `Server`, which is recreated on every recording restart) so
     /// the tray menu and `/capture/hd` routes keep working across capture
     /// toggles. Handed to both the HTTP server and the VisionManager so HTTP
     /// toggles and the capture loop see the same session state.
-    pub high_fps_controller: Arc<screenpipe_engine::high_fps_controller::HighFpsController>,
+    pub high_fps_controller: Arc<daimonion_engine::high_fps_controller::HighFpsController>,
     pub data_dir: PathBuf,
     pub data_path: PathBuf,
     pub port: u16,
@@ -63,9 +63,9 @@ impl ServerCore {
     /// that should survive recording toggles.
     pub async fn start(
         config: &RecordingConfig,
-        on_pipe_output: Option<screenpipe_core::pipes::OnPipeOutputLine>,
+        on_pipe_output: Option<daimonion_core::pipes::OnPipeOutputLine>,
         owned_browser: Option<
-            std::sync::Arc<screenpipe_connect::connections::browser::OwnedBrowser>,
+            std::sync::Arc<daimonion_connect::connections::browser::OwnedBrowser>,
         >,
         // App-scoped cloud-token handle. Outlives Server (which is recreated
         // on every recording restart) so a token pushed via `set_cloud_token`
@@ -258,7 +258,7 @@ impl ServerCore {
                     .unwrap_or_else(chrono::Utc::now);
                 rt.spawn(async move {
                     cache
-                        .push_audio(screenpipe_engine::hot_frame_cache::HotAudio {
+                        .push_audio(daimonion_engine::hot_frame_cache::HotAudio {
                             audio_chunk_id: info.audio_chunk_id,
                             timestamp: ts,
                             transcription: info.transcription.into(),
@@ -279,13 +279,13 @@ impl ServerCore {
         let audio_manager = Arc::new(audio_manager);
 
         // --- Shared state ---
-        let vision_metrics = Arc::new(screenpipe_screen::PipelineMetrics::new());
+        let vision_metrics = Arc::new(daimonion_screen::PipelineMetrics::new());
 
         let initial_power_pref = config
             .power_mode
             .as_deref()
             .and_then(|s| {
-                serde_json::from_value::<screenpipe_engine::power::PowerMode>(
+                serde_json::from_value::<daimonion_engine::power::PowerMode>(
                     serde_json::Value::String(s.to_string()),
                 )
                 .ok()
@@ -357,13 +357,13 @@ impl ServerCore {
                     None
                 }
             };
-            match screenpipe_secrets::SecretStore::new(db.pool.clone(), secret_key).await {
+            match daimonion_secrets::SecretStore::new(db.pool.clone(), secret_key).await {
                 Ok(store) => {
-                    let fixed = screenpipe_secrets::fix_secret_file_permissions(&config.data_dir);
+                    let fixed = daimonion_secrets::fix_secret_file_permissions(&config.data_dir);
                     if fixed > 0 {
                         info!("fixed permissions on {} credential files", fixed);
                     }
-                    match screenpipe_secrets::migrate_legacy_secrets(&store, &config.data_dir).await
+                    match daimonion_secrets::migrate_legacy_secrets(&store, &config.data_dir).await
                     {
                         Ok(report) => {
                             if !report.migrated.is_empty() {
@@ -380,7 +380,7 @@ impl ServerCore {
                     // instance=None keep hitting the stale default and
                     // reporting "not connected" even though a healthy
                     // instanced entry sits right next to it.
-                    match screenpipe_connect::oauth::sweep_shadowed_default_slots(&store).await {
+                    match daimonion_connect::oauth::sweep_shadowed_default_slots(&store).await {
                         Ok(n) if n > 0 => {
                             info!("oauth: swept {} shadowed default-slot entry(ies)", n);
                         }
@@ -398,7 +398,7 @@ impl ServerCore {
                     // cancel the task) and so `/health` can surface metrics
                     // later via `server.oauth_refresher.snapshot()`.
                     let refresher = Arc::new(
-                        screenpipe_connect::oauth_refresh_scheduler::OAuthRefreshScheduler::new(),
+                        daimonion_connect::oauth_refresh_scheduler::OAuthRefreshScheduler::new(),
                     );
                     refresher.start(store_arc.clone());
                     server.oauth_refresher = Some(refresher);
@@ -408,7 +408,7 @@ impl ServerCore {
                     // when neither destination is enabled in the
                     // connections store, so it's safe to always start.
                     let memory_sync = Arc::new(
-                        screenpipe_engine::external_memory_sync::ExternalMemorySyncScheduler::new(),
+                        daimonion_engine::external_memory_sync::ExternalMemorySyncScheduler::new(),
                     );
                     memory_sync.start(db.clone(), Some(store_arc.clone()), local_data_dir.clone());
                     server.external_memory_sync = Some(memory_sync);
@@ -433,22 +433,22 @@ impl ServerCore {
         // run without restarting the engine.
         let cloud_token_handle = server.cloud_token.clone();
         let pi_executor = Arc::new(
-            screenpipe_core::agents::pi::PiExecutor::with_shared_user_token(
+            daimonion_core::agents::pi::PiExecutor::with_shared_user_token(
                 cloud_token_handle.clone(),
             )
             .with_api_auth_key(config.api_auth_key.clone()),
         );
         let mut agent_executors: std::collections::HashMap<
             String,
-            Arc<dyn screenpipe_core::agents::AgentExecutor>,
+            Arc<dyn daimonion_core::agents::AgentExecutor>,
         > = std::collections::HashMap::new();
         agent_executors.insert("pi".to_string(), pi_executor.clone());
 
-        let pipe_store: Option<Arc<dyn screenpipe_core::pipes::PipeStore>> = Some(Arc::new(
-            screenpipe_engine::pipe_store::SqlitePipeStore::new(db.clone()),
+        let pipe_store: Option<Arc<dyn daimonion_core::pipes::PipeStore>> = Some(Arc::new(
+            daimonion_engine::pipe_store::SqlitePipeStore::new(db.clone()),
         ));
 
-        let mut pipe_manager = screenpipe_core::pipes::PipeManager::new(
+        let mut pipe_manager = daimonion_core::pipes::PipeManager::new(
             pipes_dir,
             agent_executors,
             pipe_store,
@@ -500,7 +500,7 @@ impl ServerCore {
                                 let mgr = pm.lock().await;
                                 let all = mgr
                                     .list_artifact_declarations(
-                                        screenpipe_engine::pipes_api::ARTIFACT_FALLBACK_CAP,
+                                        daimonion_engine::pipes_api::ARTIFACT_FALLBACK_CAP,
                                     )
                                     .await;
                                 all.into_iter()
@@ -509,7 +509,7 @@ impl ServerCore {
                                     .unwrap_or_default()
                             };
                             if !items.is_empty() {
-                                screenpipe_engine::routes::outputs::auto_register_pipe_outputs(
+                                daimonion_engine::routes::outputs::auto_register_pipe_outputs(
                                     &db, items, &name, &dir,
                                 )
                                 .await;
@@ -539,7 +539,7 @@ impl ServerCore {
         // explicit timer sessions (the tray "Record HD for N minutes") need
         // no detector at all.
         let high_fps_controller = Arc::new(
-            screenpipe_engine::high_fps_controller::HighFpsController::new(
+            daimonion_engine::high_fps_controller::HighFpsController::new(
                 None,
                 config.hd_recording_default,
                 config.hd_recording_interval_ms,
@@ -553,7 +553,7 @@ impl ServerCore {
             tokio::spawn(async move {
                 use futures::StreamExt;
                 let mut sub =
-                    screenpipe_events::subscribe_to_event::<serde_json::Value>("meeting_ended");
+                    daimonion_events::subscribe_to_event::<serde_json::Value>("meeting_ended");
                 while let Some(event) = sub.next().await {
                     let meeting_id = event
                         .data
@@ -576,7 +576,7 @@ impl ServerCore {
             tokio::spawn(async move {
                 use futures::StreamExt;
                 let mut sub =
-                    screenpipe_events::subscribe_to_event::<serde_json::Value>("meeting_started");
+                    daimonion_events::subscribe_to_event::<serde_json::Value>("meeting_started");
                 while let Some(event) = sub.next().await {
                     let meeting_id = event
                         .data
@@ -590,13 +590,13 @@ impl ServerCore {
                     let snap = controller.snapshot();
                     if !matches!(
                         snap.default_mode,
-                        screenpipe_engine::high_fps_controller::DefaultMode::Always
+                        daimonion_engine::high_fps_controller::DefaultMode::Always
                     ) {
                         continue;
                     }
                     let already_bound = matches!(
                         snap.kind,
-                        Some(screenpipe_engine::high_fps_controller::SessionKind::Meeting { .. })
+                        Some(daimonion_engine::high_fps_controller::SessionKind::Meeting { .. })
                     );
                     if !already_bound {
                         controller.start_meeting_session(id);
@@ -611,7 +611,7 @@ impl ServerCore {
 
         // Install pi agent in background
         tokio::spawn(async move {
-            use screenpipe_core::agents::AgentExecutor;
+            use daimonion_core::agents::AgentExecutor;
             if let Err(e) = pi_executor.ensure_installed().await {
                 warn!("pi agent install failed: {}", e);
             }
@@ -647,8 +647,8 @@ impl ServerCore {
         let mdns_enabled = std::env::var("SCREENPIPE_ENABLE_MDNS")
             .map(|v| matches!(v.trim(), "1" | "true" | "TRUE"))
             .unwrap_or(false);
-        screenpipe_connect::mdns::set_enabled(mdns_enabled);
-        if let Err(e) = screenpipe_connect::mdns::advertise(config.port) {
+        daimonion_connect::mdns::set_enabled(mdns_enabled);
+        if let Err(e) = daimonion_connect::mdns::advertise(config.port) {
             warn!("mdns advertisement failed (non-fatal): {}", e);
         }
 
@@ -669,7 +669,7 @@ impl ServerCore {
         // we filter client-side via the text/image policies built from
         // this list; the tinfoil adapters forward the raw list so the
         // enclave filters server-side. `secret` is always included
-        // regardless (see screenpipe_redact::parse_allow_list).
+        // regardless (see daimonion_redact::parse_allow_list).
         let pii_labels = config.pii_redaction_labels.clone();
 
         // Cloud Clerk JWT — same token used for the cloud transcription
@@ -685,13 +685,13 @@ impl ServerCore {
         let redact_shutdown = Arc::new(Notify::new());
 
         if config.async_pii_redaction {
-            use screenpipe_redact::adapters::onnx::{OnnxConfig, OnnxRedactor};
-            use screenpipe_redact::adapters::opf::{OpfAdapter, OpfConfig};
-            use screenpipe_redact::adapters::tinfoil::{TinfoilConfig, TinfoilRedactor};
-            use screenpipe_redact::pipeline::{Pipeline, PipelineConfig};
-            use screenpipe_redact::worker::{Worker, WorkerConfig, ALL_TARGET_TABLES};
-            use screenpipe_redact::Redactor;
-            use screenpipe_redact::TextRedactionPolicy;
+            use daimonion_redact::adapters::onnx::{OnnxConfig, OnnxRedactor};
+            use daimonion_redact::adapters::opf::{OpfAdapter, OpfConfig};
+            use daimonion_redact::adapters::tinfoil::{TinfoilConfig, TinfoilRedactor};
+            use daimonion_redact::pipeline::{Pipeline, PipelineConfig};
+            use daimonion_redact::worker::{Worker, WorkerConfig, ALL_TARGET_TABLES};
+            use daimonion_redact::Redactor;
+            use daimonion_redact::TextRedactionPolicy;
 
             // Backend selection for the text "AI" step:
             //   - "local"   → on-device candle OPF v3 (opf-rs). First
@@ -818,13 +818,13 @@ impl ServerCore {
         }
 
         if config.async_image_pii_redaction {
-            use screenpipe_redact::adapters::rfdetr::{RfdetrConfig, RfdetrRedactor};
-            use screenpipe_redact::adapters::tinfoil_image::{
+            use daimonion_redact::adapters::rfdetr::{RfdetrConfig, RfdetrRedactor};
+            use daimonion_redact::adapters::tinfoil_image::{
                 TinfoilImageConfig, TinfoilImageRedactor,
             };
-            use screenpipe_redact::image::worker::{ImageWorker, ImageWorkerConfig};
-            use screenpipe_redact::ImageRedactionPolicy;
-            use screenpipe_redact::ImageRedactor;
+            use daimonion_redact::image::worker::{ImageWorker, ImageWorkerConfig};
+            use daimonion_redact::ImageRedactionPolicy;
+            use daimonion_redact::ImageRedactor;
 
             let pool = db.pool.clone();
             if use_tinfoil {
@@ -907,7 +907,7 @@ impl ServerCore {
     /// Shut down the server core. Called only on app quit.
     pub async fn shutdown(self) {
         info!("Shutting down server core");
-        screenpipe_connect::mdns::shutdown();
+        daimonion_connect::mdns::shutdown();
 
         // Tell redaction workers to exit BEFORE the tokio runtime tears
         // down — otherwise their in-flight sqlx queries panic with

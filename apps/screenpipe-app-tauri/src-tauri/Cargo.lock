@@ -2911,6 +2911,463 @@ dependencies = [
 ]
 
 [[package]]
+name = "daimonion-a11y"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "arboard",
+ "arc-swap",
+ "chrono",
+ "cidre 0.13.1",
+ "crossbeam-channel",
+ "daimonion-config",
+ "daimonion-core",
+ "daimonion-db",
+ "dirs 6.0.0",
+ "evdev",
+ "libc",
+ "objc2-app-kit",
+ "parking_lot",
+ "regex",
+ "rusqlite",
+ "serde",
+ "serde_json",
+ "tracing",
+ "url",
+ "windows 0.58.0",
+ "windows-core 0.58.0",
+ "zbus",
+]
+
+[[package]]
+name = "daimonion-apple-intelligence"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "daimonion-audio"
+version = "0.4.17"
+dependencies = [
+ "anyhow",
+ "audiopipe",
+ "bytemuck",
+ "bytes",
+ "chrono",
+ "cidre 0.15.1 (git+https://github.com/yury/cidre.git?rev=8481f3f0dc7dd39bb5be80d9424bfac0cad3801a)",
+ "clap",
+ "cpal",
+ "crossbeam",
+ "daimonion-config",
+ "daimonion-core",
+ "daimonion-db",
+ "daimonion-events",
+ "dashmap",
+ "dirs 6.0.0",
+ "env_logger",
+ "futures",
+ "hf-hub 0.3.2",
+ "hound",
+ "knf-rs",
+ "lazy_static",
+ "libpulse-binding",
+ "libpulse-simple-binding",
+ "libsamplerate-sys",
+ "log",
+ "mlx-rs",
+ "mp3lame-encoder",
+ "ndarray",
+ "oasgen",
+ "objc",
+ "once_cell",
+ "ort",
+ "ort-sys",
+ "rand 0.9.2",
+ "realfft",
+ "reqwest 0.13.3",
+ "rubato",
+ "samplerate",
+ "serde",
+ "serde_json",
+ "symphonia",
+ "sysinfo",
+ "tokio",
+ "tokio-tungstenite",
+ "tracing",
+ "url",
+ "vad-rs",
+ "webrtc-vad",
+ "which 7.0.3",
+ "whisper-rs",
+ "windows 0.58.0",
+]
+
+[[package]]
+name = "daimonion-capture"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "daimonion-a11y",
+ "daimonion-core",
+ "daimonion-db",
+ "daimonion-screen",
+ "image 0.25.10",
+ "once_cell",
+ "regex",
+ "serde_json",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
+name = "daimonion-config"
+version = "0.4.17"
+dependencies = [
+ "dirs 6.0.0",
+ "serde",
+ "serde_json",
+ "specta",
+ "sysinfo",
+ "toml 0.8.2",
+]
+
+[[package]]
+name = "daimonion-connect"
+version = "0.4.17"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "base64 0.22.1",
+ "chrono",
+ "chrono-tz",
+ "daimonion-core",
+ "daimonion-secrets",
+ "daimonion-vault",
+ "dirs 6.0.0",
+ "eventkit-rs",
+ "icalendar",
+ "image 0.25.10",
+ "lettre",
+ "libsqlite3-sys",
+ "log",
+ "mdns-sd",
+ "objc2 0.6.4",
+ "objc2-event-kit",
+ "objc2-foundation 0.3.2",
+ "once_cell",
+ "reqwest 0.13.3",
+ "russh",
+ "russh-sftp",
+ "serde",
+ "serde_json",
+ "sha2 0.10.9",
+ "specta",
+ "sqlx",
+ "thiserror 1.0.69",
+ "tokio",
+ "tracing",
+ "uuid",
+ "windows 0.58.0",
+]
+
+[[package]]
+name = "daimonion-core"
+version = "0.4.17"
+dependencies = [
+ "accessibility",
+ "accessibility-sys",
+ "anyhow",
+ "arc-swap",
+ "argon2",
+ "async-trait",
+ "base64 0.22.1",
+ "chacha20poly1305",
+ "chrono",
+ "clap",
+ "core-foundation 0.10.1",
+ "core-graphics 0.24.0",
+ "cron",
+ "daimonion-events",
+ "daimonion-secrets",
+ "daimonion-sync",
+ "daimonion-vault",
+ "dirs 6.0.0",
+ "ffmpeg-sidecar",
+ "futures",
+ "hex",
+ "hmac 0.12.1",
+ "lazy_static",
+ "libc",
+ "log",
+ "objc",
+ "objc-foundation",
+ "once_cell",
+ "rand 0.9.2",
+ "regex",
+ "reqwest 0.13.3",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "sha2 0.10.9",
+ "sqlx",
+ "tempfile",
+ "thiserror 1.0.69",
+ "tokio",
+ "tracing",
+ "uiautomation",
+ "uuid",
+ "which 7.0.3",
+ "windows-sys 0.59.0",
+ "zeroize",
+]
+
+[[package]]
+name = "daimonion-db"
+version = "0.4.17"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "criterion",
+ "daimonion-config",
+ "futures",
+ "image 0.25.10",
+ "libsqlite3-sys",
+ "oasgen",
+ "once_cell",
+ "rand 0.9.2",
+ "regex",
+ "serde",
+ "serde_json",
+ "sqlite-vec",
+ "sqlx",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+ "zerocopy 0.7.35",
+]
+
+[[package]]
+name = "daimonion-engine"
+version = "0.4.17"
+dependencies = [
+ "anyhow",
+ "arc-swap",
+ "async-trait",
+ "axum 0.7.9",
+ "base64 0.22.1",
+ "bincode",
+ "chrono",
+ "cidre 0.15.1 (git+https://github.com/yury/cidre.git?rev=8481f3f0dc7dd39bb5be80d9424bfac0cad3801a)",
+ "clap",
+ "colored",
+ "crossbeam",
+ "daimonion-a11y",
+ "daimonion-apple-intelligence",
+ "daimonion-audio",
+ "daimonion-capture",
+ "daimonion-config",
+ "daimonion-connect",
+ "daimonion-core",
+ "daimonion-db",
+ "daimonion-events",
+ "daimonion-redact",
+ "daimonion-screen",
+ "daimonion-secrets",
+ "daimonion-vault",
+ "dashmap",
+ "dirs 6.0.0",
+ "fastrand",
+ "futures",
+ "hostname",
+ "http-body-util",
+ "image 0.25.10",
+ "imageproc",
+ "libc",
+ "lru",
+ "md5",
+ "moka",
+ "nix 0.29.0",
+ "oasgen",
+ "once_cell",
+ "port_check",
+ "regex",
+ "reqwest 0.13.3",
+ "rpassword",
+ "sentry 0.36.0",
+ "serde",
+ "serde_json",
+ "sha2 0.10.9",
+ "socket2 0.5.10",
+ "sqlx",
+ "sysinfo",
+ "tempfile",
+ "tinfoil",
+ "tokio",
+ "tokio-stream",
+ "tokio-util",
+ "tower-http 0.5.2",
+ "tracing",
+ "tracing-appender",
+ "tracing-oslog",
+ "tracing-subscriber",
+ "url",
+ "uuid",
+ "windows 0.58.0",
+]
+
+[[package]]
+name = "daimonion-events"
+version = "0.4.17"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "futures",
+ "once_cell",
+ "parking_lot",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tokio-stream",
+ "tracing",
+]
+
+[[package]]
+name = "daimonion-redact"
+version = "0.4.17"
+dependencies = [
+ "aho-corasick",
+ "anyhow",
+ "async-trait",
+ "base64 0.22.1",
+ "chrono",
+ "daimonion-rfdetr-mlx",
+ "dirs 6.0.0",
+ "image 0.25.10",
+ "moka",
+ "ndarray",
+ "once_cell",
+ "opf",
+ "ort",
+ "regex",
+ "reqwest 0.13.3",
+ "serde",
+ "serde_json",
+ "sha2 0.10.9",
+ "sha3 0.10.9",
+ "sqlx",
+ "thiserror 1.0.69",
+ "tinfoil",
+ "tokenizers 0.21.4",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
+name = "daimonion-rfdetr-mlx"
+version = "0.4.17"
+dependencies = [
+ "image 0.25.10",
+ "mlx-rs",
+ "mlx-sys",
+ "safetensors 0.6.2",
+ "thiserror 1.0.69",
+]
+
+[[package]]
+name = "daimonion-screen"
+version = "0.4.17"
+dependencies = [
+ "accessibility-sys",
+ "anyhow",
+ "atspi",
+ "atspi-common",
+ "atspi-proxies",
+ "base64 0.22.1",
+ "chrono",
+ "cidre 0.15.1 (git+https://github.com/yury/cidre.git?rev=8481f3f0dc7dd39bb5be80d9424bfac0cad3801a)",
+ "core-foundation 0.10.1",
+ "core-graphics 0.24.0",
+ "daimonion-a11y",
+ "daimonion-connect",
+ "daimonion-core",
+ "daimonion-db",
+ "image 0.25.10",
+ "image-compare",
+ "libc",
+ "once_cell",
+ "reqwest 0.13.3",
+ "rusty-tesseract",
+ "sck-rs",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tracing",
+ "uiautomation",
+ "url",
+ "windows 0.58.0",
+ "xcap",
+ "zbus",
+]
+
+[[package]]
+name = "daimonion-secrets"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "base64 0.22.1",
+ "chacha20poly1305",
+ "chrono",
+ "keyring",
+ "rand 0.9.2",
+ "serde",
+ "serde_json",
+ "sqlx",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
+name = "daimonion-sync"
+version = "0.4.17"
+dependencies = [
+ "async-trait",
+ "base64 0.22.1",
+ "bytes",
+ "chacha20poly1305",
+ "hex",
+ "rand 0.9.2",
+ "reqwest 0.13.3",
+ "serde",
+ "serde_json",
+ "sha2 0.10.9",
+ "thiserror 1.0.69",
+ "tokio",
+ "tracing",
+ "zeroize",
+]
+
+[[package]]
+name = "daimonion-vault"
+version = "0.4.17"
+dependencies = [
+ "argon2",
+ "chacha20poly1305",
+ "rand 0.9.2",
+ "serde",
+ "serde_json",
+ "thiserror 1.0.69",
+ "tokio",
+ "tracing",
+ "walkdir",
+ "zeroize",
+]
+
+[[package]]
 name = "dark-light"
 version = "2.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -10894,35 +11351,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "94143f37725109f92c262ed2cf5e59bce7498c01bcc1502d7b9afe439a4e9f49"
 
 [[package]]
-name = "screenpipe-a11y"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "arboard",
- "arc-swap",
- "chrono",
- "cidre 0.13.1",
- "crossbeam-channel",
- "dirs 6.0.0",
- "evdev",
- "libc",
- "objc2-app-kit",
- "parking_lot",
- "regex",
- "rusqlite",
- "screenpipe-config",
- "screenpipe-core",
- "screenpipe-db",
- "serde",
- "serde_json",
- "tracing",
- "url",
- "windows 0.58.0",
- "windows-core 0.58.0",
- "zbus",
-]
-
-[[package]]
 name = "screenpipe-app"
 version = "2.5.31"
 dependencies = [
@@ -10941,6 +11369,19 @@ dependencies = [
  "cocoa 0.26.1",
  "core-foundation 0.10.1",
  "core-graphics-helmer-fork",
+ "daimonion-a11y",
+ "daimonion-audio",
+ "daimonion-config",
+ "daimonion-connect",
+ "daimonion-core",
+ "daimonion-db",
+ "daimonion-engine",
+ "daimonion-events",
+ "daimonion-redact",
+ "daimonion-screen",
+ "daimonion-secrets",
+ "daimonion-sync",
+ "daimonion-vault",
  "dark-light",
  "dirs 5.0.1",
  "eventkit-rs",
@@ -10969,19 +11410,6 @@ dependencies = [
  "reqwest 0.13.3",
  "resvg",
  "rusqlite",
- "screenpipe-a11y",
- "screenpipe-audio",
- "screenpipe-config",
- "screenpipe-connect",
- "screenpipe-core",
- "screenpipe-db",
- "screenpipe-engine",
- "screenpipe-events",
- "screenpipe-redact",
- "screenpipe-screen",
- "screenpipe-secrets",
- "screenpipe-sync",
- "screenpipe-vault",
  "security-framework",
  "sentry 0.42.0",
  "serde",
@@ -11037,434 +11465,6 @@ dependencies = [
  "winreg 0.52.0",
  "wiremock",
  "xdg 2.5.2",
-]
-
-[[package]]
-name = "screenpipe-apple-intelligence"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "chrono",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "screenpipe-audio"
-version = "0.4.17"
-dependencies = [
- "anyhow",
- "audiopipe",
- "bytemuck",
- "bytes",
- "chrono",
- "cidre 0.15.1 (git+https://github.com/yury/cidre.git?rev=8481f3f0dc7dd39bb5be80d9424bfac0cad3801a)",
- "clap",
- "cpal",
- "crossbeam",
- "dashmap",
- "dirs 6.0.0",
- "env_logger",
- "futures",
- "hf-hub 0.3.2",
- "hound",
- "knf-rs",
- "lazy_static",
- "libpulse-binding",
- "libpulse-simple-binding",
- "libsamplerate-sys",
- "log",
- "mlx-rs",
- "mp3lame-encoder",
- "ndarray",
- "oasgen",
- "objc",
- "once_cell",
- "ort",
- "ort-sys",
- "rand 0.9.2",
- "realfft",
- "reqwest 0.13.3",
- "rubato",
- "samplerate",
- "screenpipe-config",
- "screenpipe-core",
- "screenpipe-db",
- "screenpipe-events",
- "serde",
- "serde_json",
- "symphonia",
- "sysinfo",
- "tokio",
- "tokio-tungstenite",
- "tracing",
- "url",
- "vad-rs",
- "webrtc-vad",
- "which 7.0.3",
- "whisper-rs",
- "windows 0.58.0",
-]
-
-[[package]]
-name = "screenpipe-capture"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "chrono",
- "image 0.25.10",
- "once_cell",
- "regex",
- "screenpipe-a11y",
- "screenpipe-core",
- "screenpipe-db",
- "screenpipe-screen",
- "serde_json",
- "tokio",
- "tracing",
-]
-
-[[package]]
-name = "screenpipe-config"
-version = "0.4.17"
-dependencies = [
- "dirs 6.0.0",
- "serde",
- "serde_json",
- "specta",
- "sysinfo",
- "toml 0.8.2",
-]
-
-[[package]]
-name = "screenpipe-connect"
-version = "0.4.17"
-dependencies = [
- "anyhow",
- "async-trait",
- "base64 0.22.1",
- "chrono",
- "chrono-tz",
- "dirs 6.0.0",
- "eventkit-rs",
- "icalendar",
- "image 0.25.10",
- "lettre",
- "libsqlite3-sys",
- "log",
- "mdns-sd",
- "objc2 0.6.4",
- "objc2-event-kit",
- "objc2-foundation 0.3.2",
- "once_cell",
- "reqwest 0.13.3",
- "russh",
- "russh-sftp",
- "screenpipe-core",
- "screenpipe-secrets",
- "screenpipe-vault",
- "serde",
- "serde_json",
- "sha2 0.10.9",
- "specta",
- "sqlx",
- "thiserror 1.0.69",
- "tokio",
- "tracing",
- "uuid",
- "windows 0.58.0",
-]
-
-[[package]]
-name = "screenpipe-core"
-version = "0.4.17"
-dependencies = [
- "accessibility",
- "accessibility-sys",
- "anyhow",
- "arc-swap",
- "argon2",
- "async-trait",
- "base64 0.22.1",
- "chacha20poly1305",
- "chrono",
- "clap",
- "core-foundation 0.10.1",
- "core-graphics 0.24.0",
- "cron",
- "dirs 6.0.0",
- "ffmpeg-sidecar",
- "futures",
- "hex",
- "hmac 0.12.1",
- "lazy_static",
- "libc",
- "log",
- "objc",
- "objc-foundation",
- "once_cell",
- "rand 0.9.2",
- "regex",
- "reqwest 0.13.3",
- "screenpipe-events",
- "screenpipe-secrets",
- "screenpipe-sync",
- "screenpipe-vault",
- "serde",
- "serde_json",
- "serde_yaml",
- "sha2 0.10.9",
- "sqlx",
- "tempfile",
- "thiserror 1.0.69",
- "tokio",
- "tracing",
- "uiautomation",
- "uuid",
- "which 7.0.3",
- "windows-sys 0.59.0",
- "zeroize",
-]
-
-[[package]]
-name = "screenpipe-db"
-version = "0.4.17"
-dependencies = [
- "anyhow",
- "chrono",
- "criterion",
- "futures",
- "image 0.25.10",
- "libsqlite3-sys",
- "oasgen",
- "once_cell",
- "rand 0.9.2",
- "regex",
- "screenpipe-config",
- "serde",
- "serde_json",
- "sqlite-vec",
- "sqlx",
- "tokio",
- "tracing",
- "tracing-subscriber",
- "zerocopy 0.7.35",
-]
-
-[[package]]
-name = "screenpipe-engine"
-version = "0.4.17"
-dependencies = [
- "anyhow",
- "arc-swap",
- "async-trait",
- "axum 0.7.9",
- "base64 0.22.1",
- "bincode",
- "chrono",
- "cidre 0.15.1 (git+https://github.com/yury/cidre.git?rev=8481f3f0dc7dd39bb5be80d9424bfac0cad3801a)",
- "clap",
- "colored",
- "crossbeam",
- "dashmap",
- "dirs 6.0.0",
- "fastrand",
- "futures",
- "hostname",
- "http-body-util",
- "image 0.25.10",
- "imageproc",
- "libc",
- "lru",
- "md5",
- "moka",
- "nix 0.29.0",
- "oasgen",
- "once_cell",
- "port_check",
- "regex",
- "reqwest 0.13.3",
- "rpassword",
- "screenpipe-a11y",
- "screenpipe-apple-intelligence",
- "screenpipe-audio",
- "screenpipe-capture",
- "screenpipe-config",
- "screenpipe-connect",
- "screenpipe-core",
- "screenpipe-db",
- "screenpipe-events",
- "screenpipe-redact",
- "screenpipe-screen",
- "screenpipe-secrets",
- "screenpipe-vault",
- "sentry 0.36.0",
- "serde",
- "serde_json",
- "sha2 0.10.9",
- "socket2 0.5.10",
- "sqlx",
- "sysinfo",
- "tempfile",
- "tinfoil",
- "tokio",
- "tokio-stream",
- "tokio-util",
- "tower-http 0.5.2",
- "tracing",
- "tracing-appender",
- "tracing-oslog",
- "tracing-subscriber",
- "url",
- "uuid",
- "windows 0.58.0",
-]
-
-[[package]]
-name = "screenpipe-events"
-version = "0.4.17"
-dependencies = [
- "anyhow",
- "chrono",
- "futures",
- "once_cell",
- "parking_lot",
- "serde",
- "serde_json",
- "tokio",
- "tokio-stream",
- "tracing",
-]
-
-[[package]]
-name = "screenpipe-redact"
-version = "0.4.17"
-dependencies = [
- "aho-corasick",
- "anyhow",
- "async-trait",
- "base64 0.22.1",
- "chrono",
- "dirs 6.0.0",
- "image 0.25.10",
- "moka",
- "ndarray",
- "once_cell",
- "opf",
- "ort",
- "regex",
- "reqwest 0.13.3",
- "screenpipe-rfdetr-mlx",
- "serde",
- "serde_json",
- "sha2 0.10.9",
- "sha3 0.10.9",
- "sqlx",
- "thiserror 1.0.69",
- "tinfoil",
- "tokenizers 0.21.4",
- "tokio",
- "tracing",
-]
-
-[[package]]
-name = "screenpipe-rfdetr-mlx"
-version = "0.4.17"
-dependencies = [
- "image 0.25.10",
- "mlx-rs",
- "mlx-sys",
- "safetensors 0.6.2",
- "thiserror 1.0.69",
-]
-
-[[package]]
-name = "screenpipe-screen"
-version = "0.4.17"
-dependencies = [
- "accessibility-sys",
- "anyhow",
- "atspi",
- "atspi-common",
- "atspi-proxies",
- "base64 0.22.1",
- "chrono",
- "cidre 0.15.1 (git+https://github.com/yury/cidre.git?rev=8481f3f0dc7dd39bb5be80d9424bfac0cad3801a)",
- "core-foundation 0.10.1",
- "core-graphics 0.24.0",
- "image 0.25.10",
- "image-compare",
- "libc",
- "once_cell",
- "reqwest 0.13.3",
- "rusty-tesseract",
- "sck-rs",
- "screenpipe-a11y",
- "screenpipe-connect",
- "screenpipe-core",
- "screenpipe-db",
- "serde",
- "serde_json",
- "tokio",
- "tracing",
- "uiautomation",
- "url",
- "windows 0.58.0",
- "xcap",
- "zbus",
-]
-
-[[package]]
-name = "screenpipe-secrets"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "base64 0.22.1",
- "chacha20poly1305",
- "chrono",
- "keyring",
- "rand 0.9.2",
- "serde",
- "serde_json",
- "sqlx",
- "tokio",
- "tracing",
-]
-
-[[package]]
-name = "screenpipe-sync"
-version = "0.4.17"
-dependencies = [
- "async-trait",
- "base64 0.22.1",
- "bytes",
- "chacha20poly1305",
- "hex",
- "rand 0.9.2",
- "reqwest 0.13.3",
- "serde",
- "serde_json",
- "sha2 0.10.9",
- "thiserror 1.0.69",
- "tokio",
- "tracing",
- "zeroize",
-]
-
-[[package]]
-name = "screenpipe-vault"
-version = "0.4.17"
-dependencies = [
- "argon2",
- "chacha20poly1305",
- "rand 0.9.2",
- "serde",
- "serde_json",
- "thiserror 1.0.69",
- "tokio",
- "tracing",
- "walkdir",
- "zeroize",
 ]
 
 [[package]]

@@ -1,5 +1,5 @@
 [package]
-name = "screenpipe-tauri"
+name = "daimonion-tauri"
 version = "0.4.3"
 edition = "2021"
 description = "Native Tauri v2 plugin for the screenpipe SDK — in-process recorder, no Node bridge"
@@ -9,7 +9,7 @@ publish = false
 # want runtime invocations like `plugin:screenpipe|<cmd>` to match the
 # permission allow-list, so set `links = "screenpipe"` to align the
 # build-time namespace with `PluginBuilder::new("screenpipe")` in
-# `lib.rs`. Not the same as `package.name` (`screenpipe-tauri`) — the
+# `lib.rs`. Not the same as `package.name` (`daimonion-tauri`) — the
 # crate name keeps the `-tauri` suffix to disambiguate from sibling
 # packages, but the plugin identity is `screenpipe`.
 links = "screenpipe"
@@ -17,7 +17,7 @@ links = "screenpipe"
 [dependencies]
 # The pure-Rust recorder orchestration. Calling it in-process is what
 # lets this plugin avoid spawning a Node helper at runtime.
-screenpipe-recorder = { path = "../../recorder-core" }
+daimonion-recorder = { path = "../../recorder-core" }
 
 base64 = { workspace = true }
 serde = { workspace = true }

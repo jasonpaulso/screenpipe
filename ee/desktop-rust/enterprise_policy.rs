@@ -97,7 +97,7 @@ fn bundled_enterprise_config_path() -> Option<std::path::PathBuf> {
 }
 
 fn user_enterprise_config_path() -> std::path::PathBuf {
-    screenpipe_core::paths::default_screenpipe_data_dir().join("enterprise.json")
+    daimonion_core::paths::default_screenpipe_data_dir().join("enterprise.json")
 }
 
 fn enterprise_json_hides_app_ui() -> bool {

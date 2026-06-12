@@ -51,7 +51,7 @@ pub struct ImportedSkill {
 }
 
 fn skills_store_dir() -> PathBuf {
-    screenpipe_core::paths::default_screenpipe_data_dir().join("skills")
+    daimonion_core::paths::default_screenpipe_data_dir().join("skills")
 }
 
 /// Normalize a display name into a filesystem-safe folder key. Mirrors the
@@ -241,7 +241,7 @@ pub fn import_skill(source_path: String) -> Result<ImportedSkill, String> {
         std::fs::remove_dir_all(&dest)
             .map_err(|e| format!("failed to replace existing skill: {e}"))?;
     }
-    screenpipe_core::paths::copy_dir_all(&src, &dest)
+    daimonion_core::paths::copy_dir_all(&src, &dest)
         .map_err(|e| format!("failed to copy skill: {e}"))?;
 
     info!("imported skill \"{}\" -> {}", display_name, dest.display());
@@ -267,7 +267,7 @@ pub fn remove_imported_skill(name: String) -> Result<(), String> {
         std::fs::remove_dir_all(&dir).map_err(|e| format!("failed to remove skill: {e}"))?;
     }
     // Best-effort: clear the mirrored copy from the desktop chat working dir.
-    let chat_copy = screenpipe_core::paths::default_screenpipe_data_dir()
+    let chat_copy = daimonion_core::paths::default_screenpipe_data_dir()
         .join("pi-chat")
         .join(".pi")
         .join("skills")

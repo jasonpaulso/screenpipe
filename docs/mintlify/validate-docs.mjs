@@ -15,7 +15,7 @@ const openApiPath = join(docsRoot, "openapi.yaml");
 const connectionRefPath = join(docsRoot, "connection-reference.mdx");
 const connectionsCodeRoot = join(
   repoRoot,
-  "crates/screenpipe-connect/src/connections",
+  "crates/daimonion-connect/src/connections",
 );
 
 const errors = [];

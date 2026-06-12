@@ -125,19 +125,19 @@ async-trait = "0.1"
 hostname = "0.4"
 
 # Screenpipe core (for sync)
-screenpipe-core = { path = "../../../crates/screenpipe-core", features = ["cloud-sync", "secrets"] }
+daimonion-core = { path = "../../../crates/daimonion-core", features = ["cloud-sync", "secrets"] }
 
 # Embedded screenpipe server
-screenpipe-config = { path = "../../../crates/screenpipe-config", features = ["specta"] }
-screenpipe-engine = { path = "../../../crates/screenpipe-engine", default-features = false }
-screenpipe-screen = { path = "../../../crates/screenpipe-screen" }
-screenpipe-a11y = { path = "../../../crates/screenpipe-a11y" }
-screenpipe-audio = { path = "../../../crates/screenpipe-audio" }
-screenpipe-db = { path = "../../../crates/screenpipe-db" }
-screenpipe-vault = { path = "../../../crates/screenpipe-vault" }
-screenpipe-connect = { path = "../../../crates/screenpipe-connect", features = ["specta"] }
-screenpipe-secrets = { path = "../../../crates/screenpipe-secrets" }
-screenpipe-events = { path = "../../../crates/screenpipe-events" }
+daimonion-config = { path = "../../../crates/daimonion-config", features = ["specta"] }
+daimonion-engine = { path = "../../../crates/daimonion-engine", default-features = false }
+daimonion-screen = { path = "../../../crates/daimonion-screen" }
+daimonion-a11y = { path = "../../../crates/daimonion-a11y" }
+daimonion-audio = { path = "../../../crates/daimonion-audio" }
+daimonion-db = { path = "../../../crates/daimonion-db" }
+daimonion-vault = { path = "../../../crates/daimonion-vault" }
+daimonion-connect = { path = "../../../crates/daimonion-connect", features = ["specta"] }
+daimonion-secrets = { path = "../../../crates/daimonion-secrets" }
+daimonion-events = { path = "../../../crates/daimonion-events" }
 eventkit-rs = { git = "https://github.com/divanshu-go/eventkit-rs", rev = "9dd52787c8435d734ed443e2d5641f45b0177cae", default-features = false, features = ["events"] }
 # Async PII reconciliation (issue #3185 / PR #3188). `onnx-coreml` is
 # the right execution-provider for Apple Silicon (image PII via
@@ -146,7 +146,7 @@ eventkit-rs = { git = "https://github.com/divanshu-go/eventkit-rs", rev = "9dd52
 # every transcript through the Tinfoil enclave. Windows builds should
 # switch onnx-coreml → onnx-directml via a build-target override. No
 # CUDA / Vulkan / GPU-vendor SDKs bundled.
-screenpipe-redact = { path = "../../../crates/screenpipe-redact", features = ["onnx-coreml", "opf-text"] }
+daimonion-redact = { path = "../../../crates/daimonion-redact", features = ["onnx-coreml", "opf-text"] }
 sqlx = { version = "0.7", features = ["sqlite", "runtime-tokio-rustls"] }
 image = "0.25.5"
 
@@ -161,7 +161,7 @@ thiserror = { version = "1.0", optional = true }
 # encryption). Used by `ee/desktop-rust/enterprise_upload.rs` for the
 # direct-upload path. Gated behind enterprise-build for the same reason
 # as thiserror — `#[path = ...]` imports aren't followed by cargo-machete.
-screenpipe-sync = { path = "../../../crates/screenpipe-sync", optional = true }
+daimonion-sync = { path = "../../../crates/daimonion-sync", optional = true }
 
 # jemalloc — aggressively returns freed pages to OS, reducing RSS bloat
 [target.'cfg(not(target_os = "windows"))'.dependencies]
@@ -242,10 +242,10 @@ lazy_static = "1.5.0"
 
 [features]
 default = ["custom-protocol", "qwen3-asr", "parakeet"]
-metal = ["screenpipe-audio/metal"]
-pulseaudio = ["screenpipe-audio/pulseaudio"]
-directml = ["screenpipe-engine/directml"]
-vulkan = ["screenpipe-audio/vulkan"]
+metal = ["daimonion-audio/metal"]
+pulseaudio = ["daimonion-audio/pulseaudio"]
+directml = ["daimonion-engine/directml"]
+vulkan = ["daimonion-audio/vulkan"]
 cargo-clippy = []
 e2e = ["tauri-plugin-webdriver"]
 
@@ -263,28 +263,28 @@ official-build = []
 # Source for the sync lives under `ee/desktop-rust/enterprise_sync.rs` (EE-licensed).
 # Consumer builds never compile this code.
 # Do NOT add official-build here — enterprise has its own policy-gated updater.
-enterprise-build = ["dep:thiserror", "dep:screenpipe-sync"]
+enterprise-build = ["dep:thiserror", "dep:daimonion-sync"]
 
 # On-device AI via Apple Foundation Models (macOS 26+ / Xcode 26+ only)
-apple-intelligence = ["screenpipe-engine/apple-intelligence"]
+apple-intelligence = ["daimonion-engine/apple-intelligence"]
 
-qwen3-asr = ["screenpipe-engine/qwen3-asr"]
-parakeet = ["screenpipe-engine/parakeet"]
+qwen3-asr = ["daimonion-engine/qwen3-asr"]
+parakeet = ["daimonion-engine/parakeet"]
 # macOS only — requires Apple MLX (Metal)
-parakeet-mlx = ["screenpipe-engine/parakeet-mlx"]
+parakeet-mlx = ["daimonion-engine/parakeet-mlx"]
 # Apple Silicon only — image-PII detector via mlx-rs (~6× faster than
-# ONNX CoreML EP). Forwards to screenpipe-engine which forwards to
-# screenpipe-redact/mlx-mac.
-rfdetr-mlx = ["screenpipe-engine/rfdetr-mlx"]
+# ONNX CoreML EP). Forwards to daimonion-engine which forwards to
+# daimonion-redact/mlx-mac.
+rfdetr-mlx = ["daimonion-engine/rfdetr-mlx"]
 
 # v45 phase 3 text-PII redactor via ONNX Runtime — cross-platform with
 # zero end-user dependencies. CPU is the Linux baseline; CoreML on Mac
 # uses Metal + Neural Engine; DirectML on Windows uses any DX12 GPU.
 # The 3 features are not mutually exclusive at compile time — each CI
 # build enables exactly one per platform.
-redact-onnx-cpu = ["screenpipe-engine/redact-onnx-cpu"]
-redact-onnx-coreml = ["screenpipe-engine/redact-onnx-coreml"]
-redact-onnx-directml = ["screenpipe-engine/redact-onnx-directml"]
+redact-onnx-cpu = ["daimonion-engine/redact-onnx-cpu"]
+redact-onnx-coreml = ["daimonion-engine/redact-onnx-coreml"]
+redact-onnx-directml = ["daimonion-engine/redact-onnx-directml"]
 
 jemalloc = ["tikv-jemallocator"]
 
@@ -298,13 +298,13 @@ serial_test = "3"
 
 
 [package.metadata.cargo-machete]
-# screenpipe-redact: workspace dep added for async PII reconciliation (PR #3188);
+# daimonion-redact: workspace dep added for async PII reconciliation (PR #3188);
 # wiring lands in a follow-up. Cargo compiles it for the workspace either way.
 # thiserror: gated behind `enterprise-build` via `dep:thiserror`; cargo-machete
 # can't follow `#[path = ...]` imports into ee/desktop-rust/enterprise_sync.rs.
 # eventkit-rs: lib crate is imported as `eventkit` (calendar.rs, permissions.rs);
 # cargo-machete matches the package name `eventkit_rs` so it can't see the use.
-ignored = ["tauri-utils", "screenpipe-redact", "thiserror", "screenpipe-sync", "eventkit-rs"]
+ignored = ["tauri-utils", "daimonion-redact", "thiserror", "daimonion-sync", "eventkit-rs"]
 
 [patch.crates-io]
 # macOS tray menus can outlive the Rust `Menu` that created them while the

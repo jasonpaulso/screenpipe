@@ -5,14 +5,14 @@
 //! Re-exports keychain functions from screenpipe-secrets core crate.
 //! Includes guards to only call keychain functions if encryption is enabled.
 
-pub use screenpipe_secrets::keychain::{
+pub use daimonion_secrets::keychain::{
     delete_key, get_key, get_or_create_key, is_keychain_available, KeyResult,
 };
 
 /// True when the user has opted into secret-store encryption.
 pub fn is_encryption_enabled() -> bool {
-    screenpipe_secrets::is_encryption_requested(
-        &screenpipe_core::paths::default_screenpipe_data_dir(),
+    daimonion_secrets::is_encryption_requested(
+        &daimonion_core::paths::default_screenpipe_data_dir(),
     )
 }
 

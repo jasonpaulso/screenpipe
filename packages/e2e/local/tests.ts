@@ -34,7 +34,7 @@ async function buildAndDeploy(ip: string): Promise<void> {
     src = debugBinary;
   } else {
     throw new Error(
-      "No screenpipe binary found. Run `cargo build -p screenpipe-engine --bin screenpipe` first."
+      "No screenpipe binary found. Run `cargo build -p daimonion-engine --bin screenpipe` first."
     );
   }
 

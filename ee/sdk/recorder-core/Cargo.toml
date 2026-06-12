@@ -1,5 +1,5 @@
 [package]
-name = "screenpipe-recorder"
+name = "daimonion-recorder"
 version = "0.4.3"
 edition = "2021"
 description = "Pure-Rust recorder orchestration for the screenpipe SDK — screen + MP4 + event-driven paired capture. Consumed by both the napi addon (ee/sdk) and the Tauri plugin (ee/sdk/tauri/rust) so neither has to spawn a Node bridge."
@@ -7,12 +7,12 @@ license = "LicenseRef-Screenpipe-Enterprise"
 publish = false
 
 [dependencies]
-screenpipe-screen  = { path = "../../../crates/screenpipe-screen" }
-screenpipe-core    = { path = "../../../crates/screenpipe-core", default-features = false }
-screenpipe-a11y    = { path = "../../../crates/screenpipe-a11y", default-features = false }
-screenpipe-capture = { path = "../../../crates/screenpipe-capture" }
-screenpipe-db      = { path = "../../../crates/screenpipe-db" }
-screenpipe-config  = { path = "../../../crates/screenpipe-config" }
+daimonion-screen  = { path = "../../../crates/daimonion-screen" }
+daimonion-core    = { path = "../../../crates/daimonion-core", default-features = false }
+daimonion-a11y    = { path = "../../../crates/daimonion-a11y", default-features = false }
+daimonion-capture = { path = "../../../crates/daimonion-capture" }
+daimonion-db      = { path = "../../../crates/daimonion-db" }
+daimonion-config  = { path = "../../../crates/daimonion-config" }
 
 anyhow = { workspace = true }
 chrono = { workspace = true }

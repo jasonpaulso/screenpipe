@@ -115,7 +115,7 @@ fn choose_user_data_dir() -> Result<(String, PathBuf, String), String> {
     }
     candidates.push((
         "screenpipe-data-dir".to_string(),
-        screenpipe_core::paths::default_screenpipe_data_dir(),
+        daimonion_core::paths::default_screenpipe_data_dir(),
     ));
 
     let mut errors = Vec::new();

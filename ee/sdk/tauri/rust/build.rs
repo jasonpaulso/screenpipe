@@ -16,7 +16,7 @@ const COMMANDS: &[&str] = &[
     "screenpipe_snapshot",
     "screenpipe_reveal",
     "screenpipe_dispose",
-    "screenpipe_events",
+    "daimonion_events",
     "screenpipe_identify",
 ];
 

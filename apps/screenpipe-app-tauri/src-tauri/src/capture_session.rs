@@ -11,22 +11,22 @@
 use std::sync::Arc;
 use std::time::Duration;
 
-use screenpipe_audio::audio_manager::builder::AudioManagerOptions;
-use screenpipe_audio::core::device::resolve_audio_devices_for_capture;
-use screenpipe_audio::core::engine::AudioTranscriptionEngine;
-use screenpipe_audio::meeting_detector::MeetingDetector;
-use screenpipe_audio::transcription::deepgram::{
+use daimonion_audio::audio_manager::builder::AudioManagerOptions;
+use daimonion_audio::core::device::resolve_audio_devices_for_capture;
+use daimonion_audio::core::engine::AudioTranscriptionEngine;
+use daimonion_audio::meeting_detector::MeetingDetector;
+use daimonion_audio::transcription::deepgram::{
     transcription_endpoint_host_for_log, DeepgramTranscriptionConfig,
 };
-use screenpipe_audio::transcription::stt::{
+use daimonion_audio::transcription::stt::{
     OpenAICompatibleConfig, DEFAULT_OPENAI_COMPATIBLE_ENDPOINT, DEFAULT_OPENAI_COMPATIBLE_MODEL,
 };
-use screenpipe_engine::{
+use daimonion_engine::{
     start_meeting_watcher, start_ui_recording,
     vision_manager::{start_monitor_watcher, stop_monitor_watcher, VisionManager},
     RecordingConfig,
 };
-use screenpipe_events::{send_event, PermissionEvent, PermissionKind};
+use daimonion_events::{send_event, PermissionEvent, PermissionKind};
 use tokio::sync::broadcast;
 use tracing::{error, info, warn};
 
@@ -42,8 +42,8 @@ use crate::server_core::ServerCore;
 pub struct CaptureSession {
     shutdown_tx: broadcast::Sender<()>,
     vision_task: Option<tokio::task::JoinHandle<()>>,
-    ui_recorder_handle: Option<screenpipe_engine::UiRecorderHandle>,
-    audio_manager: Arc<screenpipe_audio::audio_manager::AudioManager>,
+    ui_recorder_handle: Option<daimonion_engine::UiRecorderHandle>,
+    audio_manager: Arc<daimonion_audio::audio_manager::AudioManager>,
     audio_disabled: bool,
 }
 
@@ -69,10 +69,10 @@ impl CaptureSession {
         reconfigure_audio_manager(server, config).await?;
 
         // --- Capture trigger sender (set by VisionManager, consumed by UI recorder) ---
-        let mut capture_trigger_tx: Option<screenpipe_engine::event_driven_capture::TriggerSender> =
+        let mut capture_trigger_tx: Option<daimonion_engine::event_driven_capture::TriggerSender> =
             None;
         // --- Frame-linker sender (set by VisionManager, consumed by UI recorder + capture loops) ---
-        let mut linker_tx: Option<screenpipe_engine::frame_linker_actor::LinkerSender> = None;
+        let mut linker_tx: Option<daimonion_engine::frame_linker_actor::LinkerSender> = None;
         let mut vision_task = None;
 
         // --- Vision ---
@@ -85,7 +85,7 @@ impl CaptureSession {
         // spawn_screenpipe is called again from onboarding after the user grants access.
         #[cfg(target_os = "macos")]
         let screen_recording_permitted =
-            screenpipe_core::permissions::check_screen_recording_tauri().is_granted();
+            daimonion_core::permissions::check_screen_recording_tauri().is_granted();
         #[cfg(not(target_os = "macos"))]
         let screen_recording_permitted = true;
 
@@ -173,7 +173,7 @@ impl CaptureSession {
                 if let Err(e) = audio_manager_clone.start().await {
                     error!("Failed to start audio manager: {}", e);
                 }
-                if drm_pause && screenpipe_engine::drm_detector::drm_content_paused() {
+                if drm_pause && daimonion_engine::drm_detector::drm_content_paused() {
                     if let Err(e) = audio_manager_clone.stop_output_devices().await {
                         warn!("failed to stop SCK audio after late DRM detection: {:?}", e);
                     }
@@ -189,7 +189,7 @@ impl CaptureSession {
         // AXIsProcessTrusted() (used by check_accessibility) is silent.
         #[cfg(target_os = "macos")]
         let accessibility_permitted =
-            screenpipe_core::permissions::check_accessibility().is_granted();
+            daimonion_core::permissions::check_accessibility().is_granted();
         #[cfg(not(target_os = "macos"))]
         let accessibility_permitted = true;
 
@@ -216,7 +216,7 @@ impl CaptureSession {
             {
                 Ok(handle) => {
                     info!("UI event recording started successfully");
-                    screenpipe_engine::drm_detector::set_ui_recorder_stop_flag(handle.stop_flag());
+                    daimonion_engine::drm_detector::set_ui_recorder_stop_flag(handle.stop_flag());
                     Some(handle)
                 }
                 Err(e) => {
@@ -244,14 +244,14 @@ impl CaptureSession {
         }
 
         // --- Speaker identification ---
-        let _speaker_id_handle = screenpipe_engine::start_speaker_identification(
+        let _speaker_id_handle = daimonion_engine::start_speaker_identification(
             server.db.clone(),
             config.user_name.clone(),
         );
 
         // --- Schedule monitor ---
         if config.schedule_enabled {
-            screenpipe_engine::schedule_monitor::start_schedule_monitor(
+            daimonion_engine::schedule_monitor::start_schedule_monitor(
                 config.schedule_rules.clone(),
                 shutdown_tx.subscribe(),
             );
@@ -259,7 +259,7 @@ impl CaptureSession {
         }
 
         // --- Snapshot compaction ---
-        screenpipe_engine::start_snapshot_compaction(
+        daimonion_engine::start_snapshot_compaction(
             server.db.clone(),
             config.video_quality.clone(),
             shutdown_tx.subscribe(),
@@ -339,7 +339,7 @@ async fn invalidate_macos_screen_streams(reason: &str) {
     let result = tokio::time::timeout(
         Duration::from_secs(5),
         tokio::task::spawn_blocking(|| {
-            screenpipe_screen::stream_invalidation::invalidate_streams();
+            daimonion_screen::stream_invalidation::invalidate_streams();
         }),
     )
     .await;

@@ -9,14 +9,14 @@
 //! This file handles user-controlled strings (window titles, OCR snippets,
 //! transcripts) — historically the source of repeated UTF-8 char-boundary
 //! panics (SCREENPIPE-APP-97 and predecessors). `deny(clippy::string_slice)`
-//! forces every byte-index slice through [`screenpipe_core::strings`] so we
+//! forces every byte-index slice through [`daimonion_core::strings`] so we
 //! don't reintroduce `&s[..N]` panics for the fifth time.
 
 #![deny(clippy::string_slice)]
 
 use crate::recording::{local_api_context_from_app, LocalApiContext};
 use futures::StreamExt;
-use screenpipe_core::strings::{safe_byte_prefix, truncate_string};
+use daimonion_core::strings::{safe_byte_prefix, truncate_string};
 use serde::{Deserialize, Serialize};
 use specta::Type;
 use std::sync::Arc;
@@ -176,9 +176,9 @@ pub async fn auto_start_scheduler(app: AppHandle, state: &SuggestionsState) {
 
         // Subscribe to meeting events for reactive refresh
         let mut event_sub =
-            screenpipe_events::subscribe_to_event::<serde_json::Value>("meeting_started");
+            daimonion_events::subscribe_to_event::<serde_json::Value>("meeting_started");
         let mut event_end_sub =
-            screenpipe_events::subscribe_to_event::<serde_json::Value>("meeting_ended");
+            daimonion_events::subscribe_to_event::<serde_json::Value>("meeting_ended");
 
         let mut timer = tokio::time::interval(tokio::time::Duration::from_secs(600));
         timer.tick().await; // consume immediate first tick
