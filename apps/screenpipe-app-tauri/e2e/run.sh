@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# screenpipe — AI that knows everything you've seen, said, or heard
+# daimonion — AI that knows everything you've seen, said, or heard
 # https://screenpi.pe
 # Build Screenpipe (debug, no bundle) then run cross-platform E2E tests.
 # Run from app root: ./e2e/run.sh   or from e2e: ./run.sh
