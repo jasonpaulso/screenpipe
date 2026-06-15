@@ -459,7 +459,7 @@ fn test_recovery_at_failure_29_prevents_bail() {
 fn test_index_migration_sql_is_valid() {
     // Verify the migration SQL parses correctly
     let sql = include_str!(
-        "../../screenpipe-db/src/migrations/20260207000000_index_video_chunks_device_name.sql"
+        "../../daimonion-db/src/migrations/20260207000000_index_video_chunks_device_name.sql"
     );
 
     // Should contain exactly 2 CREATE INDEX statements

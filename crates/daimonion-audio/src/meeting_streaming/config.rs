@@ -7,9 +7,9 @@ use std::{env, str::FromStr};
 use serde::{Deserialize, Serialize};
 use url::Url;
 
-const SCREENPIPE_CLOUD_REALTIME_URL: &str = "wss://api.screenpipe.com/v1/realtime";
+const DAIMONION_CLOUD_REALTIME_URL: &str = "wss://api.screenpipe.com/v1/realtime";
 const DEEPGRAM_LIVE_URL: &str = "wss://api.deepgram.com/v1/listen";
-const SCREENPIPE_CLOUD_REALTIME_PATH: &str = "/v1/realtime";
+const DAIMONION_CLOUD_REALTIME_PATH: &str = "/v1/realtime";
 const DEEPGRAM_LIVE_PATH: &str = "/v1/listen";
 
 /// Live transcription provider for meeting-only streaming.
@@ -61,7 +61,7 @@ pub struct MeetingStreamingConfig {
 
 impl Default for MeetingStreamingConfig {
     fn default() -> Self {
-        let provider = env::var("SCREENPIPE_MEETING_STREAMING_PROVIDER")
+        let provider = env::var("DAIMONION_MEETING_STREAMING_PROVIDER")
             .ok()
             .as_deref()
             .and_then(|value| MeetingStreamingProvider::from_str(value).ok())
@@ -69,14 +69,14 @@ impl Default for MeetingStreamingConfig {
         let api_key = provider_api_key(&provider);
         let endpoint = match provider {
             MeetingStreamingProvider::DeepgramLive => endpoint_from_env(
-                &["SCREENPIPE_MEETING_DEEPGRAM_LIVE_URL"],
+                &["DAIMONION_MEETING_DEEPGRAM_LIVE_URL"],
                 DEEPGRAM_LIVE_URL,
                 DEEPGRAM_LIVE_PATH,
             ),
             _ => endpoint_from_env(
-                &["SCREENPIPE_MEETING_REALTIME_URL"],
-                SCREENPIPE_CLOUD_REALTIME_URL,
-                SCREENPIPE_CLOUD_REALTIME_PATH,
+                &["DAIMONION_MEETING_REALTIME_URL"],
+                DAIMONION_CLOUD_REALTIME_URL,
+                DAIMONION_CLOUD_REALTIME_PATH,
             ),
         };
         let default_model = match provider {
@@ -89,19 +89,19 @@ impl Default for MeetingStreamingConfig {
         Self {
             enabled: true,
             provider,
-            auth_token: env::var("SCREENPIPE_MEETING_CLOUD_TOKEN")
+            auth_token: env::var("DAIMONION_MEETING_CLOUD_TOKEN")
                 .ok()
                 .filter(|s| !s.trim().is_empty()),
             api_key,
             endpoint,
             model: Some(
-                env_non_empty("SCREENPIPE_MEETING_TRANSCRIPTION_MODEL")
+                env_non_empty("DAIMONION_MEETING_TRANSCRIPTION_MODEL")
                     .unwrap_or_else(|| default_model.to_string()),
             ),
-            language: env::var("SCREENPIPE_MEETING_TRANSCRIPTION_LANGUAGE")
+            language: env::var("DAIMONION_MEETING_TRANSCRIPTION_LANGUAGE")
                 .ok()
                 .filter(|s| !s.trim().is_empty()),
-            local_speaker_name: env_non_empty("SCREENPIPE_MEETING_LOCAL_SPEAKER_NAME"),
+            local_speaker_name: env_non_empty("DAIMONION_MEETING_LOCAL_SPEAKER_NAME"),
             persist_finals: true,
         }
     }
@@ -146,24 +146,24 @@ impl MeetingStreamingConfig {
             MeetingStreamingProvider::ScreenpipeCloud => {
                 self.api_key = None;
                 self.endpoint = endpoint_from_env(
-                    &["SCREENPIPE_MEETING_REALTIME_URL"],
-                    SCREENPIPE_CLOUD_REALTIME_URL,
-                    SCREENPIPE_CLOUD_REALTIME_PATH,
+                    &["DAIMONION_MEETING_REALTIME_URL"],
+                    DAIMONION_CLOUD_REALTIME_URL,
+                    DAIMONION_CLOUD_REALTIME_PATH,
                 );
                 self.model = Some(
-                    env_non_empty("SCREENPIPE_MEETING_TRANSCRIPTION_MODEL")
+                    env_non_empty("DAIMONION_MEETING_TRANSCRIPTION_MODEL")
                         .unwrap_or_else(|| "nova-3".to_string()),
                 );
             }
             MeetingStreamingProvider::DeepgramLive => {
                 self.api_key = provider_api_key(&self.provider);
                 self.endpoint = endpoint_from_env(
-                    &["SCREENPIPE_MEETING_DEEPGRAM_LIVE_URL"],
+                    &["DAIMONION_MEETING_DEEPGRAM_LIVE_URL"],
                     DEEPGRAM_LIVE_URL,
                     DEEPGRAM_LIVE_PATH,
                 );
                 self.model = Some(
-                    env_non_empty("SCREENPIPE_MEETING_TRANSCRIPTION_MODEL")
+                    env_non_empty("DAIMONION_MEETING_TRANSCRIPTION_MODEL")
                         .unwrap_or_else(|| "nova-3".to_string()),
                 );
             }
@@ -204,22 +204,22 @@ impl MeetingStreamingConfig {
             config.api_key =
                 provider_api_key_override.or_else(|| provider_api_key(&config.provider));
             config.endpoint = endpoint_from_env(
-                &["SCREENPIPE_MEETING_DEEPGRAM_LIVE_URL"],
+                &["DAIMONION_MEETING_DEEPGRAM_LIVE_URL"],
                 DEEPGRAM_LIVE_URL,
                 DEEPGRAM_LIVE_PATH,
             );
             config.model = Some(
-                env_non_empty("SCREENPIPE_MEETING_TRANSCRIPTION_MODEL")
+                env_non_empty("DAIMONION_MEETING_TRANSCRIPTION_MODEL")
                     .unwrap_or_else(|| "nova-3".to_string()),
             );
         } else if config.provider == MeetingStreamingProvider::ScreenpipeCloud {
             config.endpoint = endpoint_from_env(
-                &["SCREENPIPE_MEETING_REALTIME_URL"],
-                SCREENPIPE_CLOUD_REALTIME_URL,
-                SCREENPIPE_CLOUD_REALTIME_PATH,
+                &["DAIMONION_MEETING_REALTIME_URL"],
+                DAIMONION_CLOUD_REALTIME_URL,
+                DAIMONION_CLOUD_REALTIME_PATH,
             );
             config.model = Some(
-                env_non_empty("SCREENPIPE_MEETING_TRANSCRIPTION_MODEL")
+                env_non_empty("DAIMONION_MEETING_TRANSCRIPTION_MODEL")
                     .unwrap_or_else(|| "nova-3".to_string()),
             );
         }
@@ -266,7 +266,7 @@ fn resolve_settings_provider(
 fn provider_api_key(provider: &MeetingStreamingProvider) -> Option<String> {
     let keys: &[&str] = match provider {
         MeetingStreamingProvider::DeepgramLive => {
-            &["SCREENPIPE_MEETING_DEEPGRAM_API_KEY", "DEEPGRAM_API_KEY"]
+            &["DAIMONION_MEETING_DEEPGRAM_API_KEY", "DEEPGRAM_API_KEY"]
         }
         MeetingStreamingProvider::Disabled
         | MeetingStreamingProvider::SelectedEngine
@@ -432,15 +432,15 @@ mod tests {
     #[test]
     fn realtime_endpoint_normalization_rejects_hostless_urls() {
         assert_eq!(
-            normalize_realtime_endpoint("wss://", SCREENPIPE_CLOUD_REALTIME_PATH),
+            normalize_realtime_endpoint("wss://", DAIMONION_CLOUD_REALTIME_PATH),
             None
         );
         assert_eq!(
-            normalize_realtime_endpoint("https://", SCREENPIPE_CLOUD_REALTIME_PATH),
+            normalize_realtime_endpoint("https://", DAIMONION_CLOUD_REALTIME_PATH),
             None
         );
         assert_eq!(
-            normalize_realtime_endpoint("", SCREENPIPE_CLOUD_REALTIME_PATH),
+            normalize_realtime_endpoint("", DAIMONION_CLOUD_REALTIME_PATH),
             None
         );
     }
@@ -448,7 +448,7 @@ mod tests {
     #[test]
     fn realtime_endpoint_normalization_accepts_https_base_url() {
         assert_eq!(
-            normalize_realtime_endpoint("https://api.screenpi.pe", SCREENPIPE_CLOUD_REALTIME_PATH)
+            normalize_realtime_endpoint("https://api.screenpi.pe", DAIMONION_CLOUD_REALTIME_PATH)
                 .as_deref(),
             Some("wss://api.screenpi.pe/v1/realtime")
         );

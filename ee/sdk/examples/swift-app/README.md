@@ -22,7 +22,7 @@ cd examples/swift-app
 swift run ScreenpipeExample
 ```
 
-For local development, the example uses `SCREENPIPE_SDK_ROOT` when it is set,
+For local development, the example uses `DAIMONION_SDK_ROOT` when it is set,
 then falls back to this checkout. When embedding in another app, pass
 `ScreenpipeClient.Configuration.localPackage(sdkRoot:)` a URL for the npm
 package checkout or for a packaged copy of `@screenpipe/sdk`.

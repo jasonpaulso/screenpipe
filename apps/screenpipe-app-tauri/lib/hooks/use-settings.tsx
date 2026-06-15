@@ -436,7 +436,7 @@ const PIPES_PRESET_ID = "pipes";
 // pipe runs that pick the cheapest model that fits the task).
 // Non-pro users get a single "screenpipe" preset on auto — auto handles
 // model routing without needing the user to know what to pick.
-const SCREENPIPE_PRESET_ID = "screenpipe";
+const DAIMONION_PRESET_ID = "screenpipe";
 
 export function makeDefaultPresets(isPro: boolean): AIPreset[] {
 	if (isPro) {
@@ -463,7 +463,7 @@ export function makeDefaultPresets(isPro: boolean): AIPreset[] {
 	}
 	return [
 		{
-			id: SCREENPIPE_PRESET_ID,
+			id: DAIMONION_PRESET_ID,
 			provider: "screenpipe-cloud",
 			url: "",
 			model: "auto",
@@ -732,7 +732,7 @@ function createSettingsStore() {
 			const presets = settings.aiPresets ?? [];
 			const isAnonymousPlaceholder =
 				presets.length === 1 &&
-				(presets[0] as any)?.id === SCREENPIPE_PRESET_ID &&
+				(presets[0] as any)?.id === DAIMONION_PRESET_ID &&
 				(presets[0] as any)?.provider === "screenpipe-cloud";
 			if (isPro && isAnonymousPlaceholder) {
 				settings.aiPresets = makeDefaultPresets(true) as any;

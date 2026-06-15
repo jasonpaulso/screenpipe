@@ -188,16 +188,16 @@ impl PrivacyFilter {
 static INSTANCE: OnceCell<Arc<PrivacyFilter>> = OnceCell::new();
 
 /// Global handle. Enclave host + repo come from
-/// `SCREENPIPE_PRIVACY_FILTER_ENCLAVE` / `SCREENPIPE_PRIVACY_FILTER_REPO`,
+/// `DAIMONION_PRIVACY_FILTER_ENCLAVE` / `DAIMONION_PRIVACY_FILTER_REPO`,
 /// defaulting to the screenpipe-published enclave + its source repo so that
 /// Tinfoil's measurement comparison ties this client to the exact open
 /// source code at github.com/screenpipe/privacy-filter.
 pub fn global() -> Arc<PrivacyFilter> {
     INSTANCE
         .get_or_init(|| {
-            let enclave = std::env::var("SCREENPIPE_PRIVACY_FILTER_ENCLAVE")
+            let enclave = std::env::var("DAIMONION_PRIVACY_FILTER_ENCLAVE")
                 .unwrap_or_else(|_| DEFAULT_ENCLAVE.to_string());
-            let repo = std::env::var("SCREENPIPE_PRIVACY_FILTER_REPO")
+            let repo = std::env::var("DAIMONION_PRIVACY_FILTER_REPO")
                 .unwrap_or_else(|_| DEFAULT_REPO.to_string());
             Arc::new(PrivacyFilter::new(enclave, repo))
         })

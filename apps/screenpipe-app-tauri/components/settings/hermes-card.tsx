@@ -5,8 +5,8 @@
 
 import {
   AgentCard,
-  SCREENPIPE_API_SKILL_MD,
-  SCREENPIPE_CLI_SKILL_MD,
+  DAIMONION_API_SKILL_MD,
+  DAIMONION_CLI_SKILL_MD,
 } from "./agent-card";
 
 const HERMES_MCP_SNIPPET = `mcp_servers:
@@ -35,7 +35,7 @@ export function HermesCard() {
           label: "API",
           blurb:
             "Read screen history, meetings, and memories over the local REST API (read-only queries).",
-          md: SCREENPIPE_API_SKILL_MD,
+          md: DAIMONION_API_SKILL_MD,
           downloadName: "screenpipe-api-SKILL.md",
           localPath: "~/.hermes/skills/screenpipe-api/SKILL.md",
           cliInstall:
@@ -46,7 +46,7 @@ export function HermesCard() {
           label: "CLI",
           blurb:
             "Manage pipes (scheduled automations) and connections (Telegram, Slack, ...) from the shell.",
-          md: SCREENPIPE_CLI_SKILL_MD,
+          md: DAIMONION_CLI_SKILL_MD,
           downloadName: "screenpipe-cli-SKILL.md",
           localPath: "~/.hermes/skills/screenpipe-cli/SKILL.md",
           cliInstall:

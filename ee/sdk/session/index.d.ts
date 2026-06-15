@@ -96,7 +96,7 @@ export type ScreenpipeEventPayload =
   | ScreenpipePermissionsChangedPayload
   | ScreenpipeErrorPayload;
 
-export const SCREENPIPE_EVENTS: ReadonlyArray<ScreenpipeEventName>;
+export const DAIMONION_EVENTS: ReadonlyArray<ScreenpipeEventName>;
 
 /**
  * Per-event-loop polling cadences in milliseconds. Hosts can dial
@@ -140,8 +140,8 @@ export type ScreenpipeSessionOptions = {
   /**
    * Master switch for SDK telemetry. Defaults to `true`: the SDK reports a
    * small, PII-scrubbed set of crash + usage events to screenpipe. Set to
-   * `false` — or set env `SCREENPIPE_SDK_TELEMETRY=0` / `DO_NOT_TRACK=1` /
-   * `SCREENPIPE_DISABLE_ANALYTICS=1` — to disable it entirely.
+   * `false` — or set env `DAIMONION_SDK_TELEMETRY=0` / `DO_NOT_TRACK=1` /
+   * `DAIMONION_DISABLE_ANALYTICS=1` — to disable it entirely.
    */
   telemetry?: boolean;
   /** Optional app name attached to telemetry for segmentation. */

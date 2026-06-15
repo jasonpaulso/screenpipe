@@ -119,7 +119,7 @@ fn install_onnxruntime() {
     // When `ort` is configured for dynamic loading, missing ORT at runtime is fine
     // as long as callers don't use ONNX-backed pipelines.
     let offline = env_var_truthy("CARGO_NET_OFFLINE")
-        || env_var_truthy("SCREENPIPE_SKIP_ONNX_DOWNLOAD")
+        || env_var_truthy("DAIMONION_SKIP_ONNX_DOWNLOAD")
         || env_var_truthy("ORT_SKIP_DOWNLOAD");
 
     // `ort` is configured with `load-dynamic` on Windows (both x86_64 and aarch64),

@@ -10,7 +10,7 @@ import SwiftUI
 @main
 struct ScreenpipeExampleApp: App {
   init() {
-    if ProcessInfo.processInfo.environment["SCREENPIPE_SWIFT_EXAMPLE_SMOKE"] == "1" {
+    if ProcessInfo.processInfo.environment["DAIMONION_SWIFT_EXAMPLE_SMOKE"] == "1" {
       ExampleSmoke.runAndExit()
     }
   }
@@ -104,7 +104,7 @@ final class RecorderViewModel: ObservableObject {
   private let outputDirectory: URL
 
   init() {
-    let root = ProcessInfo.processInfo.environment["SCREENPIPE_SDK_ROOT"]
+    let root = ProcessInfo.processInfo.environment["DAIMONION_SDK_ROOT"]
       .map { URL(fileURLWithPath: $0) }
       ?? Self.repoRootFromSourceFile()
 

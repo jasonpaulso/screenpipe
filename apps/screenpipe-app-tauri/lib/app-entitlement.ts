@@ -85,8 +85,8 @@ export function isDevLoginEnabled() {
   return (
     process.env.NODE_ENV === "development" ||
     process.env.TAURI_ENV_DEBUG === "true" ||
-    process.env.NEXT_PUBLIC_SCREENPIPE_FORCE_BILLING_GATE === "true" ||
-    !!process.env.NEXT_PUBLIC_SCREENPIPE_WEB_URL
+    process.env.NEXT_PUBLIC_DAIMONION_FORCE_BILLING_GATE === "true" ||
+    !!process.env.NEXT_PUBLIC_DAIMONION_WEB_URL
   );
 }
 

@@ -330,7 +330,7 @@ fn main() {
         .duration_since(std::time::UNIX_EPOCH)
         .map(|d| d.as_secs())
         .unwrap_or(0);
-    println!("cargo:rustc-env=SCREENPIPE_BUILD_UNIX_TIME={}", build_time);
+    println!("cargo:rustc-env=DAIMONION_BUILD_UNIX_TIME={}", build_time);
     // Re-run the build script on every compile so the timestamp is fresh.
     println!("cargo:rerun-if-changed=build.rs");
 

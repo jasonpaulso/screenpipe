@@ -8,18 +8,18 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const sdkRoot = resolve(process.env.SCREENPIPE_SDK_ROOT || join(here, "..", "..", ".."));
+const sdkRoot = resolve(process.env.DAIMONION_SDK_ROOT || join(here, "..", "..", ".."));
 const requireFromSdk = createRequire(pathToFileURL(join(sdkRoot, "package.json")));
-const { createScreenpipeSession, SCREENPIPE_EVENTS } = requireFromSdk("./session");
+const { createScreenpipeSession, DAIMONION_EVENTS } = requireFromSdk("./session");
 
-const outputDir = process.env.SCREENPIPE_OUTPUT_DIR || undefined;
-const permissionTimeoutMs = Number(process.env.SCREENPIPE_PERMISSION_TIMEOUT_MS || 0) || undefined;
+const outputDir = process.env.DAIMONION_OUTPUT_DIR || undefined;
+const permissionTimeoutMs = Number(process.env.DAIMONION_PERMISSION_TIMEOUT_MS || 0) || undefined;
 // Telemetry identification — Swift/Tauri-native hosts pass these via env
 // when spawning the bridge. `userId` tags this user in screenpipe's
-// Sentry/PostHog; opt-out rides on SCREENPIPE_SDK_TELEMETRY (read inside
+// Sentry/PostHog; opt-out rides on DAIMONION_SDK_TELEMETRY (read inside
 // the session's telemetry layer).
-const userId = process.env.SCREENPIPE_SDK_USER_ID || undefined;
-const appName = process.env.SCREENPIPE_SDK_APP_NAME || undefined;
+const userId = process.env.DAIMONION_SDK_USER_ID || undefined;
+const appName = process.env.DAIMONION_SDK_APP_NAME || undefined;
 const session = createScreenpipeSession({ outputDir, permissionTimeoutMs, userId, appName });
 
 function write(message) {
@@ -69,7 +69,7 @@ async function dispatch(method, params) {
       // Returns the canonical event taxonomy so clients on the other
       // side of the JSON-line bridge (Tauri Rust, Swift) can allow-list
       // without redeclaring the names.
-      return SCREENPIPE_EVENTS.slice();
+      return DAIMONION_EVENTS.slice();
     case "dispose":
       await session.dispose();
       return true;
@@ -88,8 +88,8 @@ async function dispatch(method, params) {
 // Skip silently when the session doesn't expose `.on` (smaller mocks
 // in tests, or older session shapes). The bridge stays useful for RPC
 // even without events.
-if (typeof session.on === "function" && Array.isArray(SCREENPIPE_EVENTS)) {
-  for (const eventName of SCREENPIPE_EVENTS) {
+if (typeof session.on === "function" && Array.isArray(DAIMONION_EVENTS)) {
+  for (const eventName of DAIMONION_EVENTS) {
     session.on(eventName, (data) => {
       try {
         write({ event: eventName, data: data ?? null });

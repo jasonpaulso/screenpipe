@@ -6,8 +6,8 @@
 //! binary from a terminal. Fires only from the CLI entrypoint — never from
 //! the desktop app, which embeds the engine as a library.
 //!
-//! Opt out with `SCREENPIPE_NO_REMINDERS=1` (silences all tips).
-//! Opt out of the version-check nudge only with `SCREENPIPE_NO_UPDATE_CHECK=1`.
+//! Opt out with `DAIMONION_NO_REMINDERS=1` (silences all tips).
+//! Opt out of the version-check nudge only with `DAIMONION_NO_UPDATE_CHECK=1`.
 
 use colored::Colorize;
 use std::env;
@@ -20,7 +20,7 @@ const NPM_LATEST_URL: &str = "https://registry.npmjs.org/screenpipe/latest";
 
 /// Spawn the background reminder loop. Safe to call once at CLI startup.
 pub fn spawn() {
-    if env::var("SCREENPIPE_NO_REMINDERS").is_ok() {
+    if env::var("DAIMONION_NO_REMINDERS").is_ok() {
         return;
     }
 
@@ -55,7 +55,7 @@ async fn run_tip(idx: usize) {
 /// and prints a banner if the current binary is outdated. Silent on success or
 /// any network/parse error so we never noise up the terminal.
 pub async fn check_for_updates() {
-    if env::var("SCREENPIPE_NO_UPDATE_CHECK").is_ok() {
+    if env::var("DAIMONION_NO_UPDATE_CHECK").is_ok() {
         return;
     }
 

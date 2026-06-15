@@ -42,36 +42,36 @@ function collector() {
 
 test("resolveEnabled: default on, explicit + env opt-outs", () => {
   const saved = {
-    a: process.env.SCREENPIPE_SDK_TELEMETRY,
+    a: process.env.DAIMONION_SDK_TELEMETRY,
     b: process.env.DO_NOT_TRACK,
-    c: process.env.SCREENPIPE_DISABLE_ANALYTICS,
+    c: process.env.DAIMONION_DISABLE_ANALYTICS,
   };
-  delete process.env.SCREENPIPE_SDK_TELEMETRY;
+  delete process.env.DAIMONION_SDK_TELEMETRY;
   delete process.env.DO_NOT_TRACK;
-  delete process.env.SCREENPIPE_DISABLE_ANALYTICS;
+  delete process.env.DAIMONION_DISABLE_ANALYTICS;
   try {
     assert.equal(resolveEnabled(undefined), true, "default is on");
     assert.equal(resolveEnabled(false), false, "telemetry:false wins");
 
-    process.env.SCREENPIPE_SDK_TELEMETRY = "0";
-    assert.equal(resolveEnabled(undefined), false, "SCREENPIPE_SDK_TELEMETRY=0");
-    process.env.SCREENPIPE_SDK_TELEMETRY = "true";
+    process.env.DAIMONION_SDK_TELEMETRY = "0";
+    assert.equal(resolveEnabled(undefined), false, "DAIMONION_SDK_TELEMETRY=0");
+    process.env.DAIMONION_SDK_TELEMETRY = "true";
     assert.equal(resolveEnabled(undefined), true, "explicit truthy stays on");
-    delete process.env.SCREENPIPE_SDK_TELEMETRY;
+    delete process.env.DAIMONION_SDK_TELEMETRY;
 
     process.env.DO_NOT_TRACK = "1";
     assert.equal(resolveEnabled(undefined), false, "DO_NOT_TRACK=1");
     delete process.env.DO_NOT_TRACK;
 
-    process.env.SCREENPIPE_DISABLE_ANALYTICS = "yes";
-    assert.equal(resolveEnabled(undefined), false, "SCREENPIPE_DISABLE_ANALYTICS");
+    process.env.DAIMONION_DISABLE_ANALYTICS = "yes";
+    assert.equal(resolveEnabled(undefined), false, "DAIMONION_DISABLE_ANALYTICS");
   } finally {
-    if (saved.a === undefined) delete process.env.SCREENPIPE_SDK_TELEMETRY;
-    else process.env.SCREENPIPE_SDK_TELEMETRY = saved.a;
+    if (saved.a === undefined) delete process.env.DAIMONION_SDK_TELEMETRY;
+    else process.env.DAIMONION_SDK_TELEMETRY = saved.a;
     if (saved.b === undefined) delete process.env.DO_NOT_TRACK;
     else process.env.DO_NOT_TRACK = saved.b;
-    if (saved.c === undefined) delete process.env.SCREENPIPE_DISABLE_ANALYTICS;
-    else process.env.SCREENPIPE_DISABLE_ANALYTICS = saved.c;
+    if (saved.c === undefined) delete process.env.DAIMONION_DISABLE_ANALYTICS;
+    else process.env.DAIMONION_DISABLE_ANALYTICS = saved.c;
   }
 });
 

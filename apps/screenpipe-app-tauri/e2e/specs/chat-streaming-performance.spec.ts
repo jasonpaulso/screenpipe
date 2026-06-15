@@ -23,10 +23,10 @@ const DELTA_COUNT = 240;
 const PIPE_DELTA_COUNT = 800;
 const CPU_SAMPLE_INTERVAL_MS = 250;
 const CHAT_CPU_AVG_MAX_PERCENT = Number(
-  process.env.SCREENPIPE_E2E_CHAT_CPU_AVG_MAX_PERCENT ?? "85",
+  process.env.DAIMONION_E2E_CHAT_CPU_AVG_MAX_PERCENT ?? "85",
 );
 const CHAT_CPU_P95_MAX_PERCENT = Number(
-  process.env.SCREENPIPE_E2E_CHAT_CPU_P95_MAX_PERCENT ?? "120",
+  process.env.DAIMONION_E2E_CHAT_CPU_P95_MAX_PERCENT ?? "120",
 );
 
 interface StreamingPerfResult {

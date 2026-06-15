@@ -14,8 +14,8 @@
 //!
 //! Auth: `team_api_token` from `~/.daimonion/enterprise.json` (admin
 //! mints it once at <https://screenpi.pe/enterprise?tab=tokens>). Override
-//! via `SCREENPIPE_TEAM_API_TOKEN` env var for scripts/CI. Base URL
-//! override: `SCREENPIPE_CLOUD_BASE_URL` (default `https://screenpi.pe`).
+//! via `DAIMONION_TEAM_API_TOKEN` env var for scripts/CI. Base URL
+//! override: `DAIMONION_CLOUD_BASE_URL` (default `https://screenpi.pe`).
 //!
 //! Skips the local sp daemon entirely — calls go straight to the cloud,
 //! so this works on any machine the admin has signed into (CI, a fresh
@@ -33,8 +33,8 @@ use std::path::PathBuf;
 use crate::cli::{TeamCommand, TeamDevicesArgs, TeamRecordsArgs, TeamSearchArgs};
 
 const DEFAULT_BASE_URL: &str = "https://screenpi.pe";
-const ENV_TOKEN: &str = "SCREENPIPE_TEAM_API_TOKEN";
-const ENV_BASE_URL: &str = "SCREENPIPE_CLOUD_BASE_URL";
+const ENV_TOKEN: &str = "DAIMONION_TEAM_API_TOKEN";
+const ENV_BASE_URL: &str = "DAIMONION_CLOUD_BASE_URL";
 
 const TOKEN_HELP: &str = "no team_api_token found.
 
@@ -43,7 +43,7 @@ Open https://screenpi.pe/enterprise?tab=tokens, mint a token with scopes
 
   - paste it into desktop Settings → Privacy → Admin Team API Token
     (writes ~/.daimonion/enterprise.json), or
-  - export SCREENPIPE_TEAM_API_TOKEN=<token> for this shell.";
+  - export DAIMONION_TEAM_API_TOKEN=<token> for this shell.";
 
 pub async fn handle_team_command(cmd: &TeamCommand) -> anyhow::Result<()> {
     let env = TeamEnv::resolve()?;

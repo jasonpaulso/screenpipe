@@ -976,12 +976,12 @@ function friendlyToolLabel(toolCall: ToolCall): string {
       if (result) return result.label;
       // Fallback for non-API curls / arbitrary shell — strip the auth-header
       // boilerplate so the truncation surfaces the meaningful tail, not the
-      // 80-char "-H Authorization: Bearer $SCREENPIPE_LOCAL_API_KEY" header.
+      // 80-char "-H Authorization: Bearer $DAIMONION_LOCAL_API_KEY" header.
       // Matches both the canonical and deprecated alias name.
       const stripped = cmd
         .replace(/^\s*curl\s+/, "curl ")
         .replace(/\s-s\s+/g, " ")
-        .replace(/\s-H\s+['"]Authorization:\s*Bearer\s+\$?SCREENPIPE_(LOCAL_API|API_AUTH)_KEY['"]\s*/g, " ")
+        .replace(/\s-H\s+['"]Authorization:\s*Bearer\s+\$?DAIMONION_(LOCAL_API|API_AUTH)_KEY['"]\s*/g, " ")
         .replace(/\s-H\s+['"]Content-Type:\s*application\/json['"]\s*/g, " ")
         .replace(/\s+/g, " ")
         .trim();

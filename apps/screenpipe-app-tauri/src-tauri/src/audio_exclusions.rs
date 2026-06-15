@@ -18,7 +18,7 @@
 //! ```
 //!
 //! The path defaults to `$HOME/.daimonion/audio-exclusions.json` and can
-//! be overridden with `SCREENPIPE_AUDIO_EXCLUSIONS_PATH` — both the engine
+//! be overridden with `DAIMONION_AUDIO_EXCLUSIONS_PATH` — both the engine
 //! reader and these commands honor the same env var so they always agree.
 
 use base64::{engine::general_purpose::STANDARD as BASE64, Engine as _};
@@ -30,7 +30,7 @@ use std::io::Write;
 use std::path::Path;
 use std::path::PathBuf;
 
-const ENV_OVERRIDE: &str = "SCREENPIPE_AUDIO_EXCLUSIONS_PATH";
+const ENV_OVERRIDE: &str = "DAIMONION_AUDIO_EXCLUSIONS_PATH";
 const DEFAULT_RELATIVE_PATH: &str = ".daimonion/audio-exclusions.json";
 
 #[derive(Serialize, Deserialize, Type, Clone, Debug, PartialEq)]

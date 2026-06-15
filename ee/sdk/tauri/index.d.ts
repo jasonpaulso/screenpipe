@@ -107,7 +107,7 @@ export type CreateScreenpipeTauriClientOptions = {
 };
 
 export const DEFAULT_TAURI_COMMANDS: ScreenpipeTauriCommands;
-export const SCREENPIPE_EVENT_CHANNEL: string;
+export const DAIMONION_EVENT_CHANNEL: string;
 
 export function createScreenpipeTauriClient(
   options?: CreateScreenpipeTauriClientOptions

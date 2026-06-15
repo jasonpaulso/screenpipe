@@ -26,7 +26,7 @@ import {
   waitForLocalApi,
 } from "../helpers/api-utils.js";
 
-const restartSmokeEnabled = process.env.SCREENPIPE_E2E_RESTART_SMOKE === "1";
+const restartSmokeEnabled = process.env.DAIMONION_E2E_RESTART_SMOKE === "1";
 
 type LocalApiConfig = Awaited<ReturnType<typeof getLocalApiConfig>>;
 

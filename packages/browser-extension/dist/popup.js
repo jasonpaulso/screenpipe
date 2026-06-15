@@ -29,7 +29,7 @@ function browserPairStatusUrl(baseHttpUrl, id) {
 }
 
 // src/popup.ts
-var SCREENPIPE_FOCUS_URL = "http://127.0.0.1:11435/focus";
+var DAIMONION_FOCUS_URL = "http://127.0.0.1:11435/focus";
 var PAIR_POLL_MS = 1000;
 var PAIR_TIMEOUT_MS = 120000;
 var SESSION_PAIR_KEY = "screenpipe_pending_pair";
@@ -111,7 +111,7 @@ async function tryFocusScreenpipe() {
   try {
     const ctrl = new AbortController;
     const t = setTimeout(() => ctrl.abort(), 2000);
-    await fetch(SCREENPIPE_FOCUS_URL, {
+    await fetch(DAIMONION_FOCUS_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ target: "browser_pairing" }),

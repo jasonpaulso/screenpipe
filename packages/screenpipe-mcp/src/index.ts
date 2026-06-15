@@ -25,7 +25,7 @@ for (let i = 0; i < args.length; i++) {
   }
 }
 
-const SCREENPIPE_API = `http://localhost:${port}`;
+const DAIMONION_API = `http://localhost:${port}`;
 
 // Discover the local API key, in priority order:
 //
@@ -48,7 +48,7 @@ const SCREENPIPE_API = `http://localhost:${port}`;
 // If all 5 miss we log a loud stderr warning so it surfaces in the host's
 // MCP log instead of the user just seeing 403s with no explanation.
 function discoverApiKey(): string {
-  const envKey = process.env.SCREENPIPE_LOCAL_API_KEY || process.env.SCREENPIPE_API_KEY;
+  const envKey = process.env.DAIMONION_LOCAL_API_KEY || process.env.DAIMONION_API_KEY;
   if (envKey) return envKey;
 
   // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -178,12 +178,12 @@ function discoverApiKey(): string {
   // the screenpipe server on every tool call.
   process.stderr.write(
     [
-      "[screenpipe-mcp] could not discover SCREENPIPE_LOCAL_API_KEY from any source.",
-      "  - env vars (SCREENPIPE_LOCAL_API_KEY / SCREENPIPE_API_KEY) not set",
+      "[screenpipe-mcp] could not discover DAIMONION_LOCAL_API_KEY from any source.",
+      "  - env vars (DAIMONION_LOCAL_API_KEY / DAIMONION_API_KEY) not set",
       "  - bundled `bun` from screenpipe.app not found at any known install path",
       "  - npx fallback unavailable",
       "  - direct sqlite3 read of ~/.daimonion/db.sqlite failed",
-      "Fix: set SCREENPIPE_LOCAL_API_KEY in your MCP launcher's env block,",
+      "Fix: set DAIMONION_LOCAL_API_KEY in your MCP launcher's env block,",
       "or install the screenpipe desktop app (https://screenpi.pe).",
       "",
     ].join("\n"),
@@ -201,7 +201,7 @@ const API_KEY = discoverApiKey();
 // machine do" AND "what did MY TEAM do" without juggling two MCPs.
 //
 // Resolution order matches discoverApiKey() in spirit:
-//   1. SCREENPIPE_ENTERPRISE_TOKEN env var (Claude config, terminal)
+//   1. DAIMONION_ENTERPRISE_TOKEN env var (Claude config, terminal)
 //   2. team_api_token field in ~/.daimonion/enterprise.json (written by
 //      the desktop app's Settings → Privacy → Admin Team API Token)
 //
@@ -209,7 +209,7 @@ const API_KEY = discoverApiKey();
 // registered; non-admin users of screenpipe-mcp see exactly what they
 // see today.
 function discoverTeamToken(): string {
-  const envTok = process.env.SCREENPIPE_ENTERPRISE_TOKEN;
+  const envTok = process.env.DAIMONION_ENTERPRISE_TOKEN;
   if (envTok && envTok.startsWith("sk_ent_")) return envTok;
   try {
     const entPath = path.join(os.homedir(), ".daimonion", "enterprise.json");
@@ -875,7 +875,7 @@ Never fabricate IDs or timestamps — only use values from actual results.
 class BackendDownError extends Error {
   constructor(public readonly cause: unknown) {
     super(
-      `screenpipe backend not running on ${SCREENPIPE_API}. ` +
+      `screenpipe backend not running on ${DAIMONION_API}. ` +
         `Start it with \`screenpipe\` in a terminal, or open the screenpipe desktop app.`,
     );
     this.name = "BackendDownError";
@@ -893,7 +893,7 @@ class BackendHttpError extends Error {
     let hint = "";
     if (status === 401 || status === 403) {
       hint =
-        " — API key not accepted. Set SCREENPIPE_LOCAL_API_KEY in your MCP " +
+        " — API key not accepted. Set DAIMONION_LOCAL_API_KEY in your MCP " +
         "launcher env, or install the screenpipe desktop app so the MCP can " +
         "discover the key automatically.";
     } else if (status === 404) {
@@ -915,7 +915,7 @@ async function fetchAPI(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<Response> {
-  const url = `${SCREENPIPE_API}${endpoint}`;
+  const url = `${DAIMONION_API}${endpoint}`;
   try {
     return await fetch(url, {
       ...options,
@@ -1774,7 +1774,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                 type: "text",
                 text:
                   `team-* tools require an enterprise admin token. Set ` +
-                  `SCREENPIPE_ENTERPRISE_TOKEN in your MCP env, or mint one ` +
+                  `DAIMONION_ENTERPRISE_TOKEN in your MCP env, or mint one ` +
                   `at https://screenpi.pe/enterprise → API Tokens and paste ` +
                   `it into Settings → Privacy → Admin Team API Token in the ` +
                   `screenpipe desktop app.`,

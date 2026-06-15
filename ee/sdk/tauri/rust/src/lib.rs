@@ -62,13 +62,13 @@ use telemetry::Telemetry;
 /// ```
 ///
 /// Or use the `onEvent` helper on `createScreenpipeTauriClient()`.
-pub const SCREENPIPE_EVENT_CHANNEL: &str = "screenpipe://event";
+pub const DAIMONION_EVENT_CHANNEL: &str = "screenpipe://event";
 
 /// Stable taxonomy of event names the plugin will emit on
-/// [`SCREENPIPE_EVENT_CHANNEL`]. Keep in sync with `SCREENPIPE_EVENTS`
+/// [`DAIMONION_EVENT_CHANNEL`]. Keep in sync with `DAIMONION_EVENTS`
 /// in `ee/sdk/session/index.js` — both sides should describe the same
 /// universe so renderers can allow-list without redeclaring.
-pub const SCREENPIPE_EVENTS: &[&str] = &[
+pub const DAIMONION_EVENTS: &[&str] = &[
     "start",
     "stop",
     "recording_started",
@@ -152,7 +152,7 @@ fn emit_event<R: Runtime, T: Clone + Serialize>(app: &AppHandle<R>, event: &'sta
     if let Some(state) = app.try_state::<Arc<ScreenpipeState>>() {
         state.telemetry.track(event, &data);
     }
-    let _ = app.emit(SCREENPIPE_EVENT_CHANNEL, EventEnvelope { event, data });
+    let _ = app.emit(DAIMONION_EVENT_CHANNEL, EventEnvelope { event, data });
 }
 
 // ─── public config + types ────────────────────────────────────────────
@@ -176,8 +176,8 @@ pub struct ScreenpipeConfig {
     /// Optional app name attached to telemetry for segmentation.
     pub app_name: Option<String>,
     /// Master switch for SDK telemetry. `None` (default) means ON; `Some(false)`
-    /// disables it. Env vars `SCREENPIPE_SDK_TELEMETRY=0` / `DO_NOT_TRACK=1` /
-    /// `SCREENPIPE_DISABLE_ANALYTICS=1` also force it off.
+    /// disables it. Env vars `DAIMONION_SDK_TELEMETRY=0` / `DO_NOT_TRACK=1` /
+    /// `DAIMONION_DISABLE_ANALYTICS=1` also force it off.
     pub telemetry_enabled: Option<bool>,
 }
 
@@ -1010,11 +1010,11 @@ async fn screenpipe_dispose(state: State<'_, Arc<ScreenpipeState>>) -> Result<bo
 }
 
 /// Returns the stable list of event names the plugin can emit on
-/// [`SCREENPIPE_EVENT_CHANNEL`]. Mirrors `SCREENPIPE_EVENTS` from the
+/// [`DAIMONION_EVENT_CHANNEL`]. Mirrors `DAIMONION_EVENTS` from the
 /// Node SDK so renderers can allow-list without redeclaring.
 #[tauri::command]
 async fn daimonion_events() -> Result<Vec<&'static str>, String> {
-    Ok(SCREENPIPE_EVENTS.to_vec())
+    Ok(DAIMONION_EVENTS.to_vec())
 }
 
 /// Apply telemetry identity from the JS client. Called once on

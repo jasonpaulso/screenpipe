@@ -83,7 +83,7 @@ fn detect_os_version() -> Option<(u64, u64, u64)> {
 /// ```
 ///
 /// Path defaults to `$HOME/.daimonion/audio-exclusions.json` and can be
-/// overridden with the `SCREENPIPE_AUDIO_EXCLUSIONS_PATH` environment
+/// overridden with the `DAIMONION_AUDIO_EXCLUSIONS_PATH` environment
 /// variable. The engine reads the file on every Process Tap rebuild and
 /// polls its mtime + the resolved AudioObjectID set on the existing 500ms
 /// loop in [`spawn_process_tap_capture`], so changes (file edits, an
@@ -101,7 +101,7 @@ mod exclusions {
 
     use cidre::{arc, core_audio as ca, ns};
 
-    pub const ENV_OVERRIDE: &str = "SCREENPIPE_AUDIO_EXCLUSIONS_PATH";
+    pub const ENV_OVERRIDE: &str = "DAIMONION_AUDIO_EXCLUSIONS_PATH";
     pub const DEFAULT_RELATIVE_PATH: &str = ".daimonion/audio-exclusions.json";
 
     /// Snapshot of the exclusion state used by the rebuild loop to detect drift.

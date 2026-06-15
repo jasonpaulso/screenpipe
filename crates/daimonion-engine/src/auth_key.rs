@@ -16,7 +16,7 @@ use std::path::Path;
 
 /// Resolve the API auth key. Priority:
 ///
-/// 1. `SCREENPIPE_API_KEY` env var
+/// 1. `DAIMONION_API_KEY` env var
 /// 2. `settings_key` (non-empty)
 /// 3. plaintext `api_auth_key` in the `db.sqlite` secret store
 /// 4. legacy `~/.daimonion/auth.json`
@@ -60,9 +60,9 @@ pub async fn resolve_api_auth_key(data_dir: &Path, settings_key: Option<&str>) -
         None
     };
 
-    let (key, source) = if let Ok(k) = std::env::var("SCREENPIPE_API_KEY") {
+    let (key, source) = if let Ok(k) = std::env::var("DAIMONION_API_KEY") {
         if !k.is_empty() {
-            (k, "SCREENPIPE_API_KEY env")
+            (k, "DAIMONION_API_KEY env")
         } else {
             resolve_without_env(settings_key, &stored_key)
         }
@@ -197,7 +197,7 @@ fn read_legacy_auth_json() -> Option<String> {
 /// that doesn't match the running server's in-memory value when called from
 /// a sibling process.
 pub async fn find_api_auth_key() -> Option<String> {
-    if let Ok(k) = std::env::var("SCREENPIPE_API_KEY") {
+    if let Ok(k) = std::env::var("DAIMONION_API_KEY") {
         if !k.is_empty() {
             return Some(k);
         }
@@ -206,7 +206,7 @@ pub async fn find_api_auth_key() -> Option<String> {
     // app's env under different names. Honor those too — without this the
     // agent's `connection list` couldn't authenticate even though the key
     // was right there.
-    for var in ["SCREENPIPE_LOCAL_API_KEY", "SCREENPIPE_API_AUTH_KEY"] {
+    for var in ["DAIMONION_LOCAL_API_KEY", "DAIMONION_API_AUTH_KEY"] {
         if let Ok(k) = std::env::var(var) {
             if !k.is_empty() {
                 return Some(k);

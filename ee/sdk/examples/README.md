@@ -6,7 +6,7 @@ small and uses the SDK surface an app would use in production.
 | App | Preview | Run | Smoke check |
 | --- | --- | --- | --- |
 | [Electron](./electron-app) | ![Electron example app](../docs/screenshots/electron-example.png) | `npm --prefix examples/electron-app install && npm --prefix examples/electron-app start` | `npm --prefix examples/electron-app run smoke` |
-| [Swift](./swift-app) | ![Swift example app](../docs/screenshots/swift-example.png) | `swift run --package-path examples/swift-app ScreenpipeExample` | `SCREENPIPE_SWIFT_EXAMPLE_SMOKE=1 swift run --package-path examples/swift-app ScreenpipeExample` |
+| [Swift](./swift-app) | ![Swift example app](../docs/screenshots/swift-example.png) | `swift run --package-path examples/swift-app ScreenpipeExample` | `DAIMONION_SWIFT_EXAMPLE_SMOKE=1 swift run --package-path examples/swift-app ScreenpipeExample` |
 | [Tauri](./tauri-app) | ![Tauri example app](../docs/screenshots/tauri-example.png) | `npm --prefix examples/tauri-app install && npm --prefix examples/tauri-app run dev` | `npm --prefix examples/tauri-app run smoke` |
 
 ## Before Running UI Apps
@@ -28,5 +28,5 @@ permissions depending on the platform and which features you press.
 node --test --test-concurrency=1 __test__/examples_e2e.test.mjs
 ```
 
-Set `SCREENPIPE_RUN_NATIVE_EXAMPLE_BUILDS=1` to include the optional native
+Set `DAIMONION_RUN_NATIVE_EXAMPLE_BUILDS=1` to include the optional native
 Tauri example compile.

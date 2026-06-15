@@ -104,7 +104,7 @@ sanitize_json_fallback() {
 
 build_posthog_payload() {
     if command -v node >/dev/null 2>&1; then
-        SCREENPIPE_POSTHOG_OS="$OS" SCREENPIPE_POSTHOG_ARCH="$(uname -m)" node <<'NODE'
+        DAIMONION_POSTHOG_OS="$OS" DAIMONION_POSTHOG_ARCH="$(uname -m)" node <<'NODE'
 const { hostname } = require("node:os");
 
 function firstEnv(names) {
@@ -119,25 +119,25 @@ function firstEnv(names) {
 
 function supportTelemetryContext() {
   const context = {};
-  const supportId = firstEnv(["SCREENPIPE_SUPPORT_ID", "SCREENPIPE_TELEMETRY_ID"]);
+  const supportId = firstEnv(["DAIMONION_SUPPORT_ID", "DAIMONION_TELEMETRY_ID"]);
   const customerId = firstEnv([
-    "SCREENPIPE_CUSTOMER_ID",
-    "SCREENPIPE_ORG_ID",
-    "SCREENPIPE_TELEMETRY_CUSTOMER_ID",
+    "DAIMONION_CUSTOMER_ID",
+    "DAIMONION_ORG_ID",
+    "DAIMONION_TELEMETRY_CUSTOMER_ID",
   ]);
   const deploymentId = firstEnv([
-    "SCREENPIPE_DEPLOYMENT_ID",
-    "SCREENPIPE_TELEMETRY_DEPLOYMENT_ID",
+    "DAIMONION_DEPLOYMENT_ID",
+    "DAIMONION_TELEMETRY_DEPLOYMENT_ID",
   ]);
   const embedder = firstEnv([
-    "SCREENPIPE_EMBEDDER",
-    "SCREENPIPE_HOST_APP",
-    "SCREENPIPE_TELEMETRY_HOST_APP",
+    "DAIMONION_EMBEDDER",
+    "DAIMONION_HOST_APP",
+    "DAIMONION_TELEMETRY_HOST_APP",
   ]);
   const embedderVersion = firstEnv([
-    "SCREENPIPE_EMBEDDER_VERSION",
-    "SCREENPIPE_HOST_VERSION",
-    "SCREENPIPE_TELEMETRY_HOST_VERSION",
+    "DAIMONION_EMBEDDER_VERSION",
+    "DAIMONION_HOST_VERSION",
+    "DAIMONION_TELEMETRY_HOST_VERSION",
   ]);
 
   if (supportId) context.screenpipe_support_id = supportId;
@@ -151,10 +151,10 @@ function supportTelemetryContext() {
 const supportContext = supportTelemetryContext();
 const properties = {
   distinct_id:
-    firstEnv(["SCREENPIPE_ANALYTICS_ID", "SCREENPIPE_SUPPORT_ID", "SCREENPIPE_TELEMETRY_ID"]) ||
+    firstEnv(["DAIMONION_ANALYTICS_ID", "DAIMONION_SUPPORT_ID", "DAIMONION_TELEMETRY_ID"]) ||
     hostname(),
-  os: process.env.SCREENPIPE_POSTHOG_OS || "",
-  arch: process.env.SCREENPIPE_POSTHOG_ARCH || "",
+  os: process.env.DAIMONION_POSTHOG_OS || "",
+  arch: process.env.DAIMONION_POSTHOG_ARCH || "",
   ...supportContext,
 };
 

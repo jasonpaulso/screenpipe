@@ -258,7 +258,7 @@ export function friendlyError(model: string, status: number, fellThrough: boolea
     : `${model} request failed (${status}). Please try again or pick a different model.`;
 }
 
-export const SCREENPIPE_SYSTEM_HINT = `You have screenpipe skills. At the start of every conversation, read the files in .pi/skills/ directory (e.g. .pi/skills/screenpipe-api/SKILL.md and .pi/skills/screenpipe-cli/SKILL.md) before responding. Do not use web_search for the user's own screenpipe data or for the local screenpipe API at localhost:3030 — that is private and not on the web; answer those from your screenpipe skills and the local API/tools. Only use web_search for public, external information the user explicitly asks for (current events, news, public docs).`;
+export const DAIMONION_SYSTEM_HINT = `You have screenpipe skills. At the start of every conversation, read the files in .pi/skills/ directory (e.g. .pi/skills/screenpipe-api/SKILL.md and .pi/skills/screenpipe-cli/SKILL.md) before responding. Do not use web_search for the user's own screenpipe data or for the local screenpipe API at localhost:3030 — that is private and not on the web; answer those from your screenpipe skills and the local API/tools. Only use web_search for public, external information the user explicitly asks for (current events, news, public docs).`;
 
 /** Prepend a screenpipe system hint if no system message already mentions screenpipe */
 export function ensureScreenpipeHint(body: RequestBody): RequestBody {
@@ -272,7 +272,7 @@ export function ensureScreenpipeHint(body: RequestBody): RequestBody {
   if (hasScreenpipeContext) return body;
   return {
     ...body,
-    messages: [{ role: 'system', content: SCREENPIPE_SYSTEM_HINT }, ...messages],
+    messages: [{ role: 'system', content: DAIMONION_SYSTEM_HINT }, ...messages],
   };
 }
 

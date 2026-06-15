@@ -167,7 +167,7 @@ export interface Env {
 	// Optional — Tinfoil tokens are org-scoped, so TINFOIL_API_KEY is the
 	// fallback. Set this separately only if you need to rotate it
 	// independently of the gemma4-31b path.
-	SCREENPIPE_ENCLAVE_API_KEY?: string;
+	DAIMONION_ENCLAVE_API_KEY?: string;
 	// Admin API auth
 	ADMIN_SECRET: string;
 	// Transcription A/B/C test routing

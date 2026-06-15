@@ -4,7 +4,7 @@
 
 // Keep this suite off the network — these sessions are fakes, not real
 // usage. Telemetry routing has its own coverage in telemetry.test.mjs.
-process.env.SCREENPIPE_SDK_TELEMETRY = "0";
+process.env.DAIMONION_SDK_TELEMETRY = "0";
 
 import { test } from "node:test";
 import assert from "node:assert/strict";

@@ -16,7 +16,7 @@ import {
 
 type ConnStatus = "checking" | "ok" | "bridge_down" | "auth_required" | "server_down" | "error";
 
-const SCREENPIPE_FOCUS_URL = "http://127.0.0.1:11435/focus";
+const DAIMONION_FOCUS_URL = "http://127.0.0.1:11435/focus";
 const PAIR_POLL_MS = 1_000;
 const PAIR_TIMEOUT_MS = 120_000;
 const SESSION_PAIR_KEY = "screenpipe_pending_pair";
@@ -116,7 +116,7 @@ async function tryFocusScreenpipe(): Promise<void> {
   try {
     const ctrl = new AbortController();
     const t = setTimeout(() => ctrl.abort(), 2000);
-    await fetch(SCREENPIPE_FOCUS_URL, {
+    await fetch(DAIMONION_FOCUS_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ target: "browser_pairing" }),

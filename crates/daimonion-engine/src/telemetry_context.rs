@@ -7,36 +7,36 @@ use std::collections::BTreeMap;
 use std::env;
 
 const DISTINCT_ID_ENV_VARS: &[&str] = &[
-    "SCREENPIPE_ANALYTICS_ID",
-    "SCREENPIPE_SUPPORT_ID",
-    "SCREENPIPE_TELEMETRY_ID",
+    "DAIMONION_ANALYTICS_ID",
+    "DAIMONION_SUPPORT_ID",
+    "DAIMONION_TELEMETRY_ID",
 ];
 
-const SUPPORT_ID_ENV_VARS: &[&str] = &["SCREENPIPE_SUPPORT_ID", "SCREENPIPE_TELEMETRY_ID"];
+const SUPPORT_ID_ENV_VARS: &[&str] = &["DAIMONION_SUPPORT_ID", "DAIMONION_TELEMETRY_ID"];
 const CUSTOMER_ID_ENV_VARS: &[&str] = &[
-    "SCREENPIPE_CUSTOMER_ID",
-    "SCREENPIPE_ORG_ID",
-    "SCREENPIPE_TELEMETRY_CUSTOMER_ID",
+    "DAIMONION_CUSTOMER_ID",
+    "DAIMONION_ORG_ID",
+    "DAIMONION_TELEMETRY_CUSTOMER_ID",
 ];
 const DEPLOYMENT_ID_ENV_VARS: &[&str] = &[
-    "SCREENPIPE_DEPLOYMENT_ID",
-    "SCREENPIPE_TELEMETRY_DEPLOYMENT_ID",
+    "DAIMONION_DEPLOYMENT_ID",
+    "DAIMONION_TELEMETRY_DEPLOYMENT_ID",
 ];
 const EMBEDDER_ENV_VARS: &[&str] = &[
-    "SCREENPIPE_EMBEDDER",
-    "SCREENPIPE_HOST_APP",
-    "SCREENPIPE_TELEMETRY_HOST_APP",
+    "DAIMONION_EMBEDDER",
+    "DAIMONION_HOST_APP",
+    "DAIMONION_TELEMETRY_HOST_APP",
 ];
 const EMBEDDER_VERSION_ENV_VARS: &[&str] = &[
-    "SCREENPIPE_EMBEDDER_VERSION",
-    "SCREENPIPE_HOST_VERSION",
-    "SCREENPIPE_TELEMETRY_HOST_VERSION",
+    "DAIMONION_EMBEDDER_VERSION",
+    "DAIMONION_HOST_VERSION",
+    "DAIMONION_TELEMETRY_HOST_VERSION",
 ];
-const DISTRIBUTION_ENV_VARS: &[&str] = &["SCREENPIPE_DISTRIBUTION", "SCREENPIPE_DIST"];
+const DISTRIBUTION_ENV_VARS: &[&str] = &["DAIMONION_DISTRIBUTION", "DAIMONION_DIST"];
 
 /// How this engine was launched: "desktop-app" (Tauri app), "cli" (npm/bunx),
 /// or "source"/"source-dev" (built locally). The app and CLI set
-/// `SCREENPIPE_DISTRIBUTION` explicitly; without it we infer a source build
+/// `DAIMONION_DISTRIBUTION` explicitly; without it we infer a source build
 /// (debug = dev). Lets analytics split the free OSS engine WAU from the signed
 /// app and paying users.
 pub fn resolve_distribution() -> String {
@@ -155,22 +155,22 @@ mod tests {
     static ENV_LOCK: Mutex<()> = Mutex::new(());
 
     const ALL_ENV_VARS: &[&str] = &[
-        "SCREENPIPE_ANALYTICS_ID",
-        "SCREENPIPE_SUPPORT_ID",
-        "SCREENPIPE_TELEMETRY_ID",
-        "SCREENPIPE_CUSTOMER_ID",
-        "SCREENPIPE_ORG_ID",
-        "SCREENPIPE_TELEMETRY_CUSTOMER_ID",
-        "SCREENPIPE_DEPLOYMENT_ID",
-        "SCREENPIPE_TELEMETRY_DEPLOYMENT_ID",
-        "SCREENPIPE_EMBEDDER",
-        "SCREENPIPE_HOST_APP",
-        "SCREENPIPE_TELEMETRY_HOST_APP",
-        "SCREENPIPE_EMBEDDER_VERSION",
-        "SCREENPIPE_HOST_VERSION",
-        "SCREENPIPE_TELEMETRY_HOST_VERSION",
-        "SCREENPIPE_DISTRIBUTION",
-        "SCREENPIPE_DIST",
+        "DAIMONION_ANALYTICS_ID",
+        "DAIMONION_SUPPORT_ID",
+        "DAIMONION_TELEMETRY_ID",
+        "DAIMONION_CUSTOMER_ID",
+        "DAIMONION_ORG_ID",
+        "DAIMONION_TELEMETRY_CUSTOMER_ID",
+        "DAIMONION_DEPLOYMENT_ID",
+        "DAIMONION_TELEMETRY_DEPLOYMENT_ID",
+        "DAIMONION_EMBEDDER",
+        "DAIMONION_HOST_APP",
+        "DAIMONION_TELEMETRY_HOST_APP",
+        "DAIMONION_EMBEDDER_VERSION",
+        "DAIMONION_HOST_VERSION",
+        "DAIMONION_TELEMETRY_HOST_VERSION",
+        "DAIMONION_DISTRIBUTION",
+        "DAIMONION_DIST",
     ];
 
     fn with_env<T>(pairs: &[(&str, &str)], test: impl FnOnce() -> T) -> T {
@@ -205,8 +205,8 @@ mod tests {
     fn distinct_id_prefers_existing_analytics_id() {
         with_env(
             &[
-                ("SCREENPIPE_ANALYTICS_ID", "analytics-user"),
-                ("SCREENPIPE_SUPPORT_ID", "support-user"),
+                ("DAIMONION_ANALYTICS_ID", "analytics-user"),
+                ("DAIMONION_SUPPORT_ID", "support-user"),
             ],
             || {
                 assert_eq!(
@@ -219,7 +219,7 @@ mod tests {
 
     #[test]
     fn support_id_can_supply_standalone_distinct_id() {
-        with_env(&[("SCREENPIPE_SUPPORT_ID", "spcust_acme_123")], || {
+        with_env(&[("DAIMONION_SUPPORT_ID", "spcust_acme_123")], || {
             assert_eq!(
                 TelemetryContext::distinct_id_from_env(),
                 Some("spcust_acme_123".to_string())
@@ -231,10 +231,10 @@ mod tests {
     fn posthog_properties_include_person_set_values() {
         with_env(
             &[
-                ("SCREENPIPE_SUPPORT_ID", "spcust_acme_123"),
-                ("SCREENPIPE_ORG_ID", "acme"),
-                ("SCREENPIPE_DEPLOYMENT_ID", "prod-fleet"),
-                ("SCREENPIPE_EMBEDDER", "acme-agent"),
+                ("DAIMONION_SUPPORT_ID", "spcust_acme_123"),
+                ("DAIMONION_ORG_ID", "acme"),
+                ("DAIMONION_DEPLOYMENT_ID", "prod-fleet"),
+                ("DAIMONION_EMBEDDER", "acme-agent"),
             ],
             || {
                 let context = TelemetryContext::from_env();
@@ -265,7 +265,7 @@ mod tests {
 
     #[test]
     fn distribution_prefers_env_then_falls_back_to_source() {
-        with_env(&[("SCREENPIPE_DISTRIBUTION", "desktop-app")], || {
+        with_env(&[("DAIMONION_DISTRIBUTION", "desktop-app")], || {
             assert_eq!(resolve_distribution(), "desktop-app");
         });
         with_env(&[], || {
@@ -276,7 +276,7 @@ mod tests {
 
     #[test]
     fn distribution_always_tagged_even_without_context() {
-        with_env(&[("SCREENPIPE_DISTRIBUTION", "cli")], || {
+        with_env(&[("DAIMONION_DISTRIBUTION", "cli")], || {
             let context = TelemetryContext::from_env();
             assert!(context.is_empty(), "no enterprise context expected");
 

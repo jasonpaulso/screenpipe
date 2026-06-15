@@ -31,7 +31,7 @@ function createScreenpipeRendererApi(ipcRenderer, channels) {
      * Subscribe to screenpipe session events broadcast by the main
      * process. Returns an unsubscribe function. `callback` is called
      * with `{ event, data }` where `event` is the session event name
-     * (see `SCREENPIPE_EVENTS` on the main-process side) and `data` is
+     * (see `DAIMONION_EVENTS` on the main-process side) and `data` is
      * the event payload.
      *
      * Pass `{ filter: ["app_switched", ...] }` to allow-list events at

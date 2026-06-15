@@ -147,12 +147,12 @@ fn get_env(name: &str) -> String {
     std::env::var(String::from(name)).unwrap_or(String::from(""))
 }
 
-/// Returns which E2E seeds are requested (env SCREENPIPE_E2E_SEED, comma-separated).
+/// Returns which E2E seeds are requested (env DAIMONION_E2E_SEED, comma-separated).
 /// Rust uses "onboarding" in setup to complete onboarding at startup.
 #[tauri::command]
 #[specta::specta]
 fn get_e2e_seed_flags() -> Vec<String> {
-    std::env::var("SCREENPIPE_E2E_SEED")
+    std::env::var("DAIMONION_E2E_SEED")
         .ok()
         .filter(|s| !s.is_empty())
         .map(|s| {
@@ -379,11 +379,11 @@ async fn main() {
     //
     // Escape hatches (in order of preference):
     //   1. `screenpipe db unlock` — friendly path
-    //   2. SCREENPIPE_IGNORE_DB_LOCK=1 env var — bypass on this launch only
+    //   2. DAIMONION_IGNORE_DB_LOCK=1 env var — bypass on this launch only
     //   3. `rm ~/.daimonion/.db_recovery.lock` — manual
     //
     // See `crates/screenpipe-engine/src/cli/db.rs`.
-    if std::env::var("SCREENPIPE_IGNORE_DB_LOCK").ok().as_deref() != Some("1") {
+    if std::env::var("DAIMONION_IGNORE_DB_LOCK").ok().as_deref() != Some("1") {
         let lock_path =
             daimonion_core::paths::default_screenpipe_data_dir().join(".db_recovery.lock");
         if let Ok(metadata) = std::fs::metadata(&lock_path) {
@@ -401,7 +401,7 @@ async fn main() {
                     "screenpipe: a `screenpipe db ...` operation is in progress.\n\
                      lock: {}\n\
                      content: {}\n\
-                     options:\n  • wait for the op to finish, then re-open the app\n  • run `screenpipe db unlock` if you're sure it's stuck\n  • set SCREENPIPE_IGNORE_DB_LOCK=1 and retry to bypass this check",
+                     options:\n  • wait for the op to finish, then re-open the app\n  • run `screenpipe db unlock` if you're sure it's stuck\n  • set DAIMONION_IGNORE_DB_LOCK=1 and retry to bypass this check",
                     lock_path.display(),
                     body.trim(),
                 );
@@ -452,7 +452,7 @@ async fn main() {
             .find(|a| a.starts_with("screenpipe://"))
             .cloned();
 
-        let focus_port: u16 = std::env::var("SCREENPIPE_FOCUS_PORT")
+        let focus_port: u16 = std::env::var("DAIMONION_FOCUS_PORT")
             .ok()
             .and_then(|v| v.parse().ok())
             .unwrap_or(11435);
@@ -524,7 +524,7 @@ async fn main() {
                     // for a full release cycle but tight enough that truly
                     // stale installs age out.
                     const SENTRY_REPORT_TTL_SECS: u64 = 90 * 24 * 60 * 60;
-                    let build_time: u64 = env!("SCREENPIPE_BUILD_UNIX_TIME")
+                    let build_time: u64 = env!("DAIMONION_BUILD_UNIX_TIME")
                         .parse()
                         .unwrap_or(0);
                     if build_time > 0 {
@@ -1101,7 +1101,7 @@ async fn main() {
                 store::SettingsStore::default()
             });
 
-            // E2E seed: when SCREENPIPE_E2E_SEED contains "no-recording", flip
+            // E2E seed: when DAIMONION_E2E_SEED contains "no-recording", flip
             // disable_vision + disable_audio so the e2e harness can drive the
             // app without granting Screen Recording / Microphone TCC. The
             // server (DB + HTTP) still boots; only SCK + audio capture skip.
@@ -1221,7 +1221,7 @@ async fn main() {
             });
             app.manage(onboarding_store.clone());
 
-            // E2E seed: when SCREENPIPE_E2E_SEED contains "onboarding", mark onboarding complete
+            // E2E seed: when DAIMONION_E2E_SEED contains "onboarding", mark onboarding complete
             let e2e_flags = get_e2e_seed_flags();
             if e2e_flags.iter().any(|f| f == "onboarding") {
                 if let Err(e) = store::OnboardingStore::update(&app.handle(), |o| o.complete()) {
@@ -1370,7 +1370,7 @@ async fn main() {
             let app_handle = app.handle().clone();
 
             // Initialize server first (core service)
-            let focus_port: u16 = std::env::var("SCREENPIPE_FOCUS_PORT")
+            let focus_port: u16 = std::env::var("DAIMONION_FOCUS_PORT")
                 .ok()
                 .and_then(|v| v.parse().ok())
                 .unwrap_or(11435);
@@ -1817,7 +1817,7 @@ async fn main() {
 
             // Enterprise telemetry sync (no-op stub on consumer builds).
             // Runs forever in background; only takes effect on enterprise-
-            // telemetry builds with SCREENPIPE_ENTERPRISE_LICENSE_KEY env set.
+            // telemetry builds with DAIMONION_ENTERPRISE_LICENSE_KEY env set.
             let _enterprise_shutdown_tx = enterprise_sync::spawn(&app_handle);
 
             // Auto-start cloud sync if it was enabled

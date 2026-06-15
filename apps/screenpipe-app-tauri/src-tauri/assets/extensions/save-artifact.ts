@@ -77,17 +77,17 @@ export default function (pi: ExtensionAPI) {
       writeFileSync(tmpPath, content, "utf-8");
 
       // Per-session source key — set by Tauri when spawning Pi
-      const sessionId = process.env.SCREENPIPE_CHAT_SESSION_ID || "chat";
+      const sessionId = process.env.DAIMONION_CHAT_SESSION_ID || "chat";
 
       try {
         const apiUrl =
-          process.env.SCREENPIPE_LOCAL_API_URL ||
+          process.env.DAIMONION_LOCAL_API_URL ||
           `http://localhost:${
-            process.env.SCREENPIPE_LOCAL_API_PORT ||
-            process.env.SCREENPIPE_PORT ||
+            process.env.DAIMONION_LOCAL_API_PORT ||
+            process.env.DAIMONION_PORT ||
             "3030"
           }`;
-        const authKey = process.env.SCREENPIPE_LOCAL_API_KEY || "";
+        const authKey = process.env.DAIMONION_LOCAL_API_KEY || "";
         const headers: Record<string, string> = {
           "Content-Type": "application/json",
         };

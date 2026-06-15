@@ -114,7 +114,7 @@ export default class RuntimeCoverageReporter extends WDIOReporter {
       schemaVersion: 1,
       generatedAt: new Date().toISOString(),
       platform: process.platform,
-      seed: process.env.SCREENPIPE_E2E_SEED ?? null,
+      seed: process.env.DAIMONION_E2E_SEED ?? null,
       ci: Boolean(process.env.CI),
       cid: runner.cid ?? this.runner?.cid ?? null,
       specs,

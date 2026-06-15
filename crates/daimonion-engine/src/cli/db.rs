@@ -18,7 +18,7 @@
 //!   * Released on normal Drop, on SIGINT, and on SIGTERM.
 //!   * The desktop app refuses to start while the lock is fresh
 //!     (`apps/screenpipe-app-tauri/src-tauri/src/main.rs`); env var
-//!     `SCREENPIPE_IGNORE_DB_LOCK=1` is the escape hatch.
+//!     `DAIMONION_IGNORE_DB_LOCK=1` is the escape hatch.
 //!
 //! ## When the lock is "stale"
 //!

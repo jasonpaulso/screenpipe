@@ -18,8 +18,8 @@ const outFile = path.resolve(__dirname, '../lib/generated/screenpipe-skills.ts')
 // export name -> canonical SKILL.md (the same folders the `... skills install
 // github:screenpipe/screenpipe/.claude/skills/<id>` one-liners install from).
 const SOURCES = {
-	SCREENPIPE_API_SKILL_MD: path.join(repoRoot, '.claude/skills/screenpipe-api/SKILL.md'),
-	SCREENPIPE_CLI_SKILL_MD: path.join(repoRoot, '.claude/skills/screenpipe-cli/SKILL.md'),
+	DAIMONION_API_SKILL_MD: path.join(repoRoot, '.claude/skills/screenpipe-api/SKILL.md'),
+	DAIMONION_CLI_SKILL_MD: path.join(repoRoot, '.claude/skills/screenpipe-cli/SKILL.md'),
 }
 
 const HEADER = `// daimonion — AI that knows everything you've seen, said, or heard

@@ -107,12 +107,12 @@ export function createProvider(model: string, env: Env): AIProvider {
 	// Screenpipe enclave — our own Tinfoil-hosted CVM serving Gemma 4 E4B
 	// (audio + vision + chat) alongside the privacy-filter. Tinfoil tokens
 	// are org-scoped so TINFOIL_API_KEY works against this shim too; we
-	// only require a dedicated SCREENPIPE_ENCLAVE_API_KEY if it's set.
+	// only require a dedicated DAIMONION_ENCLAVE_API_KEY if it's set.
 	if (isScreenpipeEnclaveModel(model)) {
-		const key = isConfiguredSecret(env.SCREENPIPE_ENCLAVE_API_KEY)
-			? env.SCREENPIPE_ENCLAVE_API_KEY
+		const key = isConfiguredSecret(env.DAIMONION_ENCLAVE_API_KEY)
+			? env.DAIMONION_ENCLAVE_API_KEY
 			: env.TINFOIL_API_KEY;
-		return new ScreenpipeEnclaveProvider(requireSecret(key, 'No Tinfoil API key configured (need SCREENPIPE_ENCLAVE_API_KEY or TINFOIL_API_KEY)'));
+		return new ScreenpipeEnclaveProvider(requireSecret(key, 'No Tinfoil API key configured (need DAIMONION_ENCLAVE_API_KEY or TINFOIL_API_KEY)'));
 	}
 	if (isOpenRouterModel(model)) {
 		return new OpenRouterProvider(requireSecret(env.OPENROUTER_API_KEY, 'OpenRouter API key not configured'));

@@ -21,25 +21,25 @@ function firstEnv(names) {
 
 function supportTelemetryContext() {
   const context = {};
-  const supportId = firstEnv(["SCREENPIPE_SUPPORT_ID", "SCREENPIPE_TELEMETRY_ID"]);
+  const supportId = firstEnv(["DAIMONION_SUPPORT_ID", "DAIMONION_TELEMETRY_ID"]);
   const customerId = firstEnv([
-    "SCREENPIPE_CUSTOMER_ID",
-    "SCREENPIPE_ORG_ID",
-    "SCREENPIPE_TELEMETRY_CUSTOMER_ID",
+    "DAIMONION_CUSTOMER_ID",
+    "DAIMONION_ORG_ID",
+    "DAIMONION_TELEMETRY_CUSTOMER_ID",
   ]);
   const deploymentId = firstEnv([
-    "SCREENPIPE_DEPLOYMENT_ID",
-    "SCREENPIPE_TELEMETRY_DEPLOYMENT_ID",
+    "DAIMONION_DEPLOYMENT_ID",
+    "DAIMONION_TELEMETRY_DEPLOYMENT_ID",
   ]);
   const embedder = firstEnv([
-    "SCREENPIPE_EMBEDDER",
-    "SCREENPIPE_HOST_APP",
-    "SCREENPIPE_TELEMETRY_HOST_APP",
+    "DAIMONION_EMBEDDER",
+    "DAIMONION_HOST_APP",
+    "DAIMONION_TELEMETRY_HOST_APP",
   ]);
   const embedderVersion = firstEnv([
-    "SCREENPIPE_EMBEDDER_VERSION",
-    "SCREENPIPE_HOST_VERSION",
-    "SCREENPIPE_TELEMETRY_HOST_VERSION",
+    "DAIMONION_EMBEDDER_VERSION",
+    "DAIMONION_HOST_VERSION",
+    "DAIMONION_TELEMETRY_HOST_VERSION",
   ]);
 
   if (supportId) context.screenpipe_support_id = supportId;
@@ -60,7 +60,7 @@ function trackInstall() {
     }
     const supportContext = supportTelemetryContext();
     const distinctId =
-      firstEnv(["SCREENPIPE_ANALYTICS_ID", "SCREENPIPE_SUPPORT_ID", "SCREENPIPE_TELEMETRY_ID"]) ||
+      firstEnv(["DAIMONION_ANALYTICS_ID", "DAIMONION_SUPPORT_ID", "DAIMONION_TELEMETRY_ID"]) ||
       hostname();
     const properties = {
       distinct_id: distinctId,

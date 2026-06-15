@@ -12,10 +12,10 @@ Local REST API at `http://localhost:3030`.
 **ALL requests require authentication.** Add the auth header to every curl call:
 
 ```bash
-curl -H "Authorization: Bearer $SCREENPIPE_LOCAL_API_KEY" "http://localhost:3030/..."
+curl -H "Authorization: Bearer $DAIMONION_LOCAL_API_KEY" "http://localhost:3030/..."
 ```
 
-The `$SCREENPIPE_LOCAL_API_KEY` env var is already set in your environment. Without it you get 403. Endpoints that skip auth: `/health`, `/ws/health`, `/audio/device/status`, `/connections/oauth/callback`, `/frames/*`, `/notify`, `/pipes/store/*`.
+The `$DAIMONION_LOCAL_API_KEY` env var is already set in your environment. Without it you get 403. Endpoints that skip auth: `/health`, `/ws/health`, `/audio/device/status`, `/connections/oauth/callback`, `/frames/*`, `/notify`, `/pipes/store/*`.
 
 ## Context Window Protection
 
@@ -28,7 +28,7 @@ API responses can be large. Always write curl output to a file first (`curl ... 
 Default broad-context call. Bundles apps, windows, key_texts, audio, edited_files, recording health, top memories, deduped screen+audio snippets, and a `data_status` + `query_status` + `guidance` triple.
 
 ```bash
-curl -H "Authorization: Bearer $SCREENPIPE_LOCAL_API_KEY" "http://localhost:3030/activity-summary?start_time=30m%20ago&end_time=now"
+curl -H "Authorization: Bearer $DAIMONION_LOCAL_API_KEY" "http://localhost:3030/activity-summary?start_time=30m%20ago&end_time=now"
 ```
 
 Required: `start_time`, `end_time`. Optional: `app_name`, `q` (filters memories+snippets, drives `query_status`), `include_recording|memories|snippets|guidance=false` (each defaults true — disable to slim), `max_snippets` (8/12), `max_snippet_chars` (500/1200), `max_memories` (5/20).
@@ -42,7 +42,7 @@ Required: `start_time`, `end_time`. Optional: `app_name`, `q` (filters memories+
 Use when `/activity-summary` says `ok` but you need verbatim quotes, media paths, frame IDs, or a specific content match.
 
 ```bash
-curl -H "Authorization: Bearer $SCREENPIPE_LOCAL_API_KEY" "http://localhost:3030/search?q=QUERY&content_type=all&limit=10&start_time=1h%20ago"
+curl -H "Authorization: Bearer $DAIMONION_LOCAL_API_KEY" "http://localhost:3030/search?q=QUERY&content_type=all&limit=10&start_time=1h%20ago"
 ```
 
 ### Parameters
@@ -100,7 +100,7 @@ Frames are pruned by retention, so for a durable link tag a memory (memories als
 Lightweight FTS search across UI elements (~100-500 bytes each vs 5-20KB from `/search`).
 
 ```bash
-curl -H "Authorization: Bearer $SCREENPIPE_LOCAL_API_KEY" "http://localhost:3030/elements?q=Submit&start_time=1h%20ago&limit=10"
+curl -H "Authorization: Bearer $DAIMONION_LOCAL_API_KEY" "http://localhost:3030/elements?q=Submit&start_time=1h%20ago&limit=10"
 ```
 
 Parameters: `q`, `frame_id`, `source` (`accessibility`|`ocr`), `role`, `start_time`, `end_time`, `app_name`, `limit`, `offset`.
@@ -110,7 +110,7 @@ Parameters: `q`, `frame_id`, `source` (`accessibility`|`ocr`), `role`, `start_ti
 Returns accessibility text, parsed nodes, and extracted URLs for a frame.
 
 ```bash
-curl -H "Authorization: Bearer $SCREENPIPE_LOCAL_API_KEY" "http://localhost:3030/frames/6789/context"
+curl -H "Authorization: Bearer $DAIMONION_LOCAL_API_KEY" "http://localhost:3030/frames/6789/context"
 ```
 
 ### Common Roles (platform-specific)
@@ -153,7 +153,7 @@ Renders a real-time MP4 (screen frames at their true timestamps + synced microph
 ```bash
 curl -X POST http://localhost:3030/export \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer $SCREENPIPE_LOCAL_API_KEY" \
+  -H "Authorization: Bearer $DAIMONION_LOCAL_API_KEY" \
   -d '{"start": "5m ago", "end": "now"}'
 ```
 
@@ -300,15 +300,15 @@ meetings, or upcoming events:
 
 ```bash
 # Native Apple/Windows Calendar
-curl -H "Authorization: Bearer $SCREENPIPE_LOCAL_API_KEY" \
+curl -H "Authorization: Bearer $DAIMONION_LOCAL_API_KEY" \
   "http://localhost:3030/connections/calendar/events?hours_back=0&hours_ahead=72"
 
 # Google Calendar
-curl -H "Authorization: Bearer $SCREENPIPE_LOCAL_API_KEY" \
+curl -H "Authorization: Bearer $DAIMONION_LOCAL_API_KEY" \
   "http://localhost:3030/connections/google-calendar/events?hours_back=0&hours_ahead=72"
 
 # ICS/webcal subscriptions
-curl -H "Authorization: Bearer $SCREENPIPE_LOCAL_API_KEY" \
+curl -H "Authorization: Bearer $DAIMONION_LOCAL_API_KEY" \
   "http://localhost:3030/connections/ics-calendar/events?hours_back=0&hours_ahead=72"
 ```
 
@@ -322,7 +322,7 @@ reach for `/eval` only when the first two aren't enough.
 
 ```bash
 # 1. Navigate — opens the URL in the embedded browser sidebar.
-curl -X POST -H "Authorization: Bearer $SCREENPIPE_LOCAL_API_KEY" \
+curl -X POST -H "Authorization: Bearer $DAIMONION_LOCAL_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"url": "https://en.wikipedia.org/wiki/Giraffe"}' \
   http://localhost:3030/connections/browsers/owned-default/navigate
@@ -332,7 +332,7 @@ curl -X POST -H "Authorization: Bearer $SCREENPIPE_LOCAL_API_KEY" \
 #    a compact accessibility-style outline (headings, links, buttons,
 #    form fields). This is almost always what you want for "what's on
 #    the page?" / "is this still loading?" / "what links are visible?".
-curl -H "Authorization: Bearer $SCREENPIPE_LOCAL_API_KEY" \
+curl -H "Authorization: Bearer $DAIMONION_LOCAL_API_KEY" \
   http://localhost:3030/connections/browsers/owned-default/snapshot
 # → {
 #     "title": "Giraffe - Wikipedia",
@@ -345,7 +345,7 @@ curl -H "Authorization: Bearer $SCREENPIPE_LOCAL_API_KEY" \
 #    Use this when navigate + snapshot can't express what you need
 #    (e.g. clicking a specific button, reading a table you can't see in
 #    the snapshot tree, scraping with custom selectors).
-curl -X POST -H "Authorization: Bearer $SCREENPIPE_LOCAL_API_KEY" \
+curl -X POST -H "Authorization: Bearer $DAIMONION_LOCAL_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"code": "return [...document.querySelectorAll(\".title > a\")].slice(0,5).map(a => a.innerText)"}' \
   http://localhost:3030/connections/browsers/owned-default/eval
@@ -363,9 +363,9 @@ real browser). Password fields are stripped from snapshot output.
 ## 9. Meetings — `GET /meetings`
 
 ```bash
-curl -H "Authorization: Bearer $SCREENPIPE_LOCAL_API_KEY" "http://localhost:3030/meetings?start_time=1d%20ago&end_time=now&limit=10&offset=0"
-curl -H "Authorization: Bearer $SCREENPIPE_LOCAL_API_KEY" "http://localhost:3030/meetings?q=alice%40acme.com"
-curl -H "Authorization: Bearer $SCREENPIPE_LOCAL_API_KEY" "http://localhost:3030/meetings/42"
+curl -H "Authorization: Bearer $DAIMONION_LOCAL_API_KEY" "http://localhost:3030/meetings?start_time=1d%20ago&end_time=now&limit=10&offset=0"
+curl -H "Authorization: Bearer $DAIMONION_LOCAL_API_KEY" "http://localhost:3030/meetings?q=alice%40acme.com"
+curl -H "Authorization: Bearer $DAIMONION_LOCAL_API_KEY" "http://localhost:3030/meetings/42"
 ```
 
 Returns detected meetings (from calendar, app detection, window titles, UI elements, multi-speaker audio). `q` is a case-insensitive substring filter against title, attendees, and notes.
@@ -388,13 +388,13 @@ Also available via raw SQL: `SELECT * FROM meetings WHERE meeting_start > dateti
 
 ```bash
 # Search speakers by name
-curl -H "Authorization: Bearer $SCREENPIPE_LOCAL_API_KEY" "http://localhost:3030/speakers/search?name=John"
+curl -H "Authorization: Bearer $DAIMONION_LOCAL_API_KEY" "http://localhost:3030/speakers/search?name=John"
 
 # Get unnamed speakers (for labeling)
-curl -H "Authorization: Bearer $SCREENPIPE_LOCAL_API_KEY" "http://localhost:3030/speakers/unnamed?limit=20&offset=0"
+curl -H "Authorization: Bearer $DAIMONION_LOCAL_API_KEY" "http://localhost:3030/speakers/unnamed?limit=20&offset=0"
 
 # Get speakers similar to a given speaker (by voice embedding)
-curl -H "Authorization: Bearer $SCREENPIPE_LOCAL_API_KEY" "http://localhost:3030/speakers/similar?speaker_id=29&limit=5"
+curl -H "Authorization: Bearer $DAIMONION_LOCAL_API_KEY" "http://localhost:3030/speakers/similar?speaker_id=29&limit=5"
 
 # Update speaker name/metadata
 curl -X POST http://localhost:3030/speakers/update \
@@ -456,13 +456,13 @@ When the user says "that was actually Jordan, not Karishma":
 
 ```bash
 # Search memories (FTS) — do this often!
-curl -H "Authorization: Bearer $SCREENPIPE_LOCAL_API_KEY" "http://localhost:3030/memories?q=preference&limit=20"
+curl -H "Authorization: Bearer $DAIMONION_LOCAL_API_KEY" "http://localhost:3030/memories?q=preference&limit=20"
 
 # List recent memories (high importance first)
-curl -H "Authorization: Bearer $SCREENPIPE_LOCAL_API_KEY" "http://localhost:3030/memories?min_importance=0.5&limit=20"
+curl -H "Authorization: Bearer $DAIMONION_LOCAL_API_KEY" "http://localhost:3030/memories?min_importance=0.5&limit=20"
 
 # Filter by source or tags
-curl -H "Authorization: Bearer $SCREENPIPE_LOCAL_API_KEY" "http://localhost:3030/memories?source=user&tags=project&limit=20"
+curl -H "Authorization: Bearer $DAIMONION_LOCAL_API_KEY" "http://localhost:3030/memories?source=user&tags=project&limit=20"
 
 # Create a memory
 curl -X POST http://localhost:3030/memories \

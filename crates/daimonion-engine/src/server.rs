@@ -193,7 +193,7 @@ pub struct AppState {
     pub owned_browser: Arc<daimonion_connect::connections::browser::OwnedBrowser>,
     /// When true, non-localhost requests require Authorization: Bearer <api_key>
     pub api_auth: bool,
-    /// The API key to validate against (from SCREENPIPE_API_KEY or auth.json)
+    /// The API key to validate against (from DAIMONION_API_KEY or auth.json)
     pub api_auth_key: Option<String>,
     /// Cloud JWT (Clerk) used to authenticate proxied requests to api.screenpipe.com.
     /// Held in ArcSwap so the desktop shell can refresh it after login/logout
@@ -1152,7 +1152,7 @@ impl SCServer {
                                         // tells them how to authenticate. Discord
                                         // jeffutter, 2026-05-04: the previous hint
                                         // pointed at a UI menu they didn't have.
-                                        r#"{"error":"unauthorized: API access requires authentication. Pass `Authorization: Bearer <your-api-key>`. Get the key with `screenpipe auth token`, or set the `SCREENPIPE_API_KEY` env var before starting screenpipe. (Desktop app users: Settings > Privacy.)"}"#,
+                                        r#"{"error":"unauthorized: API access requires authentication. Pass `Authorization: Bearer <your-api-key>`. Get the key with `screenpipe auth token`, or set the `DAIMONION_API_KEY` env var before starting screenpipe. (Desktop app users: Settings > Privacy.)"}"#,
                                     ))
                                     .unwrap()
                             }

@@ -18,7 +18,7 @@ use tracing::{debug, error, info, warn};
 const PI_PACKAGE: &str = "@earendil-works/pi-coding-agent@0.75.4";
 const PI_AI_PACKAGE: &str = "@earendil-works/pi-ai@0.75.4";
 const PI_NAMESPACE_DIR: &str = "@earendil-works";
-pub const SCREENPIPE_API_URL: &str = "https://api.screenpipe.com/v1";
+pub const DAIMONION_API_URL: &str = "https://api.screenpipe.com/v1";
 
 /// Bounded retries for provider rate limiting (HTTP 429) in streaming runs.
 const MAX_RATE_LIMIT_RETRIES: usize = 3;
@@ -160,8 +160,8 @@ pub struct PiExecutor {
     /// Screenpipe API base URL (default: `https://api.screenpipe.com/v1`).
     pub api_url: String,
     /// Bearer token for the *local* screenpipe-server API (localhost:3030).
-    /// Exposed to the Pi subprocess as `SCREENPIPE_LOCAL_API_KEY` so bash/TS
-    /// pipe code can authenticate against the local server. `SCREENPIPE_API_AUTH_KEY`
+    /// Exposed to the Pi subprocess as `DAIMONION_LOCAL_API_KEY` so bash/TS
+    /// pipe code can authenticate against the local server. `DAIMONION_API_AUTH_KEY`
     /// is also exported as a deprecated alias (one release) for old pipe.md
     /// files on disk. None = auth disabled.
     pub api_auth_key: Option<String>,
@@ -171,7 +171,7 @@ impl PiExecutor {
     pub fn new(user_token: Option<String>) -> Self {
         Self {
             user_token: Arc::new(ArcSwap::new(Arc::new(user_token))),
-            api_url: SCREENPIPE_API_URL.to_string(),
+            api_url: DAIMONION_API_URL.to_string(),
             api_auth_key: None,
         }
     }
@@ -184,7 +184,7 @@ impl PiExecutor {
     pub fn with_shared_user_token(user_token: Arc<ArcSwap<Option<String>>>) -> Self {
         Self {
             user_token,
-            api_url: SCREENPIPE_API_URL.to_string(),
+            api_url: DAIMONION_API_URL.to_string(),
             api_auth_key: None,
         }
     }
@@ -767,12 +767,12 @@ impl PiExecutor {
 
         if should_add_screenpipe {
             // Use actual token value in apiKey — Pi doesn't resolve env var names,
-            // so writing the literal string "SCREENPIPE_API_KEY" causes tier=anonymous.
+            // so writing the literal string "DAIMONION_API_KEY" causes tier=anonymous.
             // Resolve from: argument > env var > literal fallback (last resort).
             let api_key_value = user_token
                 .map(|t| t.to_string())
-                .or_else(|| std::env::var("SCREENPIPE_API_KEY").ok())
-                .unwrap_or_else(|| "SCREENPIPE_API_KEY".to_string());
+                .or_else(|| std::env::var("DAIMONION_API_KEY").ok())
+                .unwrap_or_else(|| "DAIMONION_API_KEY".to_string());
             let api_key_value = api_key_value.as_str();
             let models = screenpipe_cloud_models(api_url, user_token).await;
             let screenpipe_provider = json!({
@@ -1148,7 +1148,7 @@ impl PiExecutor {
 
         let cloud_token = self.current_user_token();
         if let Some(ref token) = cloud_token {
-            cmd.env("SCREENPIPE_API_KEY", token);
+            cmd.env("DAIMONION_API_KEY", token);
         }
 
         // Pi resolves apiKey values in models.json as env var names.
@@ -1173,21 +1173,21 @@ impl PiExecutor {
                     }
                     // Ensure screenpipe API key is set as env var fallback
                     "screenpipe" if cloud_token.is_none() => {
-                        cmd.env("SCREENPIPE_API_KEY", key);
+                        cmd.env("DAIMONION_API_KEY", key);
                     }
                     _ => {}
                 }
             }
         }
 
-        // Canonical name: SCREENPIPE_LOCAL_API_KEY. The AUTH_KEY alias is
+        // Canonical name: DAIMONION_LOCAL_API_KEY. The AUTH_KEY alias is
         // kept ONE release as a deprecated fallback for user-installed
         // pipe.md files that hardcoded the old name (e.g. an older
         // meeting-summary install on disk that install_builtin_pipes won't
-        // overwrite). TODO(remove next release): drop SCREENPIPE_API_AUTH_KEY.
+        // overwrite). TODO(remove next release): drop DAIMONION_API_AUTH_KEY.
         if let Some(ref key) = self.api_auth_key {
-            cmd.env("SCREENPIPE_LOCAL_API_KEY", key);
-            cmd.env("SCREENPIPE_API_AUTH_KEY", key); // deprecated alias
+            cmd.env("DAIMONION_LOCAL_API_KEY", key);
+            cmd.env("DAIMONION_API_AUTH_KEY", key); // deprecated alias
         }
 
         // Auto-auth the agent's `curl localhost:3030/...` calls via a bash
@@ -1276,7 +1276,7 @@ impl PiExecutor {
 
         let cloud_token = self.current_user_token();
         if let Some(ref token) = cloud_token {
-            cmd.env("SCREENPIPE_API_KEY", token);
+            cmd.env("DAIMONION_API_KEY", token);
         }
 
         if let Some(key) = provider_api_key {
@@ -1299,7 +1299,7 @@ impl PiExecutor {
                     }
                     // Ensure screenpipe API key is set as env var fallback
                     "screenpipe" if cloud_token.is_none() => {
-                        cmd.env("SCREENPIPE_API_KEY", key);
+                        cmd.env("DAIMONION_API_KEY", key);
                     }
                     _ => {}
                 }
@@ -1308,22 +1308,22 @@ impl PiExecutor {
 
         // See spawn_pi above — TODO(remove next release): drop the deprecated alias.
         if let Some(ref key) = self.api_auth_key {
-            cmd.env("SCREENPIPE_LOCAL_API_KEY", key);
-            cmd.env("SCREENPIPE_API_AUTH_KEY", key); // deprecated alias
+            cmd.env("DAIMONION_LOCAL_API_KEY", key);
+            cmd.env("DAIMONION_API_AUTH_KEY", key); // deprecated alias
         }
 
         // Tag this run's local API calls with the owning chat/session so the
         // owned-browser sidebar can route navigations to the right chat (the
-        // bash shim reads SCREENPIPE_SESSION_ID and adds x-screenpipe-session;
+        // bash shim reads DAIMONION_SESSION_ID and adds x-screenpipe-session;
         // the navigate handler forwards it to the frontend). For pipes this is
         // `pipe:<name>`, which never matches an open chat's conversationId, so a
         // background pipe's browser stays out of whatever chat is on screen.
         if let Some(owner) = session_owner {
-            cmd.env("SCREENPIPE_SESSION_ID", owner);
+            cmd.env("DAIMONION_SESSION_ID", owner);
             // Expose the bare pipe name for extensions (e.g. register-artifact)
             // that need it without the "pipe:" routing prefix.
             if let Some(name) = owner.strip_prefix("pipe:") {
-                cmd.env("SCREENPIPE_PIPE_NAME", name);
+                cmd.env("DAIMONION_PIPE_NAME", name);
             }
         }
 
@@ -1823,7 +1823,7 @@ pub fn find_bun_executable() -> Option<String> {
     paths.into_iter().find(|p| std::path::Path::new(p).exists())
 }
 
-/// Returns the screenpipe-managed pi install directory (`~/.daimonion/pi-agent/` or SCREENPIPE_DATA_DIR/pi-agent).
+/// Returns the screenpipe-managed pi install directory (`~/.daimonion/pi-agent/` or DAIMONION_DATA_DIR/pi-agent).
 fn pi_local_install_dir() -> Option<PathBuf> {
     Some(crate::paths::default_screenpipe_data_dir().join("pi-agent"))
 }
@@ -2723,7 +2723,7 @@ mod tests {
         // Call ensure_pi_config with ollama provider info
         PiExecutor::ensure_pi_config(
             None,
-            SCREENPIPE_API_URL,
+            DAIMONION_API_URL,
             Some("ollama"),
             Some("qwen3:8b"),
             Some("http://localhost:11434/v1"),

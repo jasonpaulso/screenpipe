@@ -211,22 +211,22 @@ final class NodeJSONLineTransport: ScreenpipeTransport, @unchecked Sendable {
   private func bridgeEnvironment() -> [String: String] {
     var environment = ProcessInfo.processInfo.environment
     if let sdkRoot = configuration.sdkRoot {
-      environment["SCREENPIPE_SDK_ROOT"] = sdkRoot.path
+      environment["DAIMONION_SDK_ROOT"] = sdkRoot.path
     }
     if let outputDirectory = configuration.outputDirectory {
-      environment["SCREENPIPE_OUTPUT_DIR"] = outputDirectory.path
+      environment["DAIMONION_OUTPUT_DIR"] = outputDirectory.path
     }
     // Telemetry identification — the bridge reads these and passes them to
     // createScreenpipeSession so this user shows up in screenpipe's Sentry
-    // and PostHog. Opt-out flips SCREENPIPE_SDK_TELEMETRY off.
+    // and PostHog. Opt-out flips DAIMONION_SDK_TELEMETRY off.
     if let userId = configuration.userId, !userId.isEmpty {
-      environment["SCREENPIPE_SDK_USER_ID"] = userId
+      environment["DAIMONION_SDK_USER_ID"] = userId
     }
     if let appName = configuration.appName, !appName.isEmpty {
-      environment["SCREENPIPE_SDK_APP_NAME"] = appName
+      environment["DAIMONION_SDK_APP_NAME"] = appName
     }
     if !configuration.telemetryEnabled {
-      environment["SCREENPIPE_SDK_TELEMETRY"] = "0"
+      environment["DAIMONION_SDK_TELEMETRY"] = "0"
     }
     return environment
   }

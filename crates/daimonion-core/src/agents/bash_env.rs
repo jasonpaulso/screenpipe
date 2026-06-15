@@ -6,7 +6,7 @@
 //!
 //! Problem: every chat/pipe run, the agent's first `curl localhost:3030/...`
 //! typically omits the Authorization header and comes back 403. The agent
-//! then reads the skill file, learns about `$SCREENPIPE_LOCAL_API_KEY`, and
+//! then reads the skill file, learns about `$DAIMONION_LOCAL_API_KEY`, and
 //! retries — burning a wasted tool call per fresh session.
 //!
 //! Fix: ship a tiny bash shim that defines a `curl` shell function which
@@ -20,9 +20,9 @@
 //! wrapper is in scope for every tool invocation the agent issues. No
 //! model effort, no prompt changes, no new system-prompt lines.
 //!
-//! Reads `$SCREENPIPE_LOCAL_API_KEY` only — every spawn path (Tauri chat,
+//! Reads `$DAIMONION_LOCAL_API_KEY` only — every spawn path (Tauri chat,
 //! core pipe-executor) is now contractually required to export it.
-//! `SCREENPIPE_API_AUTH_KEY` was a historical second name from when the two
+//! `DAIMONION_API_AUTH_KEY` was a historical second name from when the two
 //! spawn paths diverged; spawn paths still export it as a deprecated alias
 //! for one release so user-installed pipe.md files that hardcode the old
 //! name keep working, but new shim code reads the canonical name only.
@@ -42,28 +42,28 @@ pub const WRAPPER_RELATIVE_PATH: &str = "pi-agent/bash-env.sh";
 pub const WRAPPER_SCRIPT: &str = r#"# screenpipe — auto-injected by pi-agent bash subshells (do not edit by hand)
 # Transparently adds Authorization: Bearer to curl calls that target the
 # local screenpipe API, tags them with x-screenpipe-session (the chat/pipe
-# that owns this agent, from SCREENPIPE_SESSION_ID) so the owned-browser
+# that owns this agent, from DAIMONION_SESSION_ID) so the owned-browser
 # sidebar can route navigations to the right chat, and — when
-# SCREENPIPE_FILTER_PII=1 — rewrites any /search URL to include filter_pii=1
+# DAIMONION_FILTER_PII=1 — rewrites any /search URL to include filter_pii=1
 # so responses are PII-redacted before Pi sees them. Other curl calls pass
 # through unchanged — the token never leaks to third-party hosts.
 #
 # Regenerated on every pi-agent spawn from screenpipe-core::agents::bash_env.
 
-# Hide the cloud-LLM JWT (SCREENPIPE_API_KEY) from the agent's bash. The
+# Hide the cloud-LLM JWT (DAIMONION_API_KEY) from the agent's bash. The
 # pi-coding-agent reads it from auth.json directly and does NOT need it
 # in the env. Leaving it exposed bit a real user (justinspillers,
-# 2026-05-05): the agent saw an env var named "SCREENPIPE_API_KEY", used
+# 2026-05-05): the agent saw an env var named "DAIMONION_API_KEY", used
 # it on localhost:3030, the server 401'd (it's a JWT, not the local
 # sp-<uuid8> token), and the agent burned 30+ tool calls hunting a
 # phantom auth bug before concluding — wrongly — that "the local API
 # needs a full JWT token". Unset it here so the only auth-shaped name
-# the agent can see is SCREENPIPE_LOCAL_API_KEY, which is correct.
-unset SCREENPIPE_API_KEY
+# the agent can see is DAIMONION_LOCAL_API_KEY, which is correct.
+unset DAIMONION_API_KEY
 
 _sp_auth_key() {
-  # spawn paths guarantee SCREENPIPE_LOCAL_API_KEY is set (see pi.rs).
-  printf '%s' "${SCREENPIPE_LOCAL_API_KEY:-}"
+  # spawn paths guarantee DAIMONION_LOCAL_API_KEY is set (see pi.rs).
+  printf '%s' "${DAIMONION_LOCAL_API_KEY:-}"
 }
 
 curl() {
@@ -75,8 +75,8 @@ curl() {
   # (x-screenpipe-session); the navigate handler rides it to the frontend so a
   # background pipe's page doesn't pop into whatever chat is on screen. Empty
   # for spawn paths that don't set it — then the call is simply untagged.
-  sid="${SCREENPIPE_SESSION_ID:-}"
-  if [ "${SCREENPIPE_FILTER_PII:-}" = "1" ]; then
+  sid="${DAIMONION_SESSION_ID:-}"
+  if [ "${DAIMONION_FILTER_PII:-}" = "1" ]; then
     add_filter=1
   fi
 
@@ -200,27 +200,27 @@ mod tests {
 
     #[test]
     fn wrapper_script_reads_canonical_env_var_name() {
-        assert!(WRAPPER_SCRIPT.contains("SCREENPIPE_LOCAL_API_KEY"));
+        assert!(WRAPPER_SCRIPT.contains("DAIMONION_LOCAL_API_KEY"));
         // The deprecated alias must NOT be referenced here — every spawn
         // path now guarantees the canonical name is set, and reading both
         // hides bugs where a new spawn path forgets the canonical export.
         assert!(
-            !WRAPPER_SCRIPT.contains("SCREENPIPE_API_AUTH_KEY"),
+            !WRAPPER_SCRIPT.contains("DAIMONION_API_AUTH_KEY"),
             "shim must read only the canonical env var name"
         );
     }
 
     #[test]
     fn wrapper_script_unsets_cloud_token_env_var() {
-        // The agent must not see SCREENPIPE_API_KEY (cloud JWT) — it's
-        // distinct from SCREENPIPE_LOCAL_API_KEY (local sp-<uuid>) and
+        // The agent must not see DAIMONION_API_KEY (cloud JWT) — it's
+        // distinct from DAIMONION_LOCAL_API_KEY (local sp-<uuid>) and
         // exposing both has caused real users' agents to send the JWT
         // to localhost:3030 and chase phantom auth bugs (justinspillers,
         // 2026-05-05 — feedback log shows the agent burning 30+ tool
         // calls before concluding "API needs full JWT" — wrong).
         assert!(
-            WRAPPER_SCRIPT.contains("unset SCREENPIPE_API_KEY"),
-            "wrapper must unset SCREENPIPE_API_KEY in pi-agent subshells"
+            WRAPPER_SCRIPT.contains("unset DAIMONION_API_KEY"),
+            "wrapper must unset DAIMONION_API_KEY in pi-agent subshells"
         );
     }
 
@@ -239,7 +239,7 @@ mod tests {
     #[test]
     fn wrapper_script_references_filter_pii_env() {
         assert!(
-            WRAPPER_SCRIPT.contains("SCREENPIPE_FILTER_PII"),
+            WRAPPER_SCRIPT.contains("DAIMONION_FILTER_PII"),
             "wrapper must check the privacy-filter env var to rewrite /search URLs"
         );
         assert!(
@@ -251,7 +251,7 @@ mod tests {
     #[test]
     fn wrapper_script_tags_session_owner() {
         assert!(
-            WRAPPER_SCRIPT.contains("SCREENPIPE_SESSION_ID"),
+            WRAPPER_SCRIPT.contains("DAIMONION_SESSION_ID"),
             "wrapper must read the session id env var"
         );
         assert!(
@@ -261,7 +261,7 @@ mod tests {
     }
 
     /// End-to-end: the shim adds `x-screenpipe-session: <id>` to local API
-    /// calls when `SCREENPIPE_SESSION_ID` is set, and never leaks it to
+    /// calls when `DAIMONION_SESSION_ID` is set, and never leaks it to
     /// third-party hosts. This is the production path that lets a background
     /// pipe's owned-browser navigation be ignored by an unrelated chat.
     #[test]
@@ -291,8 +291,8 @@ mod tests {
             .env("PATH", format!("{}:/usr/bin:/bin", fake_curl_dir.display()))
             .env("BASH_ENV", &wrapper)
             .env("CURL_ARGV_FILE", &argv_local)
-            .env("SCREENPIPE_LOCAL_API_KEY", "sp-test")
-            .env("SCREENPIPE_SESSION_ID", "conv-abc-123")
+            .env("DAIMONION_LOCAL_API_KEY", "sp-test")
+            .env("DAIMONION_SESSION_ID", "conv-abc-123")
             .arg("-c")
             .arg("curl -X POST http://localhost:3030/connections/browsers/owned-default/navigate")
             .status()
@@ -310,8 +310,8 @@ mod tests {
             .env("PATH", format!("{}:/usr/bin:/bin", fake_curl_dir.display()))
             .env("BASH_ENV", &wrapper)
             .env("CURL_ARGV_FILE", &argv_ext)
-            .env("SCREENPIPE_LOCAL_API_KEY", "sp-test")
-            .env("SCREENPIPE_SESSION_ID", "conv-abc-123")
+            .env("DAIMONION_LOCAL_API_KEY", "sp-test")
+            .env("DAIMONION_SESSION_ID", "conv-abc-123")
             .arg("-c")
             .arg("curl https://example.com/api")
             .status()
@@ -377,7 +377,7 @@ mod tests {
             .env("PATH", format!("{}:/usr/bin:/bin", fake_curl_dir.display()))
             .env("BASH_ENV", &wrapper)
             .env("CURL_ARGV_FILE", &argv_on)
-            .env("SCREENPIPE_FILTER_PII", "1")
+            .env("DAIMONION_FILTER_PII", "1")
             .arg("-c")
             .arg("curl http://localhost:3030/search?q=foo")
             .status()
@@ -399,7 +399,7 @@ mod tests {
             .env("PATH", format!("{}:/usr/bin:/bin", fake_curl_dir.display()))
             .env("BASH_ENV", &wrapper)
             .env("CURL_ARGV_FILE", &argv_other)
-            .env("SCREENPIPE_FILTER_PII", "1")
+            .env("DAIMONION_FILTER_PII", "1")
             .arg("-c")
             .arg("curl http://localhost:3030/health")
             .status()

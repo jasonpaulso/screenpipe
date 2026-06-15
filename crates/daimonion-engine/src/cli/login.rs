@@ -232,8 +232,8 @@ pub async fn handle_whoami_command() -> anyhow::Result<()> {
                     .map(|s| s.to_string());
             }
 
-            let source = if std::env::var("SCREENPIPE_API_KEY").is_ok() {
-                "SCREENPIPE_API_KEY env var"
+            let source = if std::env::var("DAIMONION_API_KEY").is_ok() {
+                "DAIMONION_API_KEY env var"
             } else {
                 "~/.daimonion/store.bin"
             };

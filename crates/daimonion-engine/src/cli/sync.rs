@@ -25,11 +25,11 @@ pub async fn start_sync_service(
 ) -> anyhow::Result<Arc<SyncServiceHandle>> {
     // Validate required credentials
     let token = args.sync_token.as_ref().ok_or_else(|| {
-        anyhow::anyhow!("--sync-token or SCREENPIPE_SYNC_TOKEN required for sync")
+        anyhow::anyhow!("--sync-token or DAIMONION_SYNC_TOKEN required for sync")
     })?;
 
     let password = args.sync_password.as_ref().ok_or_else(|| {
-        anyhow::anyhow!("--sync-password or SCREENPIPE_SYNC_PASSWORD required for sync")
+        anyhow::anyhow!("--sync-password or DAIMONION_SYNC_PASSWORD required for sync")
     })?;
 
     // Get machine ID

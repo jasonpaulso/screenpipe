@@ -125,7 +125,7 @@ components/app-entitlement-gate.test.tsx lib/app-entitlement.test.ts` — 20 tes
 
 | Item | Effect now |
 |---|---|
-| `NEXT_PUBLIC_SCREENPIPE_DEV_BILLING_BYPASS`, `_FORCE_BILLING_GATE`, `_E2E` | **Dead** as bypass inputs after §2 — the bypass is hardcoded. Harmless if still referenced in CI/docs. |
+| `NEXT_PUBLIC_DAIMONION_DEV_BILLING_BYPASS`, `_FORCE_BILLING_GATE`, `_E2E` | **Dead** as bypass inputs after §2 — the bypass is hardcoded. Harmless if still referenced in CI/docs. |
 | `enterprise-build` (Cargo feature) | **Keep OFF.** Enabling it compiles the entire enterprise lock layer (§3). |
 | `~/.daimonion/enterprise.json` | Local admin/license file read by the Pi enterprise skill (§3). Absent by default. |
 | `~/.daimonion/cloud_media_analysis.disabled` | Opt-out file; absence = cloud media analysis instructions enabled in the Pi skill. |

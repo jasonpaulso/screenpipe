@@ -15,7 +15,7 @@
 //! ```
 //!
 //! Hosts other than `screenpipe.com` or `screenpi.pe` are rejected unless
-//! `--allow-untrusted` is passed or `SCREENPIPE_TRUSTED_HOSTS` lists them
+//! `--allow-untrusted` is passed or `DAIMONION_TRUSTED_HOSTS` lists them
 //! (comma-separated). This exists because installing pipes runs code, so
 //! manifests should come from sources the user controls.
 
@@ -54,7 +54,7 @@ pub async fn handle_install(url: &str, allow_untrusted: bool) -> Result<()> {
 
     if !allow_untrusted && !is_trusted_host(url)? {
         return Err(anyhow!(
-            "manifest host is not in the trusted list — pass --allow-untrusted to override or set SCREENPIPE_TRUSTED_HOSTS"
+            "manifest host is not in the trusted list — pass --allow-untrusted to override or set DAIMONION_TRUSTED_HOSTS"
         ));
     }
 
@@ -89,14 +89,14 @@ pub async fn handle_install(url: &str, allow_untrusted: bool) -> Result<()> {
     let pipes_dir = daimonion_core::paths::default_screenpipe_data_dir().join("pipes");
     std::fs::create_dir_all(&pipes_dir)?;
 
-    let user_token = std::env::var("SCREENPIPE_API_KEY").ok();
+    let user_token = std::env::var("DAIMONION_API_KEY").ok();
     let pi: Arc<dyn AgentExecutor> = Arc::new(PiExecutor::new(user_token));
     let mut executors: HashMap<String, Arc<dyn AgentExecutor>> = HashMap::new();
     executors.insert("pi".to_string(), pi);
     let manager = PipeManager::new(pipes_dir, executors, None, 3030);
     manager.load_pipes().await?;
 
-    let api_base = std::env::var("SCREENPIPE_API_BASE_URL")
+    let api_base = std::env::var("DAIMONION_API_BASE_URL")
         .unwrap_or_else(|_| "https://screenpipe.com".to_string());
 
     let mut installed = 0usize;
@@ -182,7 +182,7 @@ async fn install_one(
 
 fn is_trusted_host(url: &str) -> Result<bool> {
     let host = host_from_url(url)?;
-    let env_hosts = std::env::var("SCREENPIPE_TRUSTED_HOSTS").unwrap_or_default();
+    let env_hosts = std::env::var("DAIMONION_TRUSTED_HOSTS").unwrap_or_default();
     let env_iter = env_hosts
         .split(',')
         .map(|s| s.trim())
@@ -246,8 +246,8 @@ mod tests {
 
     #[test]
     fn is_trusted_host_rejects_unknown() {
-        // Note: this test reads SCREENPIPE_TRUSTED_HOSTS — we don't set it, so default list applies.
-        std::env::remove_var("SCREENPIPE_TRUSTED_HOSTS");
+        // Note: this test reads DAIMONION_TRUSTED_HOSTS — we don't set it, so default list applies.
+        std::env::remove_var("DAIMONION_TRUSTED_HOSTS");
         assert!(!is_trusted_host("https://evil.example.com/x.json").unwrap());
     }
 }

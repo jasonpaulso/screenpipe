@@ -292,7 +292,7 @@ public struct ScreenpipeRevealOptions: Codable, Equatable, Sendable {
 struct EmptyParams: Codable, Sendable {}
 
 /// Stable taxonomy of session event names the Node bridge can forward.
-/// Mirrors `SCREENPIPE_EVENTS` in `session/index.js`. Use `.raw(...)` to
+/// Mirrors `DAIMONION_EVENTS` in `session/index.js`. Use `.raw(...)` to
 /// keep forward-compatible if a newer SDK ships an event the host app
 /// doesn't have a case for yet.
 public enum ScreenpipeEventName: Sendable, Hashable, Equatable {

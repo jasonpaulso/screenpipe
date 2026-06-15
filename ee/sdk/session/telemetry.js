@@ -11,8 +11,8 @@
 // itself lives in ./telemetry-core.js (shared with the Tauri webview).
 //
 // Privacy posture (screenpipe is sold local-first): ON by default, but a
-// single flag (`telemetry: false`) or env var (`SCREENPIPE_SDK_TELEMETRY=0`,
-// `DO_NOT_TRACK=1`, `SCREENPIPE_DISABLE_ANALYTICS=1`) turns it fully off.
+// single flag (`telemetry: false`) or env var (`DAIMONION_SDK_TELEMETRY=0`,
+// `DO_NOT_TRACK=1`, `DAIMONION_DISABLE_ANALYTICS=1`) turns it fully off.
 // Only a small, PII-scrubbed allow-list of events is forwarded.
 
 const https = require("node:https");
@@ -46,9 +46,9 @@ function falsyEnv(v) {
 // vars, otherwise ON.
 function resolveEnabled(optTelemetry) {
   if (optTelemetry === false) return false;
-  if (falsyEnv(process.env.SCREENPIPE_SDK_TELEMETRY)) return false;
+  if (falsyEnv(process.env.DAIMONION_SDK_TELEMETRY)) return false;
   if (truthyEnv(process.env.DO_NOT_TRACK)) return false;
-  if (truthyEnv(process.env.SCREENPIPE_DISABLE_ANALYTICS)) return false;
+  if (truthyEnv(process.env.DAIMONION_DISABLE_ANALYTICS)) return false;
   return true;
 }
 

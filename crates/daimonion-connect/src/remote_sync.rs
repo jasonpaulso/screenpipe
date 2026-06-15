@@ -100,7 +100,7 @@ fn should_skip(name: &str) -> bool {
 }
 
 /// Screenpipe skill file dropped on the remote so AI agents know how to query the data.
-const SCREENPIPE_SKILL: &str = r#"# Screenpipe Data Reference
+const DAIMONION_SKILL: &str = r#"# Screenpipe Data Reference
 
 This directory contains synced data from [screenpipe](https://screenpi.pe) — an AI that knows everything you've seen, said, or heard.
 
@@ -622,7 +622,7 @@ async fn sync_to_remote_inner(config: &SyncConfig, data_dir: &Path) -> Result<Sy
     // Drop the skill file so AI agents know how to use the data
     let skill_path = format!("{}/SCREENPIPE.md", remote_base);
     if let Ok(mut f) = sftp.create(&skill_path).await {
-        let _ = f.write_all(SCREENPIPE_SKILL.as_bytes()).await;
+        let _ = f.write_all(DAIMONION_SKILL.as_bytes()).await;
         let _ = f.shutdown().await;
     }
 

@@ -5,7 +5,7 @@
 "use strict";
 
 const { createScreenpipeSession } = require("../session");
-const { SCREENPIPE_EVENTS } = require("../session");
+const { DAIMONION_EVENTS } = require("../session");
 
 const DEFAULT_CHANNELS = Object.freeze({
   permissions: "screenpipe:permissions",
@@ -80,7 +80,7 @@ function registerScreenpipeIpc(options = {}) {
           }
         };
 
-  const eventHandlers = SCREENPIPE_EVENTS.map((eventName) => {
+  const eventHandlers = DAIMONION_EVENTS.map((eventName) => {
     const handler = (payload) => broadcast(eventName, payload);
     session.on(eventName, handler);
     return [eventName, handler];

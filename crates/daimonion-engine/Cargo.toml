@@ -165,7 +165,7 @@ parakeet = ["daimonion-audio/parakeet"]
 parakeet-mlx = ["daimonion-audio/parakeet-mlx"]
 # Image-PII detector via MLX (Apple Silicon-only). Compiled into macOS
 # release builds for experiments, but the CLI runtime keeps ONNX as the
-# default stable path unless SCREENPIPE_ENABLE_EXPERIMENTAL_RFDETR_MLX=1
+# default stable path unless DAIMONION_ENABLE_EXPERIMENTAL_RFDETR_MLX=1
 # is set.
 rfdetr-mlx = ["daimonion-redact/mlx-mac"]
 

@@ -59,12 +59,12 @@ fn truthy(value: &str) -> bool {
 }
 
 fn env_hides_app_ui() -> bool {
-    std::env::var("SCREENPIPE_ENTERPRISE_HIDE_APP")
+    std::env::var("DAIMONION_ENTERPRISE_HIDE_APP")
         .ok()
         .as_deref()
         .map(truthy)
         .unwrap_or(false)
-        || std::env::var("SCREENPIPE_ENTERPRISE_UI_MODE")
+        || std::env::var("DAIMONION_ENTERPRISE_UI_MODE")
             .ok()
             .as_deref()
             .map(|mode| {

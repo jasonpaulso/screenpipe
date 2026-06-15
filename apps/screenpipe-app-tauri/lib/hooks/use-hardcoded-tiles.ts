@@ -62,10 +62,10 @@ export async function getCodexConfigPath(): Promise<string> {
   return join(home, ".codex", "config.toml");
 }
 
-const CODEX_SCREENPIPE_TABLE = /(?:^|\n)\[mcp_servers\.daimonion\][\s\S]*?(?=\n\[(?!mcp_servers\.daimonion(?:\.|\]))[^\]]+\]|\s*$)/;
+const CODEX_DAIMONION_TABLE = /(?:^|\n)\[mcp_servers\.daimonion\][\s\S]*?(?=\n\[(?!mcp_servers\.daimonion(?:\.|\]))[^\]]+\]|\s*$)/;
 
 export function hasEnabledCodexMcp(content: string): boolean {
-  const table = content.match(CODEX_SCREENPIPE_TABLE)?.[0] ?? "";
+  const table = content.match(CODEX_DAIMONION_TABLE)?.[0] ?? "";
   return !!table && !/^\s*enabled\s*=\s*false\s*$/m.test(table);
 }
 

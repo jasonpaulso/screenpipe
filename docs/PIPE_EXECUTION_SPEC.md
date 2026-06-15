@@ -16,7 +16,7 @@ pipe.md (config + prompt)
     ├── screenpipe API at localhost:3030 (queried by pipe during execution)
     │     └── SQLite DB (OCR, audio, UI data the pipe reads)
     ├── LLM provider API (external network call)
-    │     └── API key (from auth.json or SCREENPIPE_API_KEY env)
+    │     └── API key (from auth.json or DAIMONION_API_KEY env)
     ├── ./output/ directory (pipe writes results here)
     └── ./logs/ directory (execution logs written after completion)
 ```
@@ -47,7 +47,7 @@ Every one of these can fail independently, mid-execution.
 **Required:** Parse common LLM API errors (model_not_found, invalid_api_key, rate_limited) from stderr. Surface structured `error_type` in API response so UI can show actionable message.
 
 #### A5. Provider requires API key but key is missing/expired
-**Current:** `ensure_pi_config()` writes `SCREENPIPE_API_KEY` env var and merges auth.json. But if screenpipe cloud token expires, pi gets a 401. Stderr says "unauthorized" but user sees generic failure.
+**Current:** `ensure_pi_config()` writes `DAIMONION_API_KEY` env var and merges auth.json. But if screenpipe cloud token expires, pi gets a 401. Stderr says "unauthorized" but user sees generic failure.
 **Required:** Detect auth errors. Surface "API key expired" or "API key missing for provider X" in execution error.
 
 #### A6. Custom provider URL changed/unreachable

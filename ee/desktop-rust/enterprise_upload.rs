@@ -85,7 +85,7 @@ pub struct DirectUploadKeyRecipientConfig {
 impl EnterpriseUploadMode {
     /// Resolve the upload mode by asking the control plane what this
     /// license is configured for. Replaces the old env-var bootstrap so
-    /// customers don't have to set `SCREENPIPE_ENTERPRISE_UPLOAD_MODE`
+    /// customers don't have to set `DAIMONION_ENTERPRISE_UPLOAD_MODE`
     /// on every device — the storage binding in the dashboard is the
     /// single source of truth.
     ///
@@ -97,7 +97,7 @@ impl EnterpriseUploadMode {
         // Explicit env override — for MDM rollouts and local testing.
         // Only takes effect when set to a non-default value; the empty /
         // default case falls through to server resolution.
-        if let Ok(raw) = std::env::var("SCREENPIPE_ENTERPRISE_UPLOAD_MODE") {
+        if let Ok(raw) = std::env::var("DAIMONION_ENTERPRISE_UPLOAD_MODE") {
             let normalized = raw.trim().to_ascii_lowercase();
             if !normalized.is_empty()
                 && normalized != "screenpipe_write"
@@ -107,7 +107,7 @@ impl EnterpriseUploadMode {
                 if let Some(mode) = Self::from_env(ingest_url) {
                     tracing::info!(
                         "enterprise sync: upload mode taken from \
-                         SCREENPIPE_ENTERPRISE_UPLOAD_MODE env override ({})",
+                         DAIMONION_ENTERPRISE_UPLOAD_MODE env override ({})",
                         normalized
                     );
                     return mode;
@@ -120,7 +120,7 @@ impl EnterpriseUploadMode {
                 // Encrypted if MDM root keys are present, readable
                 // otherwise. Same logic the env path uses; just gated by
                 // server intent instead of env var.
-                if std::env::var("SCREENPIPE_ENTERPRISE_DIRECT_UPLOAD_ROOT_KEY_B64").is_ok() {
+                if std::env::var("DAIMONION_ENTERPRISE_DIRECT_UPLOAD_ROOT_KEY_B64").is_ok() {
                     if let Some(mode) = Self::build_direct_encrypted(ingest_url) {
                         tracing::info!(
                             "enterprise sync: server requested direct upload + MDM keys \
@@ -154,7 +154,7 @@ impl EnterpriseUploadMode {
     }
 
     pub fn from_env(ingest_url: &str) -> Option<Self> {
-        let mode = std::env::var("SCREENPIPE_ENTERPRISE_UPLOAD_MODE")
+        let mode = std::env::var("DAIMONION_ENTERPRISE_UPLOAD_MODE")
             .unwrap_or_else(|_| "screenpipe_write".to_string())
             .trim()
             .to_ascii_lowercase();
@@ -179,7 +179,7 @@ impl EnterpriseUploadMode {
     /// Shared by the legacy `from_env` path and the new server-driven
     /// `resolve` path so the encrypted-mode contract stays in one place.
     fn build_direct_encrypted(ingest_url: &str) -> Option<Self> {
-        let primary_key_b64 = match required_env("SCREENPIPE_ENTERPRISE_DIRECT_UPLOAD_ROOT_KEY_B64")
+        let primary_key_b64 = match required_env("DAIMONION_ENTERPRISE_DIRECT_UPLOAD_ROOT_KEY_B64")
         {
             Some(v) => v,
             None => {
@@ -190,7 +190,7 @@ impl EnterpriseUploadMode {
             }
         };
         let recovery_key_b64 =
-            match required_env("SCREENPIPE_ENTERPRISE_DIRECT_UPLOAD_RECOVERY_ROOT_KEY_B64") {
+            match required_env("DAIMONION_ENTERPRISE_DIRECT_UPLOAD_RECOVERY_ROOT_KEY_B64") {
                 Some(v) => v,
                 None => {
                     warn!(
@@ -219,12 +219,12 @@ impl EnterpriseUploadMode {
                 return None;
             }
         };
-        let primary_key_id = std::env::var("SCREENPIPE_ENTERPRISE_DIRECT_UPLOAD_KEY_ID")
+        let primary_key_id = std::env::var("DAIMONION_ENTERPRISE_DIRECT_UPLOAD_KEY_ID")
             .ok()
             .map(|s| s.trim().to_string())
             .filter(|s| !s.is_empty())
             .unwrap_or_else(|| "mdm-primary-v1".to_string());
-        let recovery_key_id = std::env::var("SCREENPIPE_ENTERPRISE_DIRECT_UPLOAD_RECOVERY_KEY_ID")
+        let recovery_key_id = std::env::var("DAIMONION_ENTERPRISE_DIRECT_UPLOAD_RECOVERY_KEY_ID")
             .ok()
             .map(|s| s.trim().to_string())
             .filter(|s| !s.is_empty())
@@ -317,11 +317,11 @@ async fn fetch_desired_mode_from_server(
 
 impl DirectUploadConfig {
     fn without_recipients(ingest_url: &str) -> Self {
-        let ticket_url = std::env::var("SCREENPIPE_ENTERPRISE_UPLOAD_TICKET_URL")
+        let ticket_url = std::env::var("DAIMONION_ENTERPRISE_UPLOAD_TICKET_URL")
             .ok()
             .filter(|s| !s.trim().is_empty())
             .unwrap_or_else(|| sibling_enterprise_endpoint(ingest_url, "upload-ticket"));
-        let complete_url = std::env::var("SCREENPIPE_ENTERPRISE_UPLOAD_COMPLETE_URL")
+        let complete_url = std::env::var("DAIMONION_ENTERPRISE_UPLOAD_COMPLETE_URL")
             .ok()
             .filter(|s| !s.trim().is_empty())
             .unwrap_or_else(|| sibling_enterprise_endpoint(ingest_url, "upload-complete"));

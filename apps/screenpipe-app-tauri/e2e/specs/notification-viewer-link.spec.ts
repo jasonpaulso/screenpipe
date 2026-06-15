@@ -24,7 +24,7 @@ import { existsSync } from "node:fs";
 import { saveScreenshot } from "../helpers/screenshot-utils.js";
 import { openHomeWindow, t, waitForAppReady } from "../helpers/test-utils.js";
 
-const FOCUS_PORT = Number(process.env.SCREENPIPE_FOCUS_PORT ?? "11436");
+const FOCUS_PORT = Number(process.env.DAIMONION_FOCUS_PORT ?? "11436");
 const NOTIFY_URL = `http://127.0.0.1:${FOCUS_PORT}/notify`;
 const NOTIFICATIONS_URL = `http://127.0.0.1:${FOCUS_PORT}/notifications`;
 

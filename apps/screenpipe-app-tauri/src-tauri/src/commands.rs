@@ -514,7 +514,7 @@ pub async fn get_local_api_config(app_handle: tauri::AppHandle) -> serde_json::V
 #[tauri::command]
 #[specta::specta]
 pub fn get_app_server_config() -> serde_json::Value {
-    let port = std::env::var("SCREENPIPE_FOCUS_PORT")
+    let port = std::env::var("DAIMONION_FOCUS_PORT")
         .ok()
         .and_then(|v| v.parse::<u16>().ok())
         .unwrap_or(11435);

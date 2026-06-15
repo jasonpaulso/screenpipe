@@ -5,8 +5,8 @@
 
 import {
   AgentCard,
-  SCREENPIPE_API_SKILL_MD,
-  SCREENPIPE_CLI_SKILL_MD,
+  DAIMONION_API_SKILL_MD,
+  DAIMONION_CLI_SKILL_MD,
 } from "./agent-card";
 
 const OPENCLAW_MCP_SNIPPET = `{
@@ -37,7 +37,7 @@ export function OpenClawCard() {
           label: "API",
           blurb:
             "Read screen history, meetings, and memories over the local REST API (read-only queries).",
-          md: SCREENPIPE_API_SKILL_MD,
+          md: DAIMONION_API_SKILL_MD,
           downloadName: "screenpipe-api-SKILL.md",
           localPath: "~/openclaw/skills/screenpipe-api/SKILL.md",
         },
@@ -46,7 +46,7 @@ export function OpenClawCard() {
           label: "CLI",
           blurb:
             "Manage pipes (scheduled automations) and connections (Telegram, Slack, ...) from the shell.",
-          md: SCREENPIPE_CLI_SKILL_MD,
+          md: DAIMONION_CLI_SKILL_MD,
           downloadName: "screenpipe-cli-SKILL.md",
           localPath: "~/openclaw/skills/screenpipe-cli/SKILL.md",
         },

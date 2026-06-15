@@ -27,7 +27,7 @@ static REGISTRY_CLIENT: Lazy<reqwest::Client> = Lazy::new(|| {
 
 /// Base URL for the screenpipe registry API.
 fn api_base_url() -> String {
-    std::env::var("SCREENPIPE_API_BASE_URL").unwrap_or_else(|_| "https://screenpi.pe".to_string())
+    std::env::var("DAIMONION_API_BASE_URL").unwrap_or_else(|_| "https://screenpi.pe".to_string())
 }
 
 /// Extract the Bearer token from the Authorization header.

@@ -15,8 +15,8 @@
  *   bun packages/e2e/src/runner.ts --binary ./target/release/screenpipe
  *
  * Environment:
- *   SCREENPIPE_BASE_URL  — API base URL (default: http://localhost:3030)
- *   SCREENPIPE_BINARY    — path to screenpipe binary (default: screenpipe)
+ *   DAIMONION_BASE_URL  — API base URL (default: http://localhost:3030)
+ *   DAIMONION_BINARY    — path to screenpipe binary (default: screenpipe)
  */
 
 import { runApiTests } from "./suites/api";
@@ -33,10 +33,10 @@ function getFlag(flag: string): string | undefined {
 const suite = getFlag("--suite") ?? "all";
 const baseUrl =
   getFlag("--base-url") ??
-  process.env.SCREENPIPE_BASE_URL ??
+  process.env.DAIMONION_BASE_URL ??
   "http://localhost:3030";
 const binary =
-  getFlag("--binary") ?? process.env.SCREENPIPE_BINARY ?? "screenpipe";
+  getFlag("--binary") ?? process.env.DAIMONION_BINARY ?? "screenpipe";
 
 // ── Local exec helper ────────────────────────────────────────────────
 

@@ -242,10 +242,10 @@ fn decrypt_store_file(path: &Path) {
 /// app updates (code signing identity changes), causing settings loss on every update.
 /// The 0o600 file permissions are sufficient protection for now.
 ///
-/// To opt in: create ~/.daimonion/.encrypt-store or set SCREENPIPE_ENCRYPT_STORE=1.
+/// To opt in: create ~/.daimonion/.encrypt-store or set DAIMONION_ENCRYPT_STORE=1.
 fn encrypt_store_file(path: &Path) {
     // Check opt-in flag
-    let opted_in = std::env::var("SCREENPIPE_ENCRYPT_STORE")
+    let opted_in = std::env::var("DAIMONION_ENCRYPT_STORE")
         .map(|v| v == "1")
         .unwrap_or(false)
         || path
@@ -1271,7 +1271,7 @@ impl SettingsStore {
         // E2E/dev escape hatch: bind the local server to a non-default port so a
         // throwaway instance can run alongside another screenpipe already on
         // :3030 instead of piggy-backing on it.
-        if let Some(p) = std::env::var("SCREENPIPE_PORT")
+        if let Some(p) = std::env::var("DAIMONION_PORT")
             .ok()
             .and_then(|v| v.parse::<u16>().ok())
         {

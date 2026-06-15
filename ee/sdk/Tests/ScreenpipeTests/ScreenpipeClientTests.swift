@@ -107,7 +107,7 @@ final class ScreenpipeClientTests: XCTestCase {
     import { createInterface } from "node:readline";
     import { writeFileSync } from "node:fs";
 
-    const marker = process.env.SCREENPIPE_TEST_DISPOSE_MARKER;
+    const marker = process.env.DAIMONION_TEST_DISPOSE_MARKER;
     const lines = createInterface({ input: process.stdin, crlfDelay: Infinity, terminal: false });
 
     lines.on("line", (line) => {
@@ -133,10 +133,10 @@ final class ScreenpipeClientTests: XCTestCase {
     )
     configuration.outputDirectory = temporaryDirectory
 
-    let oldEnvironment = setenv("SCREENPIPE_TEST_DISPOSE_MARKER", marker.path, 1)
+    let oldEnvironment = setenv("DAIMONION_TEST_DISPOSE_MARKER", marker.path, 1)
     XCTAssertEqual(oldEnvironment, 0)
     defer {
-      unsetenv("SCREENPIPE_TEST_DISPOSE_MARKER")
+      unsetenv("DAIMONION_TEST_DISPOSE_MARKER")
     }
 
     let transport = try NodeJSONLineTransport(configuration: configuration)
@@ -160,7 +160,7 @@ final class ScreenpipeClientTests: XCTestCase {
     import { createInterface } from "node:readline";
     import { writeFileSync } from "node:fs";
 
-    const marker = process.env.SCREENPIPE_TEST_SLOW_DISPOSE_MARKER;
+    const marker = process.env.DAIMONION_TEST_SLOW_DISPOSE_MARKER;
     const lines = createInterface({ input: process.stdin, crlfDelay: Infinity, terminal: false });
 
     lines.on("line", (line) => {
@@ -181,10 +181,10 @@ final class ScreenpipeClientTests: XCTestCase {
     """
     try bridgeSource.write(to: bridge, atomically: true, encoding: .utf8)
 
-    let oldEnvironment = setenv("SCREENPIPE_TEST_SLOW_DISPOSE_MARKER", marker.path, 1)
+    let oldEnvironment = setenv("DAIMONION_TEST_SLOW_DISPOSE_MARKER", marker.path, 1)
     XCTAssertEqual(oldEnvironment, 0)
     defer {
-      unsetenv("SCREENPIPE_TEST_SLOW_DISPOSE_MARKER")
+      unsetenv("DAIMONION_TEST_SLOW_DISPOSE_MARKER")
     }
 
     let transport = try NodeJSONLineTransport(
@@ -216,8 +216,8 @@ final class ScreenpipeClientTests: XCTestCase {
     import { createInterface } from "node:readline";
     import { writeFileSync } from "node:fs";
 
-    const pendingMarker = process.env.SCREENPIPE_TEST_PENDING_MARKER;
-    const disposeMarker = process.env.SCREENPIPE_TEST_PENDING_DISPOSE_MARKER;
+    const pendingMarker = process.env.DAIMONION_TEST_PENDING_MARKER;
+    const disposeMarker = process.env.DAIMONION_TEST_PENDING_DISPOSE_MARKER;
     const lines = createInterface({ input: process.stdin, crlfDelay: Infinity, terminal: false });
 
     lines.on("line", (line) => {
@@ -234,13 +234,13 @@ final class ScreenpipeClientTests: XCTestCase {
     """
     try bridgeSource.write(to: bridge, atomically: true, encoding: .utf8)
 
-    let pendingEnvironment = setenv("SCREENPIPE_TEST_PENDING_MARKER", pendingMarker.path, 1)
+    let pendingEnvironment = setenv("DAIMONION_TEST_PENDING_MARKER", pendingMarker.path, 1)
     XCTAssertEqual(pendingEnvironment, 0)
-    let disposeEnvironment = setenv("SCREENPIPE_TEST_PENDING_DISPOSE_MARKER", disposeMarker.path, 1)
+    let disposeEnvironment = setenv("DAIMONION_TEST_PENDING_DISPOSE_MARKER", disposeMarker.path, 1)
     XCTAssertEqual(disposeEnvironment, 0)
     defer {
-      unsetenv("SCREENPIPE_TEST_PENDING_MARKER")
-      unsetenv("SCREENPIPE_TEST_PENDING_DISPOSE_MARKER")
+      unsetenv("DAIMONION_TEST_PENDING_MARKER")
+      unsetenv("DAIMONION_TEST_PENDING_DISPOSE_MARKER")
     }
 
     let transport = try NodeJSONLineTransport(
@@ -367,7 +367,7 @@ final class ScreenpipeClientTests: XCTestCase {
     import { createInterface } from "node:readline";
     import { readFileSync, writeFileSync } from "node:fs";
 
-    const marker = process.env.SCREENPIPE_TEST_ATTEMPTS_MARKER;
+    const marker = process.env.DAIMONION_TEST_ATTEMPTS_MARKER;
     const attempt = Number(readFileSync(marker, "utf8")) + 1;
     writeFileSync(marker, String(attempt));
 
@@ -386,10 +386,10 @@ final class ScreenpipeClientTests: XCTestCase {
     """
     try bridgeSource.write(to: bridge, atomically: true, encoding: .utf8)
 
-    let oldEnvironment = setenv("SCREENPIPE_TEST_ATTEMPTS_MARKER", marker.path, 1)
+    let oldEnvironment = setenv("DAIMONION_TEST_ATTEMPTS_MARKER", marker.path, 1)
     XCTAssertEqual(oldEnvironment, 0)
     defer {
-      unsetenv("SCREENPIPE_TEST_ATTEMPTS_MARKER")
+      unsetenv("DAIMONION_TEST_ATTEMPTS_MARKER")
     }
 
     let transport = try NodeJSONLineTransport(
@@ -430,7 +430,7 @@ final class ScreenpipeClientTests: XCTestCase {
     import { createInterface } from "node:readline";
     import { readFileSync, writeFileSync } from "node:fs";
 
-    const marker = process.env.SCREENPIPE_TEST_MALFORMED_MARKER;
+    const marker = process.env.DAIMONION_TEST_MALFORMED_MARKER;
     const attempt = Number(readFileSync(marker, "utf8")) + 1;
     writeFileSync(marker, String(attempt));
 
@@ -450,10 +450,10 @@ final class ScreenpipeClientTests: XCTestCase {
     """
     try bridgeSource.write(to: bridge, atomically: true, encoding: .utf8)
 
-    let oldEnvironment = setenv("SCREENPIPE_TEST_MALFORMED_MARKER", marker.path, 1)
+    let oldEnvironment = setenv("DAIMONION_TEST_MALFORMED_MARKER", marker.path, 1)
     XCTAssertEqual(oldEnvironment, 0)
     defer {
-      unsetenv("SCREENPIPE_TEST_MALFORMED_MARKER")
+      unsetenv("DAIMONION_TEST_MALFORMED_MARKER")
     }
 
     let transport = try NodeJSONLineTransport(
@@ -494,7 +494,7 @@ final class ScreenpipeClientTests: XCTestCase {
     import { createInterface } from "node:readline";
     import { readFileSync, writeFileSync } from "node:fs";
 
-    const marker = process.env.SCREENPIPE_TEST_PARTIAL_EXIT_MARKER;
+    const marker = process.env.DAIMONION_TEST_PARTIAL_EXIT_MARKER;
     const attempt = Number(readFileSync(marker, "utf8")) + 1;
     writeFileSync(marker, String(attempt));
 
@@ -515,10 +515,10 @@ final class ScreenpipeClientTests: XCTestCase {
     """
     try bridgeSource.write(to: bridge, atomically: true, encoding: .utf8)
 
-    let oldEnvironment = setenv("SCREENPIPE_TEST_PARTIAL_EXIT_MARKER", marker.path, 1)
+    let oldEnvironment = setenv("DAIMONION_TEST_PARTIAL_EXIT_MARKER", marker.path, 1)
     XCTAssertEqual(oldEnvironment, 0)
     defer {
-      unsetenv("SCREENPIPE_TEST_PARTIAL_EXIT_MARKER")
+      unsetenv("DAIMONION_TEST_PARTIAL_EXIT_MARKER")
     }
 
     let transport = try NodeJSONLineTransport(
@@ -561,7 +561,7 @@ final class ScreenpipeClientTests: XCTestCase {
     import { createInterface } from "node:readline";
     import { readFileSync, writeFileSync } from "node:fs";
 
-    const marker = process.env.SCREENPIPE_TEST_WRONG_ID_MARKER;
+    const marker = process.env.DAIMONION_TEST_WRONG_ID_MARKER;
     const attempt = Number(readFileSync(marker, "utf8")) + 1;
     writeFileSync(marker, String(attempt));
 
@@ -578,10 +578,10 @@ final class ScreenpipeClientTests: XCTestCase {
     """
     try bridgeSource.write(to: bridge, atomically: true, encoding: .utf8)
 
-    let oldEnvironment = setenv("SCREENPIPE_TEST_WRONG_ID_MARKER", marker.path, 1)
+    let oldEnvironment = setenv("DAIMONION_TEST_WRONG_ID_MARKER", marker.path, 1)
     XCTAssertEqual(oldEnvironment, 0)
     defer {
-      unsetenv("SCREENPIPE_TEST_WRONG_ID_MARKER")
+      unsetenv("DAIMONION_TEST_WRONG_ID_MARKER")
     }
 
     let transport = try NodeJSONLineTransport(

@@ -143,7 +143,7 @@ pub const DEFAULT_ALLOWED_ENDPOINTS: &[&str] = &[
 // ---------------------------------------------------------------------------
 
 /// Resolved permission set for a pipe, serialized to JSON and passed as
-/// `SCREENPIPE_PIPE_PERMISSIONS` env var to the Pi subprocess.
+/// `DAIMONION_PIPE_PERMISSIONS` env var to the Pi subprocess.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PipePermissions {
     pub pipe_name: String,

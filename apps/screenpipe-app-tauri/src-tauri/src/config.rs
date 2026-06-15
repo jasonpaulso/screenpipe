@@ -27,7 +27,7 @@ pub fn get_base_dir(
 /// Resolve the recording data directory from the store's `data_dir` setting.
 ///
 /// Returns `(resolved_path, fell_back)` where `fell_back` is true when the
-/// custom path was unusable and we silently fell back to default (~/.daimonion or SCREENPIPE_DATA_DIR).
+/// custom path was unusable and we silently fell back to default (~/.daimonion or DAIMONION_DATA_DIR).
 pub fn resolve_data_dir(data_dir_setting: &str) -> (PathBuf, bool) {
     let default_path = default_screenpipe_data_dir();
 

@@ -151,11 +151,11 @@ fn detect_macos_enterprise_management(_metadata: &mut EnterpriseInstallMetadata)
 pub fn get_enterprise_install_metadata() -> EnterpriseInstallMetadata {
     let mut metadata = EnterpriseInstallMetadata::default();
 
-    if let Ok(value) = std::env::var("SCREENPIPE_ENTERPRISE_INSTALL_SOURCE") {
+    if let Ok(value) = std::env::var("DAIMONION_ENTERPRISE_INSTALL_SOURCE") {
         set_enterprise_metadata_value(&mut metadata.install_source, Some(value));
         metadata.detected_by.push("env".to_string());
     }
-    if let Ok(value) = std::env::var("SCREENPIPE_ENTERPRISE_UPDATE_MANAGER") {
+    if let Ok(value) = std::env::var("DAIMONION_ENTERPRISE_UPDATE_MANAGER") {
         set_enterprise_metadata_value(&mut metadata.update_manager, Some(value));
         metadata.detected_by.push("env".to_string());
     }

@@ -452,7 +452,7 @@ mod imp {
     // ─── Spawn ─────────────────────────────────────────────────────────
 
     /// Spawn the enterprise telemetry sync task. No-op (returns None) when
-    /// required env (`SCREENPIPE_ENTERPRISE_LICENSE_KEY`) is missing — this is
+    /// required env (`DAIMONION_ENTERPRISE_LICENSE_KEY`) is missing — this is
     /// the path for a developer running an enterprise build locally without
     /// pointing at a real ingest.
     pub fn spawn(app: &tauri::AppHandle) -> Option<tokio::sync::watch::Sender<bool>> {
@@ -509,7 +509,7 @@ mod imp {
             tokio::time::sleep(std::time::Duration::from_secs(15)).await;
 
             // Ask the control plane what upload mode this license should run
-            // in. Replaces the old "set SCREENPIPE_ENTERPRISE_UPLOAD_MODE on
+            // in. Replaces the old "set DAIMONION_ENTERPRISE_UPLOAD_MODE on
             // every customer machine" UX — the dashboard binding is now the
             // single source of truth, so a fresh enterprise install just
             // needs the license key and uploads start automatically.

@@ -89,7 +89,7 @@ const tests: TestDef[] = [
   },
   // Regression: a6117b306 added `screenpipe team` — admin queries against
   // the enterprise cloud API. --help must work without auth so admins can
-  // discover the subcommand without setting SCREENPIPE_TEAM_API_TOKEN first.
+  // discover the subcommand without setting DAIMONION_TEAM_API_TOKEN first.
   {
     name: "team --help",
     fn: async (exec, bin) => {

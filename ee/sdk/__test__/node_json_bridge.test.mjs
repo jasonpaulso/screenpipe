@@ -24,7 +24,7 @@ const swiftBridgeScript = path.join(
 
 function bridgeSourceForComparison(file) {
   return fs.readFileSync(file, "utf8").replace(
-    /^const sdkRoot = resolve\(process\.env\.SCREENPIPE_SDK_ROOT \|\| join\(here, .+\)\);$/m,
+    /^const sdkRoot = resolve\(process\.env\.DAIMONION_SDK_ROOT \|\| join\(here, .+\)\);$/m,
     "const sdkRoot = <resource-relative-sdk-root>;",
   );
 }
@@ -57,7 +57,7 @@ test("node JSON bridge treats missing reveal file as current output", async (t) 
   const child = spawn(process.execPath, [bridgeScript], {
     env: {
       ...process.env,
-      SCREENPIPE_SDK_ROOT: sdkRoot,
+      DAIMONION_SDK_ROOT: sdkRoot,
     },
     stdio: ["pipe", "pipe", "pipe"],
   });

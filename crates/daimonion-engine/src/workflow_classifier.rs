@@ -62,7 +62,7 @@ const EVENT_LABELS: &[&str] = &[
 /// AI gateway, which forwards the `screenpipe-event-classifier` model to the
 /// self-hosted vLLM. Going through the gateway means infra moves only need a
 /// `wrangler secret put EVENT_CLASSIFIER_URL` — no client release.
-/// Override with the `SCREENPIPE_EVENT_CLASSIFIER_URL` env var for self-host.
+/// Override with the `DAIMONION_EVENT_CLASSIFIER_URL` env var for self-host.
 pub const DEFAULT_CLASSIFIER_URL: &str = "https://api.screenpipe.com";
 
 /// Start the workflow classifier polling loop.
@@ -251,7 +251,7 @@ async fn get_recent_activities(client: &Client, port: u16) -> Option<Vec<Activit
 }
 
 /// Call the classifier through the screenpipe gateway (default) or directly
-/// against a self-hosted vLLM (`SCREENPIPE_EVENT_CLASSIFIER_URL` override).
+/// against a self-hosted vLLM (`DAIMONION_EVENT_CLASSIFIER_URL` override).
 /// The model name `screenpipe-event-classifier` is recognized by both: vLLM
 /// exposes it via `--served-model-name`, and the gateway routes it to the
 /// vLLM URL stored in its `EVENT_CLASSIFIER_URL` secret.

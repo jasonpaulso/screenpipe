@@ -48,7 +48,7 @@ function inferKind(filePath: string): string {
 }
 
 export default function (pi: ExtensionAPI) {
-  const pipeName = process.env.SCREENPIPE_PIPE_NAME;
+  const pipeName = process.env.DAIMONION_PIPE_NAME;
   if (!pipeName) {
     // Not running inside a pipe runtime — silently skip registration.
     return;
@@ -88,9 +88,9 @@ export default function (pi: ExtensionAPI) {
       }
 
       const apiBase =
-        process.env.SCREENPIPE_LOCAL_API_URL ||
-        `http://localhost:${process.env.SCREENPIPE_PORT || "3030"}`;
-      const authKey = process.env.SCREENPIPE_LOCAL_API_KEY || "";
+        process.env.DAIMONION_LOCAL_API_URL ||
+        `http://localhost:${process.env.DAIMONION_PORT || "3030"}`;
+      const authKey = process.env.DAIMONION_LOCAL_API_KEY || "";
       const headers: Record<string, string> = {
         "Content-Type": "application/json",
       };

@@ -15,12 +15,12 @@ const STORE_FILENAME: &str = "store.bin";
 const STORE_MAGIC: &[u8; 8] = b"SPSTORE1";
 
 /// Returns true when the user has opted into encryption, by ANY of:
-/// - `SCREENPIPE_ENCRYPT_STORE=1` env var (testing/override)
+/// - `DAIMONION_ENCRYPT_STORE=1` env var (testing/override)
 /// - `<data_dir>/.encrypt-store` flag file exists
 /// - `<data_dir>/store.bin` is encrypted (`SPSTORE1` magic)
 /// - `<data_dir>/store.bin` is plain JSON with `settings.encryptStore == true`
 pub fn is_encryption_requested(data_dir: &Path) -> bool {
-    if std::env::var("SCREENPIPE_ENCRYPT_STORE").is_ok_and(|v| v == "1") {
+    if std::env::var("DAIMONION_ENCRYPT_STORE").is_ok_and(|v| v == "1") {
         return true;
     }
     if data_dir.join(FLAG_FILENAME).exists() {

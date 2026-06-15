@@ -156,8 +156,8 @@ const session = createScreenpipeSession({
 - **What is NOT sent.** No screen content, no audio, no clipboard, no
   `app_switched` stream, no `frames_progress` ticks.
 - **Opt out.** Set `telemetry: false` in the options, or set the env var
-  `SCREENPIPE_SDK_TELEMETRY=0` (also honors `DO_NOT_TRACK=1` and
-  `SCREENPIPE_DISABLE_ANALYTICS=1`). When off, the SDK makes no network
+  `DAIMONION_SDK_TELEMETRY=0` (also honors `DO_NOT_TRACK=1` and
+  `DAIMONION_DISABLE_ANALYTICS=1`). When off, the SDK makes no network
   calls.
 
 Without a `userId`, events fall back to a per-session anonymous id, so set
@@ -216,13 +216,13 @@ Example app smoke checks:
 ```bash
 npm --prefix examples/electron-app run smoke
 npm --prefix examples/tauri-app run smoke
-SCREENPIPE_SWIFT_EXAMPLE_SMOKE=1 swift run --package-path examples/swift-app ScreenpipeExample
+DAIMONION_SWIFT_EXAMPLE_SMOKE=1 swift run --package-path examples/swift-app ScreenpipeExample
 ```
 
 Run the optional native Tauri example compile with:
 
 ```bash
-SCREENPIPE_RUN_NATIVE_EXAMPLE_BUILDS=1 node --test --test-concurrency=1 __test__/examples_e2e.test.mjs
+DAIMONION_RUN_NATIVE_EXAMPLE_BUILDS=1 node --test --test-concurrency=1 __test__/examples_e2e.test.mjs
 ```
 
 Before publishing:

@@ -45,7 +45,7 @@ flowchart LR
 | run never starts | pipe disabled or another run is queued | enable it, stop stale runs, run manually |
 | no useful output | prompt did not require a durable output | tell the pipe exactly where to write, notify, or summarize |
 | "connection refused" | local API still booting | wait for `/health`, then rerun |
-| "unauthorized" | API auth or provider key missing | set `SCREENPIPE_API_KEY`, sign in, or update provider credentials |
+| "unauthorized" | API auth or provider key missing | set `DAIMONION_API_KEY`, sign in, or update provider credentials |
 | empty search results | time range too narrow or capture disabled | widen the window and verify `/search?limit=5` |
 | Windows terminal flashes and closes | process crashed immediately | open pipe logs or run script from PowerShell |
 | pipe sees old data only | schedule window or stale filters | remove filters, run manually, widen time range |
@@ -131,7 +131,7 @@ do:
 - keep API keys in `.env` next to `pipe.md`
 - use connected app proxies when possible
 - use local models through Ollama for fully local execution
-- use `SCREENPIPE_API_KEY` when API auth is enabled
+- use `DAIMONION_API_KEY` when API auth is enabled
 
 do not:
 

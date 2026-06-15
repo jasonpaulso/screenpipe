@@ -73,7 +73,7 @@ describe("buildConnectionsContext", () => {
       { id: "gcal", name: "Google Calendar", description: "Read events" },
     ]);
     expect(out).toContain("http://localhost:3030");
-    expect(out).toContain("SCREENPIPE_LOCAL_API_KEY");
+    expect(out).toContain("DAIMONION_LOCAL_API_KEY");
   });
 
   it("joins multiple described connections with a blank line", () => {

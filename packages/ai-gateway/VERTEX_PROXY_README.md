@@ -59,7 +59,7 @@ const env = {
   ANTHROPIC_VERTEX_BASE_URL: 'https://ai-gateway.i-f9f.workers.dev',
   CLAUDE_CODE_SKIP_VERTEX_AUTH: '1',
   // User's auth token for the proxy
-  SCREENPIPE_AUTH_TOKEN: userAuthToken,
+  DAIMONION_AUTH_TOKEN: userAuthToken,
 };
 
 // The Agent SDK will use these env vars automatically

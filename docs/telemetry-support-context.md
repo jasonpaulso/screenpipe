@@ -5,11 +5,11 @@ identity to Screenpipe's existing telemetry pipeline. This lets Screenpipe suppo
 filter Sentry errors and PostHog events by customer, deployment, or host app.
 
 ```bash
-export SCREENPIPE_SUPPORT_ID="spcust_acme_123"
-export SCREENPIPE_CUSTOMER_ID="acme"
-export SCREENPIPE_DEPLOYMENT_ID="prod-laptop-fleet-01"
-export SCREENPIPE_EMBEDDER="acme-agent"
-export SCREENPIPE_EMBEDDER_VERSION="2026.6.4"
+export DAIMONION_SUPPORT_ID="spcust_acme_123"
+export DAIMONION_CUSTOMER_ID="acme"
+export DAIMONION_DEPLOYMENT_ID="prod-laptop-fleet-01"
+export DAIMONION_EMBEDDER="acme-agent"
+export DAIMONION_EMBEDDER_VERSION="2026.6.4"
 
 npx screenpipe record
 ```
@@ -18,25 +18,25 @@ npx screenpipe record
 
 | Variable | Purpose |
 | --- | --- |
-| `SCREENPIPE_SUPPORT_ID` | Stable support ID for this customer/user/deployment. Used as the CLI PostHog `distinct_id` when `SCREENPIPE_ANALYTICS_ID` is not set, and attached to Sentry/PostHog as `screenpipe_support_id`. |
-| `SCREENPIPE_CUSTOMER_ID` | Customer or organization key, attached as `screenpipe_customer_id`. |
-| `SCREENPIPE_DEPLOYMENT_ID` | Fleet, endpoint group, device, or environment key, attached as `screenpipe_deployment_id`. |
-| `SCREENPIPE_EMBEDDER` | Name of the app embedding or launching Screenpipe, attached as `screenpipe_embedder`. |
-| `SCREENPIPE_EMBEDDER_VERSION` | Version of the embedding app, attached as `screenpipe_embedder_version`. |
+| `DAIMONION_SUPPORT_ID` | Stable support ID for this customer/user/deployment. Used as the CLI PostHog `distinct_id` when `DAIMONION_ANALYTICS_ID` is not set, and attached to Sentry/PostHog as `screenpipe_support_id`. |
+| `DAIMONION_CUSTOMER_ID` | Customer or organization key, attached as `screenpipe_customer_id`. |
+| `DAIMONION_DEPLOYMENT_ID` | Fleet, endpoint group, device, or environment key, attached as `screenpipe_deployment_id`. |
+| `DAIMONION_EMBEDDER` | Name of the app embedding or launching Screenpipe, attached as `screenpipe_embedder`. |
+| `DAIMONION_EMBEDDER_VERSION` | Version of the embedding app, attached as `screenpipe_embedder_version`. |
 
 Aliases are also accepted for easier integration with existing deployments:
 
 | Canonical variable | Accepted aliases |
 | --- | --- |
-| `SCREENPIPE_SUPPORT_ID` | `SCREENPIPE_TELEMETRY_ID` |
-| `SCREENPIPE_CUSTOMER_ID` | `SCREENPIPE_ORG_ID`, `SCREENPIPE_TELEMETRY_CUSTOMER_ID` |
-| `SCREENPIPE_DEPLOYMENT_ID` | `SCREENPIPE_TELEMETRY_DEPLOYMENT_ID` |
-| `SCREENPIPE_EMBEDDER` | `SCREENPIPE_HOST_APP`, `SCREENPIPE_TELEMETRY_HOST_APP` |
-| `SCREENPIPE_EMBEDDER_VERSION` | `SCREENPIPE_HOST_VERSION`, `SCREENPIPE_TELEMETRY_HOST_VERSION` |
+| `DAIMONION_SUPPORT_ID` | `DAIMONION_TELEMETRY_ID` |
+| `DAIMONION_CUSTOMER_ID` | `DAIMONION_ORG_ID`, `DAIMONION_TELEMETRY_CUSTOMER_ID` |
+| `DAIMONION_DEPLOYMENT_ID` | `DAIMONION_TELEMETRY_DEPLOYMENT_ID` |
+| `DAIMONION_EMBEDDER` | `DAIMONION_HOST_APP`, `DAIMONION_TELEMETRY_HOST_APP` |
+| `DAIMONION_EMBEDDER_VERSION` | `DAIMONION_HOST_VERSION`, `DAIMONION_TELEMETRY_HOST_VERSION` |
 
-`SCREENPIPE_ANALYTICS_ID` remains the highest-priority explicit PostHog
+`DAIMONION_ANALYTICS_ID` remains the highest-priority explicit PostHog
 `distinct_id`. Use it only when you intentionally want to control the exact
-person identity. Otherwise prefer `SCREENPIPE_SUPPORT_ID`.
+person identity. Otherwise prefer `DAIMONION_SUPPORT_ID`.
 
 ## Privacy Boundary
 

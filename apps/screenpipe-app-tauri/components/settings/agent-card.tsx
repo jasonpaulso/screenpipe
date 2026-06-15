@@ -41,8 +41,8 @@ import { useSettings } from "@/lib/hooks/use-settings";
 // ---------------------------------------------------------------------------
 
 export {
-  SCREENPIPE_API_SKILL_MD,
-  SCREENPIPE_CLI_SKILL_MD,
+  DAIMONION_API_SKILL_MD,
+  DAIMONION_CLI_SKILL_MD,
 } from "@/lib/generated/screenpipe-skills";
 
 // ---------------------------------------------------------------------------

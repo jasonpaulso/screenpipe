@@ -200,7 +200,7 @@ export function CloudPipesTab({ active }: { active: boolean }) {
                   <Input
                     value={aiKeyDraft}
                     onChange={(e) => setAiKeyDraft(e.target.value)}
-                    placeholder="api key for AI pipes (SCREENPIPE_API_KEY on the vm)"
+                    placeholder="api key for AI pipes (DAIMONION_API_KEY on the vm)"
                     className="h-7 text-xs"
                     type="password"
                     spellCheck={false}

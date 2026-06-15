@@ -108,7 +108,7 @@ if screenpipe says "unauthorized" when accessing the local API, but your custom 
 **fix:** configure your pipe or app to use the API key explicitly:
 ```bash
 curl "http://localhost:3030/search?limit=5" \
-  -H "Authorization: Bearer YOUR_SCREENPIPE_API_KEY"
+  -H "Authorization: Bearer YOUR_DAIMONION_API_KEY"
 ```
 
 or set the API key in screenpipe settings → API security → enable API key auth, then provide that key in your requests.

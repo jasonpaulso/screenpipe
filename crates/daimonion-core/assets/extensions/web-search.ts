@@ -42,7 +42,7 @@ export default function (pi: ExtensionAPI) {
         ],
       });
 
-      const apiKey = process.env.SCREENPIPE_API_KEY || "";
+      const apiKey = process.env.DAIMONION_API_KEY || "";
       const response = await fetch(
         "https://api.screenpipe.com/v1/web-search",
         {

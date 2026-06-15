@@ -64,7 +64,7 @@ const BACKOFF_MAX: Duration = Duration::from_secs(60 * 60);
 /// retrying every interval.
 const RETRY_AFTER_AUTH_FAIL: Duration = Duration::from_secs(60 * 60);
 
-/// Default endpoint. Overridable via `SCREENPIPE_ENTERPRISE_INGEST_URL` for
+/// Default endpoint. Overridable via `DAIMONION_ENTERPRISE_INGEST_URL` for
 /// staging / on-prem.
 pub const DEFAULT_INGEST_URL: &str = "https://screenpi.pe/api/enterprise/ingest";
 
@@ -91,14 +91,14 @@ pub struct EnterpriseSyncConfig {
 
 impl EnterpriseSyncConfig {
     /// Build config from env vars + the OS device id. Returns `None` when
-    /// required env (`SCREENPIPE_ENTERPRISE_LICENSE_KEY`) is missing — caller
+    /// required env (`DAIMONION_ENTERPRISE_LICENSE_KEY`) is missing — caller
     /// should silently skip sync in that case.
     ///
     /// `upload_mode` is initialized to `HostedIngest` as a safe default. The
     /// caller should run [`Self::resolve_upload_mode`] once the async runtime
     /// is up to upgrade to `DirectReadable` / `DirectEncrypted` based on the
     /// customer's storage binding in the control plane. This replaces the
-    /// old "set `SCREENPIPE_ENTERPRISE_UPLOAD_MODE` on every device" UX —
+    /// old "set `DAIMONION_ENTERPRISE_UPLOAD_MODE` on every device" UX —
     /// the dashboard binding is now the single source of truth.
     pub fn from_env(
         app_data_dir: PathBuf,
@@ -121,11 +121,11 @@ impl EnterpriseSyncConfig {
         device_label: String,
         license_key_fallback: Option<String>,
     ) -> Option<Self> {
-        let license_key = std::env::var("SCREENPIPE_ENTERPRISE_LICENSE_KEY")
+        let license_key = std::env::var("DAIMONION_ENTERPRISE_LICENSE_KEY")
             .ok()
             .filter(|s| !s.trim().is_empty())
             .or_else(|| license_key_fallback.filter(|s| !s.trim().is_empty()))?;
-        let ingest_url = std::env::var("SCREENPIPE_ENTERPRISE_INGEST_URL")
+        let ingest_url = std::env::var("DAIMONION_ENTERPRISE_INGEST_URL")
             .ok()
             .filter(|s| !s.trim().is_empty())
             .unwrap_or_else(|| DEFAULT_INGEST_URL.to_string());
@@ -135,7 +135,7 @@ impl EnterpriseSyncConfig {
         // silent fallback to plaintext could leak data. When no override is
         // set we start in HostedIngest and let `resolve_upload_mode` ask
         // the control plane what this license is actually configured for.
-        let explicit_mode = std::env::var("SCREENPIPE_ENTERPRISE_UPLOAD_MODE")
+        let explicit_mode = std::env::var("DAIMONION_ENTERPRISE_UPLOAD_MODE")
             .ok()
             .map(|s| s.trim().to_string())
             .filter(|s| !s.is_empty() && s != "auto");
@@ -1231,19 +1231,19 @@ mod tests {
     #[test]
     fn from_env_handles_all_cases() {
         // Snapshot prior env so we don't leak state into other tests.
-        let prior_license = std::env::var("SCREENPIPE_ENTERPRISE_LICENSE_KEY").ok();
-        let prior_url = std::env::var("SCREENPIPE_ENTERPRISE_INGEST_URL").ok();
-        let prior_mode = std::env::var("SCREENPIPE_ENTERPRISE_UPLOAD_MODE").ok();
-        let prior_root_key = std::env::var("SCREENPIPE_ENTERPRISE_DIRECT_UPLOAD_ROOT_KEY_B64").ok();
-        let prior_key_id = std::env::var("SCREENPIPE_ENTERPRISE_DIRECT_UPLOAD_KEY_ID").ok();
+        let prior_license = std::env::var("DAIMONION_ENTERPRISE_LICENSE_KEY").ok();
+        let prior_url = std::env::var("DAIMONION_ENTERPRISE_INGEST_URL").ok();
+        let prior_mode = std::env::var("DAIMONION_ENTERPRISE_UPLOAD_MODE").ok();
+        let prior_root_key = std::env::var("DAIMONION_ENTERPRISE_DIRECT_UPLOAD_ROOT_KEY_B64").ok();
+        let prior_key_id = std::env::var("DAIMONION_ENTERPRISE_DIRECT_UPLOAD_KEY_ID").ok();
         let prior_recovery_root_key =
-            std::env::var("SCREENPIPE_ENTERPRISE_DIRECT_UPLOAD_RECOVERY_ROOT_KEY_B64").ok();
+            std::env::var("DAIMONION_ENTERPRISE_DIRECT_UPLOAD_RECOVERY_ROOT_KEY_B64").ok();
         let prior_recovery_key_id =
-            std::env::var("SCREENPIPE_ENTERPRISE_DIRECT_UPLOAD_RECOVERY_KEY_ID").ok();
+            std::env::var("DAIMONION_ENTERPRISE_DIRECT_UPLOAD_RECOVERY_KEY_ID").ok();
 
         // Case 1: no license env → None.
-        std::env::remove_var("SCREENPIPE_ENTERPRISE_LICENSE_KEY");
-        std::env::remove_var("SCREENPIPE_ENTERPRISE_UPLOAD_MODE");
+        std::env::remove_var("DAIMONION_ENTERPRISE_LICENSE_KEY");
+        std::env::remove_var("DAIMONION_ENTERPRISE_UPLOAD_MODE");
         let dir = TempDir::new().unwrap();
         assert!(
             EnterpriseSyncConfig::from_env(dir.path().to_path_buf(), "dev".into(), "host".into())
@@ -1252,7 +1252,7 @@ mod tests {
         );
 
         // Case 2: blank license env → None.
-        std::env::set_var("SCREENPIPE_ENTERPRISE_LICENSE_KEY", "   ");
+        std::env::set_var("DAIMONION_ENTERPRISE_LICENSE_KEY", "   ");
         let dir = TempDir::new().unwrap();
         assert!(
             EnterpriseSyncConfig::from_env(dir.path().to_path_buf(), "dev".into(), "host".into())
@@ -1261,8 +1261,8 @@ mod tests {
         );
 
         // Case 3: license set, ingest url unset → default url.
-        std::env::set_var("SCREENPIPE_ENTERPRISE_LICENSE_KEY", "sek_test");
-        std::env::remove_var("SCREENPIPE_ENTERPRISE_INGEST_URL");
+        std::env::set_var("DAIMONION_ENTERPRISE_LICENSE_KEY", "sek_test");
+        std::env::remove_var("DAIMONION_ENTERPRISE_INGEST_URL");
         let dir = TempDir::new().unwrap();
         let cfg =
             EnterpriseSyncConfig::from_env(dir.path().to_path_buf(), "dev".into(), "host".into())
@@ -1275,7 +1275,7 @@ mod tests {
         ));
 
         // Case 4: ingest url override is respected.
-        std::env::set_var("SCREENPIPE_ENTERPRISE_INGEST_URL", "https://staging/ingest");
+        std::env::set_var("DAIMONION_ENTERPRISE_INGEST_URL", "https://staging/ingest");
         let dir = TempDir::new().unwrap();
         let cfg =
             EnterpriseSyncConfig::from_env(dir.path().to_path_buf(), "dev".into(), "host".into())
@@ -1285,23 +1285,23 @@ mod tests {
         // Case 5: direct upload requires an MDM-provisioned root key and
         // derives sibling control-plane URLs from the ingest URL.
         std::env::set_var(
-            "SCREENPIPE_ENTERPRISE_UPLOAD_MODE",
+            "DAIMONION_ENTERPRISE_UPLOAD_MODE",
             "direct_upload_encrypted",
         );
         std::env::set_var(
-            "SCREENPIPE_ENTERPRISE_DIRECT_UPLOAD_ROOT_KEY_B64",
+            "DAIMONION_ENTERPRISE_DIRECT_UPLOAD_ROOT_KEY_B64",
             base64::engine::general_purpose::STANDARD.encode([9u8; 32]),
         );
         std::env::set_var(
-            "SCREENPIPE_ENTERPRISE_DIRECT_UPLOAD_KEY_ID",
+            "DAIMONION_ENTERPRISE_DIRECT_UPLOAD_KEY_ID",
             "tenant-root-v1",
         );
         std::env::set_var(
-            "SCREENPIPE_ENTERPRISE_DIRECT_UPLOAD_RECOVERY_ROOT_KEY_B64",
+            "DAIMONION_ENTERPRISE_DIRECT_UPLOAD_RECOVERY_ROOT_KEY_B64",
             base64::engine::general_purpose::STANDARD.encode([8u8; 32]),
         );
         std::env::set_var(
-            "SCREENPIPE_ENTERPRISE_DIRECT_UPLOAD_RECOVERY_KEY_ID",
+            "DAIMONION_ENTERPRISE_DIRECT_UPLOAD_RECOVERY_KEY_ID",
             "tenant-recovery-v1",
         );
         let dir = TempDir::new().unwrap();
@@ -1328,11 +1328,11 @@ mod tests {
 
         // Case 6: readable direct upload does not require customer-held root keys.
         std::env::set_var(
-            "SCREENPIPE_ENTERPRISE_UPLOAD_MODE",
+            "DAIMONION_ENTERPRISE_UPLOAD_MODE",
             "direct_upload_readable",
         );
-        std::env::remove_var("SCREENPIPE_ENTERPRISE_DIRECT_UPLOAD_ROOT_KEY_B64");
-        std::env::remove_var("SCREENPIPE_ENTERPRISE_DIRECT_UPLOAD_RECOVERY_ROOT_KEY_B64");
+        std::env::remove_var("DAIMONION_ENTERPRISE_DIRECT_UPLOAD_ROOT_KEY_B64");
+        std::env::remove_var("DAIMONION_ENTERPRISE_DIRECT_UPLOAD_RECOVERY_ROOT_KEY_B64");
         let dir = TempDir::new().unwrap();
         let cfg =
             EnterpriseSyncConfig::from_env(dir.path().to_path_buf(), "dev".into(), "host".into())
@@ -1351,10 +1351,10 @@ mod tests {
 
         // Case 7: encrypted direct upload without a valid root key fails closed.
         std::env::set_var(
-            "SCREENPIPE_ENTERPRISE_UPLOAD_MODE",
+            "DAIMONION_ENTERPRISE_UPLOAD_MODE",
             "direct_upload_encrypted",
         );
-        std::env::set_var("SCREENPIPE_ENTERPRISE_DIRECT_UPLOAD_ROOT_KEY_B64", "bad");
+        std::env::set_var("DAIMONION_ENTERPRISE_DIRECT_UPLOAD_ROOT_KEY_B64", "bad");
         let dir = TempDir::new().unwrap();
         assert!(EnterpriseSyncConfig::from_env(
             dir.path().to_path_buf(),
@@ -1365,10 +1365,10 @@ mod tests {
 
         // Case 8: encrypted direct upload without a recovery key also fails closed.
         std::env::set_var(
-            "SCREENPIPE_ENTERPRISE_DIRECT_UPLOAD_ROOT_KEY_B64",
+            "DAIMONION_ENTERPRISE_DIRECT_UPLOAD_ROOT_KEY_B64",
             base64::engine::general_purpose::STANDARD.encode([9u8; 32]),
         );
-        std::env::remove_var("SCREENPIPE_ENTERPRISE_DIRECT_UPLOAD_RECOVERY_ROOT_KEY_B64");
+        std::env::remove_var("DAIMONION_ENTERPRISE_DIRECT_UPLOAD_RECOVERY_ROOT_KEY_B64");
         let dir = TempDir::new().unwrap();
         assert!(EnterpriseSyncConfig::from_env(
             dir.path().to_path_buf(),
@@ -1379,37 +1379,37 @@ mod tests {
 
         // Restore prior state so we don't pollute other tests / the process.
         match prior_license {
-            Some(v) => std::env::set_var("SCREENPIPE_ENTERPRISE_LICENSE_KEY", v),
-            None => std::env::remove_var("SCREENPIPE_ENTERPRISE_LICENSE_KEY"),
+            Some(v) => std::env::set_var("DAIMONION_ENTERPRISE_LICENSE_KEY", v),
+            None => std::env::remove_var("DAIMONION_ENTERPRISE_LICENSE_KEY"),
         }
         match prior_url {
-            Some(v) => std::env::set_var("SCREENPIPE_ENTERPRISE_INGEST_URL", v),
-            None => std::env::remove_var("SCREENPIPE_ENTERPRISE_INGEST_URL"),
+            Some(v) => std::env::set_var("DAIMONION_ENTERPRISE_INGEST_URL", v),
+            None => std::env::remove_var("DAIMONION_ENTERPRISE_INGEST_URL"),
         }
         match prior_mode {
-            Some(v) => std::env::set_var("SCREENPIPE_ENTERPRISE_UPLOAD_MODE", v),
-            None => std::env::remove_var("SCREENPIPE_ENTERPRISE_UPLOAD_MODE"),
+            Some(v) => std::env::set_var("DAIMONION_ENTERPRISE_UPLOAD_MODE", v),
+            None => std::env::remove_var("DAIMONION_ENTERPRISE_UPLOAD_MODE"),
         }
         match prior_root_key {
-            Some(v) => std::env::set_var("SCREENPIPE_ENTERPRISE_DIRECT_UPLOAD_ROOT_KEY_B64", v),
-            None => std::env::remove_var("SCREENPIPE_ENTERPRISE_DIRECT_UPLOAD_ROOT_KEY_B64"),
+            Some(v) => std::env::set_var("DAIMONION_ENTERPRISE_DIRECT_UPLOAD_ROOT_KEY_B64", v),
+            None => std::env::remove_var("DAIMONION_ENTERPRISE_DIRECT_UPLOAD_ROOT_KEY_B64"),
         }
         match prior_key_id {
-            Some(v) => std::env::set_var("SCREENPIPE_ENTERPRISE_DIRECT_UPLOAD_KEY_ID", v),
-            None => std::env::remove_var("SCREENPIPE_ENTERPRISE_DIRECT_UPLOAD_KEY_ID"),
+            Some(v) => std::env::set_var("DAIMONION_ENTERPRISE_DIRECT_UPLOAD_KEY_ID", v),
+            None => std::env::remove_var("DAIMONION_ENTERPRISE_DIRECT_UPLOAD_KEY_ID"),
         }
         match prior_recovery_root_key {
             Some(v) => std::env::set_var(
-                "SCREENPIPE_ENTERPRISE_DIRECT_UPLOAD_RECOVERY_ROOT_KEY_B64",
+                "DAIMONION_ENTERPRISE_DIRECT_UPLOAD_RECOVERY_ROOT_KEY_B64",
                 v,
             ),
             None => {
-                std::env::remove_var("SCREENPIPE_ENTERPRISE_DIRECT_UPLOAD_RECOVERY_ROOT_KEY_B64")
+                std::env::remove_var("DAIMONION_ENTERPRISE_DIRECT_UPLOAD_RECOVERY_ROOT_KEY_B64")
             }
         }
         match prior_recovery_key_id {
-            Some(v) => std::env::set_var("SCREENPIPE_ENTERPRISE_DIRECT_UPLOAD_RECOVERY_KEY_ID", v),
-            None => std::env::remove_var("SCREENPIPE_ENTERPRISE_DIRECT_UPLOAD_RECOVERY_KEY_ID"),
+            Some(v) => std::env::set_var("DAIMONION_ENTERPRISE_DIRECT_UPLOAD_RECOVERY_KEY_ID", v),
+            None => std::env::remove_var("DAIMONION_ENTERPRISE_DIRECT_UPLOAD_RECOVERY_KEY_ID"),
         }
     }
 

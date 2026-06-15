@@ -79,14 +79,14 @@ impl ServerCore {
         crate::health::set_boot_phase("starting", Some("starting server"));
 
         // --- Environment setup ---
-        std::env::set_var("SCREENPIPE_FD_LIMIT", "8192");
+        std::env::set_var("DAIMONION_FD_LIMIT", "8192");
         if !config.analytics_id.is_empty() {
-            std::env::set_var("SCREENPIPE_ANALYTICS_ID", &config.analytics_id);
+            std::env::set_var("DAIMONION_ANALYTICS_ID", &config.analytics_id);
         }
         // Tag engine telemetry as the desktop app (vs cli / source) so WAU can be
         // split by distribution. Respect an explicit override (e.g. enterprise embeds).
-        if std::env::var("SCREENPIPE_DISTRIBUTION").is_err() {
-            std::env::set_var("SCREENPIPE_DISTRIBUTION", "desktop-app");
+        if std::env::var("DAIMONION_DISTRIBUTION").is_err() {
+            std::env::set_var("DAIMONION_DISTRIBUTION", "desktop-app");
         }
         analytics::init(config.analytics_enabled);
 
@@ -643,8 +643,8 @@ impl ServerCore {
 
         // mDNS LAN discovery is opt-in (off by default) so the app doesn't
         // trigger the macOS "Local Network" permission prompt unless the user
-        // wants multi-device discovery. Enable with SCREENPIPE_ENABLE_MDNS=1.
-        let mdns_enabled = std::env::var("SCREENPIPE_ENABLE_MDNS")
+        // wants multi-device discovery. Enable with DAIMONION_ENABLE_MDNS=1.
+        let mdns_enabled = std::env::var("DAIMONION_ENABLE_MDNS")
             .map(|v| matches!(v.trim(), "1" | "true" | "TRUE"))
             .unwrap_or(false);
         daimonion_connect::mdns::set_enabled(mdns_enabled);

@@ -74,14 +74,14 @@ const CLIENT_REFRESH: Duration = Duration::from_secs(60 * 60 * 12);
 #[derive(Debug, Clone, Default)]
 pub struct TinfoilImageConfig {
     /// Override the enclave host. Falls back to
-    /// `SCREENPIPE_PRIVACY_FILTER_ENCLAVE`, then `SCREENPIPE_PRIVACY_FILTER_URL`,
+    /// `DAIMONION_PRIVACY_FILTER_ENCLAVE`, then `DAIMONION_PRIVACY_FILTER_URL`,
     /// then [`DEFAULT_ENCLAVE`]. Scheme + path are stripped.
     pub enclave: Option<String>,
     /// GitHub repo (`org/repo`) cross-checked via Sigstore. Falls back
-    /// to `SCREENPIPE_PRIVACY_FILTER_REPO`, then [`DEFAULT_REPO`].
+    /// to `DAIMONION_PRIVACY_FILTER_REPO`, then [`DEFAULT_REPO`].
     pub repo: Option<String>,
-    /// Bearer token. Falls back through `SCREENPIPE_PRIVACY_FILTER_API_KEY`,
-    /// `SCREENPIPE_LOCAL_API_KEY`, then `SCREENPIPE_API_AUTH_KEY` (deprecated alias).
+    /// Bearer token. Falls back through `DAIMONION_PRIVACY_FILTER_API_KEY`,
+    /// `DAIMONION_LOCAL_API_KEY`, then `DAIMONION_API_AUTH_KEY` (deprecated alias).
     pub api_key: Option<String>,
     /// Per-request timeout. Default 30 s.
     pub timeout: Option<Duration>,
@@ -132,21 +132,21 @@ impl TinfoilImageRedactor {
     pub fn new(cfg: TinfoilImageConfig) -> Self {
         let enclave_raw = cfg
             .enclave
-            .or_else(|| std::env::var("SCREENPIPE_PRIVACY_FILTER_ENCLAVE").ok())
-            .or_else(|| std::env::var("SCREENPIPE_PRIVACY_FILTER_URL").ok())
+            .or_else(|| std::env::var("DAIMONION_PRIVACY_FILTER_ENCLAVE").ok())
+            .or_else(|| std::env::var("DAIMONION_PRIVACY_FILTER_URL").ok())
             .unwrap_or_else(|| DEFAULT_ENCLAVE.to_string());
         let enclave = strip_scheme_and_path(&enclave_raw).to_string();
 
         let repo = cfg
             .repo
-            .or_else(|| std::env::var("SCREENPIPE_PRIVACY_FILTER_REPO").ok())
+            .or_else(|| std::env::var("DAIMONION_PRIVACY_FILTER_REPO").ok())
             .unwrap_or_else(|| DEFAULT_REPO.to_string());
 
         let api_key = cfg.api_key.or_else(|| {
-            std::env::var("SCREENPIPE_PRIVACY_FILTER_API_KEY")
+            std::env::var("DAIMONION_PRIVACY_FILTER_API_KEY")
                 .ok()
-                .or_else(|| std::env::var("SCREENPIPE_LOCAL_API_KEY").ok())
-                .or_else(|| std::env::var("SCREENPIPE_API_AUTH_KEY").ok())
+                .or_else(|| std::env::var("DAIMONION_LOCAL_API_KEY").ok())
+                .or_else(|| std::env::var("DAIMONION_API_AUTH_KEY").ok())
         });
 
         let (bearer, has_auth) = match api_key.as_deref() {
@@ -163,7 +163,7 @@ impl TinfoilImageRedactor {
             None => {
                 tracing::info!(
                     "tinfoil_image redactor has no api key — requests will be un-authenticated. \
-                     Set SCREENPIPE_PRIVACY_FILTER_API_KEY or pass via TinfoilImageConfig.api_key."
+                     Set DAIMONION_PRIVACY_FILTER_API_KEY or pass via TinfoilImageConfig.api_key."
                 );
                 (None, false)
             }
@@ -385,9 +385,9 @@ mod tests {
     #[test]
     fn no_api_key_means_no_auth() {
         // Make sure no env var is leaking in.
-        std::env::remove_var("SCREENPIPE_PRIVACY_FILTER_API_KEY");
-        std::env::remove_var("SCREENPIPE_LOCAL_API_KEY");
-        std::env::remove_var("SCREENPIPE_API_AUTH_KEY");
+        std::env::remove_var("DAIMONION_PRIVACY_FILTER_API_KEY");
+        std::env::remove_var("DAIMONION_LOCAL_API_KEY");
+        std::env::remove_var("DAIMONION_API_AUTH_KEY");
         let r = TinfoilImageRedactor::new(cfg());
         assert!(!r.has_auth());
     }

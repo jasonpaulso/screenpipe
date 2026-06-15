@@ -11,14 +11,14 @@
 // Safeguards:
 // - Max 3 concurrent, 10 total per run
 // - 5 min timeout per sub-agent
-// - No nesting (SCREENPIPE_SUBAGENT env blocks recursive spawning)
+// - No nesting (DAIMONION_SUBAGENT env blocks recursive spawning)
 // - Sub-agents inherit pipe token for screenpipe API auth
 // - All children killed on parent exit
 
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 
 // Prevent nesting — sub-agents must not spawn further sub-agents
-if (process.env.SCREENPIPE_SUBAGENT === "1") {
+if (process.env.DAIMONION_SUBAGENT === "1") {
   module.exports = function (_pi: ExtensionAPI) {};
 } else {
   module.exports = createSubAgentExtension;
@@ -88,8 +88,8 @@ async function spawnSubAgent(prompt: string): Promise<string> {
       stdio: ["ignore", "pipe", "pipe"],
       env: {
         ...process.env,
-        SCREENPIPE_SUBAGENT: "1",
-        SCREENPIPE_PARENT_PID: String(parentPid),
+        DAIMONION_SUBAGENT: "1",
+        DAIMONION_PARENT_PID: String(parentPid),
       },
     });
 

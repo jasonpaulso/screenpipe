@@ -1429,7 +1429,7 @@ struct AiResult {
 }
 
 /// Screenpipe cloud API endpoint for enhanced AI suggestions.
-const SCREENPIPE_CLOUD_API: &str = "https://api.screenpipe.com/v1";
+const DAIMONION_CLOUD_API: &str = "https://api.screenpipe.com/v1";
 
 async fn generate_ai_suggestions(
     api: &LocalApiContext,
@@ -1465,7 +1465,7 @@ async fn generate_ai_suggestions(
     let resp = if use_cloud {
         let config = enhanced_ai.unwrap();
         client
-            .post(format!("{}/chat/completions", SCREENPIPE_CLOUD_API))
+            .post(format!("{}/chat/completions", DAIMONION_CLOUD_API))
             .header("Authorization", format!("Bearer {}", config.token))
             .json(&serde_json::json!({
                 "model": "auto",

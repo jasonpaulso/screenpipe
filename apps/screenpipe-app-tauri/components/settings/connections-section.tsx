@@ -399,7 +399,7 @@ async function buildMcpConfig(opts?: { forceNpx?: boolean }): Promise<McpCommand
     .catch(() => undefined);
 
   const env: Record<string, string> | undefined = apiKey
-    ? { SCREENPIPE_LOCAL_API_KEY: apiKey }
+    ? { DAIMONION_LOCAL_API_KEY: apiKey }
     : undefined;
 
   if (opts?.forceNpx) return { command: "npx", args: ["-y", "screenpipe-mcp@latest"], env };
@@ -421,7 +421,7 @@ async function installCursorMcp(): Promise<void> {
   await writeFile(configPath, new TextEncoder().encode(JSON.stringify(config, null, 2)));
 }
 
-const CODEX_SCREENPIPE_TABLE = /(?:^|\n)\[mcp_servers\.daimonion\][\s\S]*?(?=\n\[(?!mcp_servers\.daimonion(?:\.|\]))[^\]]+\]|\s*$)/;
+const CODEX_DAIMONION_TABLE = /(?:^|\n)\[mcp_servers\.daimonion\][\s\S]*?(?=\n\[(?!mcp_servers\.daimonion(?:\.|\]))[^\]]+\]|\s*$)/;
 
 function tomlString(value: string): string {
   return JSON.stringify(value);
@@ -433,7 +433,7 @@ function tomlKey(value: string): string {
 
 function removeCodexMcpConfig(content: string): string {
   return content
-    .replace(CODEX_SCREENPIPE_TABLE, "")
+    .replace(CODEX_DAIMONION_TABLE, "")
     .replace(/^\n+/, "")
     .replace(/\n{3,}/g, "\n\n")
     .trimEnd();
@@ -1936,7 +1936,7 @@ function WhatsAppPanel() {
     try {
       // `bun_path` is sent empty so the backend runs its full resolver
       // (bundled sidecar → common install dirs → PATH). Advanced users can
-      // set SCREENPIPE_BUN_PATH — hardcoding "bun" here used to break
+      // set DAIMONION_BUN_PATH — hardcoding "bun" here used to break
       // fresh Macs that didn't have bun on their shell PATH.
       const res = await localFetch("/connections/whatsapp/pair", {
         method: "POST",

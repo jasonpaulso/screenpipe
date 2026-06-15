@@ -4,7 +4,7 @@
 
 // Validates the production billing gate (components/app-entitlement-gate.tsx).
 //
-// The e2e build bypasses the gate by default (NEXT_PUBLIC_SCREENPIPE_E2E) so the
+// The e2e build bypasses the gate by default (NEXT_PUBLIC_DAIMONION_E2E) so the
 // rest of the suite can exercise real features. This spec re-enables the gate
 // via a localStorage flag (E2E_FORCE_BILLING_GATE_KEY) that only ever makes the
 // gate stricter, then asserts:

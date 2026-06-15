@@ -4,7 +4,7 @@
 
 // Keep this suite off the network — these sessions are fakes, not real
 // usage. Telemetry routing has its own coverage in telemetry.test.mjs.
-process.env.SCREENPIPE_SDK_TELEMETRY = "0";
+process.env.DAIMONION_SDK_TELEMETRY = "0";
 
 // Behavior coverage for the v0.4 event-stream wiring. Specifically:
 // 1. permissions polling is OFF by default (no TCC dialog at session
@@ -22,7 +22,7 @@ import { tmpdir } from "node:os";
 import {
   createScreenpipeSession,
   DEFAULT_EVENT_INTERVALS,
-  SCREENPIPE_EVENTS,
+  DAIMONION_EVENTS,
 } from "../session/index.js";
 
 function scratchDir(label) {
@@ -195,12 +195,12 @@ test("eventIntervals overrides land through to the live watchers", async () => {
   }
 });
 
-test("SCREENPIPE_EVENTS exports the documented taxonomy and DEFAULT_EVENT_INTERVALS sane defaults", () => {
-  assert.ok(SCREENPIPE_EVENTS.includes("start"));
-  assert.ok(SCREENPIPE_EVENTS.includes("frames_progress"));
-  assert.ok(SCREENPIPE_EVENTS.includes("permissions_changed"));
-  assert.ok(SCREENPIPE_EVENTS.includes("app_switched"));
-  assert.ok(SCREENPIPE_EVENTS.includes("error"));
+test("DAIMONION_EVENTS exports the documented taxonomy and DEFAULT_EVENT_INTERVALS sane defaults", () => {
+  assert.ok(DAIMONION_EVENTS.includes("start"));
+  assert.ok(DAIMONION_EVENTS.includes("frames_progress"));
+  assert.ok(DAIMONION_EVENTS.includes("permissions_changed"));
+  assert.ok(DAIMONION_EVENTS.includes("app_switched"));
+  assert.ok(DAIMONION_EVENTS.includes("error"));
   assert.equal(DEFAULT_EVENT_INTERVALS.focusWatcherMs, 1000);
   assert.equal(DEFAULT_EVENT_INTERVALS.framesProgressMs, 5000);
   assert.equal(DEFAULT_EVENT_INTERVALS.permissionsPollMs, 60000);

@@ -177,12 +177,12 @@ async function getCodexConfigPath(): Promise<string> {
   return join(home, ".codex", "config.toml");
 }
 
-const CODEX_SCREENPIPE_TABLE = /(?:^|\n)\[mcp_servers\.daimonion\][\s\S]*?(?=\n\[(?!mcp_servers\.daimonion(?:\.|\]))[^\]]+\]|\s*$)/;
+const CODEX_DAIMONION_TABLE = /(?:^|\n)\[mcp_servers\.daimonion\][\s\S]*?(?=\n\[(?!mcp_servers\.daimonion(?:\.|\]))[^\]]+\]|\s*$)/;
 
 async function isCodexMcpInstalled(): Promise<boolean> {
   try {
     const content = await readTextFile(await getCodexConfigPath());
-    const table = content.match(CODEX_SCREENPIPE_TABLE)?.[0] ?? "";
+    const table = content.match(CODEX_DAIMONION_TABLE)?.[0] ?? "";
     return !!table && !/^\s*enabled\s*=\s*false\s*$/m.test(table);
   } catch { return false; }
 }
@@ -194,7 +194,7 @@ async function installCodexMcp(): Promise<void> {
   try { existing = await readTextFile(configPath); } catch { /* fresh */ }
 
   const withoutScreenpipe = existing
-    .replace(CODEX_SCREENPIPE_TABLE, "")
+    .replace(CODEX_DAIMONION_TABLE, "")
     .replace(/^\n+/, "")
     .replace(/\n{3,}/g, "\n\n")
     .trimEnd();

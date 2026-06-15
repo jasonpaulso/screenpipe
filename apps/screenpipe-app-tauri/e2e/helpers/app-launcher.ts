@@ -14,8 +14,8 @@ export const WEBDRIVER_PORT = 4445;
 /** Focus/server port — single-instance check posts here; must be free for E2E.
  *  Defaults to a non-default port so the e2e instance can coexist with a
  *  developer's running production screenpipe app (which holds 11435). The
- *  Rust binary reads `SCREENPIPE_FOCUS_PORT` from env when this differs. */
-const FOCUS_PORT = Number(process.env.SCREENPIPE_FOCUS_PORT ?? '11436');
+ *  Rust binary reads `DAIMONION_FOCUS_PORT` from env when this differs. */
+const FOCUS_PORT = Number(process.env.DAIMONION_FOCUS_PORT ?? '11436');
 
 /** Kill any process listening on a port. No-op if none. */
 function killPort(port: number): void {
@@ -60,7 +60,7 @@ const APP_PID_FILE = resolve(E2E_DATA_DIR, 'app.pid');
 // the server early-return at the permission gate and `/health` would never
 // respond. See get_e2e_seed_flags + the recording boot path in main.rs.
 //
-// Override with `SCREENPIPE_E2E_SEED=onboarding` (or any custom value) when
+// Override with `DAIMONION_E2E_SEED=onboarding` (or any custom value) when
 // running on a host that DOES have TCC granted and you want to exercise the
 // real capture pipeline. Add `no-audio` when a lane only needs vision/OCR and
 // should not boot Whisper. Add `event-trigger-capture` for the Windows
@@ -69,7 +69,7 @@ const APP_PID_FILE = resolve(E2E_DATA_DIR, 'app.pid');
 // leaves audio UI enabled, disables vision, and saves Screenpipe Cloud while
 // logged out so the fallback UX can be asserted. The same env var is read by
 // specs (e.g. timeline) to skip when recording is off.
-export const E2E_SEED_FLAGS = process.env.SCREENPIPE_E2E_SEED ?? 'onboarding,no-recording';
+export const E2E_SEED_FLAGS = process.env.DAIMONION_E2E_SEED ?? 'onboarding,no-recording';
 
 export function getAppPath(): string {
   const base = resolve(APP_ROOT, 'src-tauri/target/debug');
@@ -122,9 +122,9 @@ export async function startApp(port = WEBDRIVER_PORT): Promise<ReturnType<typeof
   appProcess = spawn(appPath, [], {
     env: {
       ...process.env,
-      SCREENPIPE_DATA_DIR: E2E_DATA_DIR,
-      SCREENPIPE_E2E_SEED: E2E_SEED_FLAGS,
-      SCREENPIPE_FOCUS_PORT: String(FOCUS_PORT),
+      DAIMONION_DATA_DIR: E2E_DATA_DIR,
+      DAIMONION_E2E_SEED: E2E_SEED_FLAGS,
+      DAIMONION_FOCUS_PORT: String(FOCUS_PORT),
       TAURI_WEBDRIVER_PORT: String(port),
       // When the app panics under E2E (common during early platform bring-up),
       // a backtrace in CI logs is far more actionable than the default "run with

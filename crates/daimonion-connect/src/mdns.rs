@@ -42,7 +42,7 @@ static DAEMON: OnceLock<Option<ServiceDaemon>> = OnceLock::new();
 /// Whether mDNS LAN peer discovery is enabled. Off by default: both advertising
 /// and browsing open a multicast socket, which makes macOS prompt for "Local
 /// Network" access. Discovery is opt-in (CLI `--enable-mdns` /
-/// `SCREENPIPE_ENABLE_MDNS`), so screenpipe stays silent on the network unless
+/// `DAIMONION_ENABLE_MDNS`), so screenpipe stays silent on the network unless
 /// the user wants multi-device discovery / remote sync.
 static ENABLED: AtomicBool = AtomicBool::new(false);
 

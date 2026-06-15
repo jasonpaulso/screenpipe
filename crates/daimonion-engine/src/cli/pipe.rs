@@ -16,7 +16,7 @@ pub async fn handle_pipe_command(command: &PipeCommand) -> anyhow::Result<()> {
     let pipes_dir = daimonion_core::paths::default_screenpipe_data_dir().join("pipes");
     std::fs::create_dir_all(&pipes_dir)?;
 
-    let user_token = std::env::var("SCREENPIPE_API_KEY").ok();
+    let user_token = std::env::var("DAIMONION_API_KEY").ok();
     let pi: Arc<dyn AgentExecutor> = Arc::new(PiExecutor::new(user_token));
     let mut executors: HashMap<String, Arc<dyn AgentExecutor>> = HashMap::new();
     executors.insert("pi".to_string(), pi);
@@ -154,15 +154,15 @@ pub async fn handle_pipe_command(command: &PipeCommand) -> anyhow::Result<()> {
 
 /// Get the API base URL from env or default.
 pub fn api_base_url() -> String {
-    std::env::var("SCREENPIPE_API_BASE_URL")
+    std::env::var("DAIMONION_API_BASE_URL")
         .unwrap_or_else(|_| "https://screenpipe.com".to_string())
 }
 
 /// Get the auth token, checking in order:
-/// 1. SCREENPIPE_API_KEY env var
+/// 1. DAIMONION_API_KEY env var
 /// 2. ~/.daimonion/store.bin (settings.user.token — written by desktop app or `screenpipe login`)
 pub fn get_auth_token() -> Option<String> {
-    if let Ok(key) = std::env::var("SCREENPIPE_API_KEY") {
+    if let Ok(key) = std::env::var("DAIMONION_API_KEY") {
         return Some(key);
     }
 
@@ -212,7 +212,7 @@ async fn handle_publish_command(name: &str, pipes_dir: &std::path::Path) -> anyh
 
     let token = get_auth_token().ok_or_else(|| {
         anyhow::anyhow!(
-            "no auth token found. set SCREENPIPE_API_KEY env var or create ~/.daimonion/auth.json"
+            "no auth token found. set DAIMONION_API_KEY env var or create ~/.daimonion/auth.json"
         )
     })?;
 
@@ -431,7 +431,7 @@ async fn handle_info_command(slug: &str) -> anyhow::Result<()> {
 async fn handle_status_command(slug: &str) -> anyhow::Result<()> {
     let token = get_auth_token().ok_or_else(|| {
         anyhow::anyhow!(
-            "no auth token found. set SCREENPIPE_API_KEY env var or create ~/.daimonion/auth.json"
+            "no auth token found. set DAIMONION_API_KEY env var or create ~/.daimonion/auth.json"
         )
     })?;
 

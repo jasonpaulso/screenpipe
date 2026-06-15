@@ -613,7 +613,7 @@ async fn capture_loop(
 ) {
     let frame_interval = Duration::from_millis((1000.0 / TARGET_FPS) as u64);
     let mut ticker = interval(frame_interval);
-    let perf_log = std::env::var("SCREENPIPE_SDK_PERF")
+    let perf_log = std::env::var("DAIMONION_SDK_PERF")
         .map(|v| v == "1" || v.eq_ignore_ascii_case("true"))
         .unwrap_or(false);
 
@@ -674,7 +674,7 @@ async fn capture_loop(
             }
             let n = frames_written.fetch_add(1, Ordering::Relaxed) + 1;
             // Per-frame perf log, opt-in via env var so customer-facing
-            // runs stay silent. Set SCREENPIPE_SDK_PERF=1 to see
+            // runs stay silent. Set DAIMONION_SDK_PERF=1 to see
             // capture/encode/size per captured frame.
             if perf_log && (n <= 5 || n % 30 == 0) {
                 eprintln!(

@@ -108,7 +108,7 @@ save, then open a new Codex session. if you use a local screenpipe API key, set 
 
 ```toml
 [mcp_servers.screenpipe.env]
-SCREENPIPE_LOCAL_API_KEY = "your-local-api-key"
+DAIMONION_LOCAL_API_KEY = "your-local-api-key"
 ```
 
 ## cursor
@@ -240,7 +240,7 @@ npx @modelcontextprotocol/inspector npx screenpipe-mcp
 | --- | --- |
 | no MCP tools appear | restart the client and verify the config path |
 | `npx` not found | install Node.js 18+ or use the one-click in-app setup |
-| `403` or unauthorized | set `SCREENPIPE_LOCAL_API_KEY` or refresh API auth in settings |
+| `403` or unauthorized | set `DAIMONION_LOCAL_API_KEY` or refresh API auth in settings |
 | empty results | wait for capture, broaden the query, or verify `/search?limit=1` |
 | client hangs on startup | run the inspector command above and check Node version |
 | Claude Desktop on Windows cannot see config | check whether you use the normal or Microsoft Store/MSIX install |

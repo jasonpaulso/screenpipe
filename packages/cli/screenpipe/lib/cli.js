@@ -25,7 +25,7 @@ if (!bin) {
 // be split by distribution. Respect an explicit override if one is already set.
 const child = spawn(bin, process.argv.slice(2), {
   stdio: "inherit",
-  env: { ...process.env, SCREENPIPE_DISTRIBUTION: process.env.SCREENPIPE_DISTRIBUTION || "cli" },
+  env: { ...process.env, DAIMONION_DISTRIBUTION: process.env.DAIMONION_DISTRIBUTION || "cli" },
 });
 let forwardingSignal = null;
 

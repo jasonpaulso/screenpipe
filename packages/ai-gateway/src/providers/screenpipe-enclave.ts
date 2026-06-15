@@ -18,7 +18,7 @@ import { OpenAIProvider } from './openai';
  *
  * The Tinfoil shim attests the image digest from the GitHub release and
  * gates `/v1/*` behind a Bearer-token check against Tinfoil's control
- * plane, so `SCREENPIPE_ENCLAVE_API_KEY` must be issued by our org's
+ * plane, so `DAIMONION_ENCLAVE_API_KEY` must be issued by our org's
  * Tinfoil dashboard (different scope than `TINFOIL_API_KEY`, which is
  * for Tinfoil's hosted inference endpoint).
  */
@@ -30,8 +30,8 @@ export class ScreenpipeEnclaveProvider extends OpenAIProvider {
 	}
 }
 
-const SCREENPIPE_ENCLAVE_MODEL_IDS = ['gemma4-e4b'];
+const DAIMONION_ENCLAVE_MODEL_IDS = ['gemma4-e4b'];
 
 export function isScreenpipeEnclaveModel(model: string): boolean {
-	return SCREENPIPE_ENCLAVE_MODEL_IDS.includes(model.toLowerCase());
+	return DAIMONION_ENCLAVE_MODEL_IDS.includes(model.toLowerCase());
 }

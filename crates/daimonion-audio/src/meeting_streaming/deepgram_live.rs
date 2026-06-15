@@ -617,14 +617,14 @@ mod tests {
     /// non-english output still needs a live meeting or a localized fixture.
     #[tokio::test]
     async fn deepgram_live_streaming_accepts_language_params() {
-        let Some(api_key) = std::env::var("SCREENPIPE_MEETING_DEEPGRAM_API_KEY")
+        let Some(api_key) = std::env::var("DAIMONION_MEETING_DEEPGRAM_API_KEY")
             .ok()
             .or_else(|| std::env::var("DEEPGRAM_API_KEY").ok())
             .map(|key| key.trim().to_string())
             .filter(|key| !key.is_empty())
         else {
             eprintln!(
-                "skipping deepgram live smoke test: set SCREENPIPE_MEETING_DEEPGRAM_API_KEY (or DEEPGRAM_API_KEY) to run it"
+                "skipping deepgram live smoke test: set DAIMONION_MEETING_DEEPGRAM_API_KEY (or DEEPGRAM_API_KEY) to run it"
             );
             return;
         };

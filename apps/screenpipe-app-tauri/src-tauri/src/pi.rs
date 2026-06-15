@@ -295,7 +295,7 @@ fn check_package_bin(pkg_dir: std::path::PathBuf, bin_name: &str) -> Option<Stri
 const PI_PACKAGE: &str = "@earendil-works/pi-coding-agent@0.75.4";
 const PI_AI_PACKAGE: &str = "@earendil-works/pi-ai@0.75.4";
 const PI_NAMESPACE_DIR: &str = "@earendil-works";
-const SCREENPIPE_API_URL: &str = "https://api.screenpipe.com/v1";
+const DAIMONION_API_URL: &str = "https://api.screenpipe.com/v1";
 
 /// Pool of Pi sessions — each session_id gets its own PiManager/process.
 pub struct PiPool {
@@ -1062,10 +1062,10 @@ async fn build_models_json(
     let mut providers_map = serde_json::Map::new();
 
     // Always add screenpipe cloud provider
-    let api_key_value = user_token.unwrap_or("SCREENPIPE_API_KEY");
-    let models = screenpipe_cloud_models(SCREENPIPE_API_URL, user_token).await;
+    let api_key_value = user_token.unwrap_or("DAIMONION_API_KEY");
+    let models = screenpipe_cloud_models(DAIMONION_API_URL, user_token).await;
     let screenpipe_provider = json!({
-        "baseUrl": SCREENPIPE_API_URL,
+        "baseUrl": DAIMONION_API_URL,
         "api": "openai-completions",
         "apiKey": api_key_value,
         "authHeader": true,
@@ -1688,17 +1688,17 @@ pub async fn pi_start_inner(
     }
 
     if let Some(ref token) = user_token {
-        cmd.env("SCREENPIPE_API_KEY", token);
+        cmd.env("DAIMONION_API_KEY", token);
     }
 
     // Pass local API config so the Pi agent can authenticate to the runtime local API.
     {
         use crate::recording::local_api_context_from_app;
         let api = local_api_context_from_app(&app);
-        cmd.env("SCREENPIPE_LOCAL_API_PORT", api.port.to_string());
-        cmd.env("SCREENPIPE_LOCAL_API_URL", api.url(""));
+        cmd.env("DAIMONION_LOCAL_API_PORT", api.port.to_string());
+        cmd.env("DAIMONION_LOCAL_API_URL", api.url(""));
         if let Some(ref key) = api.api_key {
-            cmd.env("SCREENPIPE_LOCAL_API_KEY", key);
+            cmd.env("DAIMONION_LOCAL_API_KEY", key);
         }
     }
 
@@ -1708,10 +1708,10 @@ pub async fn pi_start_inner(
     // x-screenpipe-session and the navigate handler rides it to the frontend.
     // If the user switches to another chat mid-run, this agent's later
     // navigations no longer match the on-screen conversation and stay hidden.
-    cmd.env("SCREENPIPE_SESSION_ID", &sid);
+    cmd.env("DAIMONION_SESSION_ID", &sid);
 
     // Chat session ID for per-session artifact isolation
-    cmd.env("SCREENPIPE_CHAT_SESSION_ID", &sid);
+    cmd.env("DAIMONION_CHAT_SESSION_ID", &sid);
 
     // Auto-auth the agent's `curl localhost:3030/...` calls via a bash
     // shim sourced from $BASH_ENV on every subshell. See bash_env.rs in
@@ -1760,10 +1760,10 @@ pub async fn pi_start_inner(
     // (line ~1477) but the disk-backed store has one, set it here so
     // mcp-bridge.ts can authenticate its GET /mcp-servers calls. Sets the
     // canonical name + the deprecated alias for old pipe.md files on disk.
-    // TODO(remove next release): drop SCREENPIPE_API_AUTH_KEY alias.
+    // TODO(remove next release): drop DAIMONION_API_AUTH_KEY alias.
     if let Some(key) = crate::store::resolved_api_auth_key() {
-        cmd.env("SCREENPIPE_LOCAL_API_KEY", &key);
-        cmd.env("SCREENPIPE_API_AUTH_KEY", key); // deprecated alias
+        cmd.env("DAIMONION_LOCAL_API_KEY", &key);
+        cmd.env("DAIMONION_API_AUTH_KEY", key); // deprecated alias
     }
 
     // Spawn process
@@ -3460,7 +3460,7 @@ error: InstallFailed extracting tarball"#;
         let sp = &providers["screenpipe"];
         assert_eq!(sp["baseUrl"], "https://api.screenpipe.com/v1");
         assert_eq!(sp["api"], "openai-completions");
-        assert_eq!(sp["apiKey"], "SCREENPIPE_API_KEY");
+        assert_eq!(sp["apiKey"], "DAIMONION_API_KEY");
         assert_eq!(sp["authHeader"], true);
         assert!(sp["models"].as_array().unwrap().len() > 0);
     }

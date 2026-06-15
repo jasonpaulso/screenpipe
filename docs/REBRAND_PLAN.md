@@ -21,7 +21,7 @@ shippable and verifiable.
 - [x] **Phase 3 — library crate rename**: 19 crates `screenpipe-* → daimonion-*` (dirs + Cargo + 361 .rs),
       `cargo check -p daimonion-engine` green (`14e9f1614`). Binary names kept (`screenpipe`, `screenpipe-app`).
 - [ ] **Phase 1b — UI display strings** (TS, tsc-verifiable; skip OAuth-consent text / test fixtures / protocol strings)
-- [ ] **Phase 3b — env vars** `SCREENPIPE_ → DAIMONION_` + back-compat alias shim (engine-verifiable)
+- [ ] **Phase 3b — env vars** `DAIMONION_ → DAIMONION_` + back-compat alias shim (engine-verifiable)
 - [ ] **Phase 4 — distribution**: 14 npm names, MCP server name, CLI binary, **app binary** rename
       (e2e/log/process/packaging blast radius — needs the app buildable)
 - [ ] **Phase 5 — system identity**: bundle id, `daimonion://` scheme, `~/.daimonion → ~/.daimonion`
@@ -63,7 +63,7 @@ rg -l -i screenpipe | wc -l                                   # files mentioning
 rg -l "AI that knows everything you've seen" | wc -l          # source-file headers
 rg -o '^name = "(screenpipe[^"]*)"' -g Cargo.toml | sort -u   # crate name declarations
 rg -n '"name":\s*"(@?screenpipe[^"]*)"' -g package.json       # npm package names
-rg -on "SCREENPIPE_[A-Z0-9_]+" | sort -u                      # env var tokens
+rg -on "DAIMONION_[A-Z0-9_]+" | sort -u                      # env var tokens
 rg -c "screenpipe://"                                         # deep-link scheme
 rg -l "\.daimonion" | wc -l                                  # data-dir refs
 ```
@@ -98,7 +98,7 @@ Independent of naming; grouped here as a clean-identity step. You do not own the
 - **Cargo crates** (~30): rename `screenpipe-*` → `<newname>-*` in each `[package] name`, every
   dependency table that references them, the workspace globs/excludes in the root `Cargo.toml`, the
   eval `[[bin]]` names, and `Cargo.lock`. Regenerate Tauri TS bindings: `bun run bindings:generate`.
-- **Env vars** (`SCREENPIPE_*` → `<NEWNAME>_*`): rename with a **back-compat alias shim** — read the
+- **Env vars** (`DAIMONION_*` → `<NEWNAME>_*`): rename with a **back-compat alias shim** — read the
   new name, fall back to the old — so local dev, CI, and any user config survive the transition.
   Centralize the lookup so the fallback lives in one helper.
 

@@ -15,7 +15,7 @@ const child = spawn(electron, ["."], {
   cwd: here,
   env: {
     ...process.env,
-    SCREENPIPE_ELECTRON_EXAMPLE_SMOKE: "1",
+    DAIMONION_ELECTRON_EXAMPLE_SMOKE: "1",
   },
   stdio: "inherit",
 });

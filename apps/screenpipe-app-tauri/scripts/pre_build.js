@@ -211,14 +211,14 @@ async function copyBunBinary() {
 		// the Intel app — surfaced as Pi-install "Bad CPU type in executable
 		// (os error 86)" on Intel Macs).
 		const bunVersion = '1.3.10';
-		const releaseTarget = process.env.SCREENPIPE_RELEASE_TARGET;
+		const releaseTarget = process.env.DAIMONION_RELEASE_TARGET;
 
 		const archMap = [
 			{ target: 'aarch64-apple-darwin', url: `https://github.com/oven-sh/bun/releases/download/bun-v${bunVersion}/bun-darwin-aarch64.zip`, dest: bunDest1, label: 'aarch64' },
 			{ target: 'x86_64-apple-darwin',  url: `https://github.com/oven-sh/bun/releases/download/bun-v${bunVersion}/bun-darwin-x64.zip`,     dest: bunDest2, label: 'x64' },
 		];
 
-		// In CI we set SCREENPIPE_RELEASE_TARGET per-matrix-entry and only need
+		// In CI we set DAIMONION_RELEASE_TARGET per-matrix-entry and only need
 		// that one sidecar. Locally (no env), download both so either-arch dev
 		// builds work without re-running this script.
 		const wanted = releaseTarget
@@ -226,7 +226,7 @@ async function copyBunBinary() {
 			: archMap;
 
 		if (wanted.length === 0) {
-			throw new Error(`unknown SCREENPIPE_RELEASE_TARGET for macOS: ${releaseTarget}`);
+			throw new Error(`unknown DAIMONION_RELEASE_TARGET for macOS: ${releaseTarget}`);
 		}
 
 		for (const { url, dest, label } of wanted) {

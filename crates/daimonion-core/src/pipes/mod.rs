@@ -16,7 +16,7 @@ pub mod preset_fallback;
 pub mod sync;
 
 use crate::agents::{
-    pi::{PiExecutor, SCREENPIPE_API_URL},
+    pi::{PiExecutor, DAIMONION_API_URL},
     AgentExecutor, ExecutionHandle,
 };
 use anyhow::{anyhow, Result};
@@ -175,7 +175,7 @@ pub struct PipeConfig {
     #[serde(default, skip_serializing_if = "is_false")]
     pub subagent: bool,
 
-    /// When true, the pipe's agent has `SCREENPIPE_FILTER_PII=1` in its
+    /// When true, the pipe's agent has `DAIMONION_FILTER_PII=1` in its
     /// env so the BASH_ENV shim rewrites every `curl .../search` call to
     /// append `filter_pii=1` — PII is redacted server-side before the
     /// agent ever sees it. Use for pipes that forward results to third
@@ -1000,7 +1000,7 @@ fn resolve_preset(pipes_dir: &Path, preset_id: &str) -> Option<ResolvedPreset> {
 
     if !store_path.exists() {
         // Bootstrap for CLI users who don't have the app.
-        // Default to screenpipe cloud — user needs SCREENPIPE_API_KEY env var.
+        // Default to screenpipe cloud — user needs DAIMONION_API_KEY env var.
         // Mirrors the app's first-install seed (use-settings.tsx makeDefaultPresets):
         // non-pro Sonnet for chat, Haiku for pipes. Users can swap to Opus 4.7 later.
         let default_store = serde_json::json!({
@@ -1353,7 +1353,7 @@ pub struct PipeManager {
     /// Connected integrations context injected into every pipe *system* prompt.
     /// Set by the engine layer (which owns the SecretStore) via `set_connections_context`.
     connections_context: Option<String>,
-    /// Local API auth key — injected into pipe subprocesses as SCREENPIPE_LOCAL_API_KEY
+    /// Local API auth key — injected into pipe subprocesses as DAIMONION_LOCAL_API_KEY
     /// so pipes can authenticate to localhost:3030 when API auth is enabled.
     local_api_key: Option<String>,
     /// Circuit breaker registry for AI preset fallback.
@@ -1450,7 +1450,7 @@ impl PipeManager {
         self.local_api_key = key.clone();
         if let Some(ref k) = key {
             // SAFETY: called during single-threaded init before scheduler starts
-            unsafe { std::env::set_var("SCREENPIPE_LOCAL_API_KEY", k) };
+            unsafe { std::env::set_var("DAIMONION_LOCAL_API_KEY", k) };
         }
     }
 
@@ -2134,7 +2134,7 @@ impl PipeManager {
             let cloud_token = executor.user_token();
             if let Err(e) = PiExecutor::ensure_pi_config(
                 cloud_token.as_deref(),
-                SCREENPIPE_API_URL,
+                DAIMONION_API_URL,
                 run_provider.as_deref(),
                 Some(&run_model),
                 run_provider_url.as_deref(),
@@ -2636,7 +2636,7 @@ impl PipeManager {
             if config.agent == "pi" {
                 if let Err(e) = PiExecutor::ensure_pi_config(
                     None,
-                    SCREENPIPE_API_URL,
+                    DAIMONION_API_URL,
                     run_provider.as_deref(),
                     Some(&run_model),
                     run_provider_url.as_deref(),
@@ -3690,7 +3690,7 @@ impl PipeManager {
                         let cloud_token = executor.user_token();
                         if let Err(e) = PiExecutor::ensure_pi_config(
                             cloud_token.as_deref(),
-                            SCREENPIPE_API_URL,
+                            DAIMONION_API_URL,
                             provider.as_deref(),
                             Some(&model),
                             provider_url.as_deref(),
@@ -4371,7 +4371,7 @@ fn render_pipe_system_prompt(
     // the parent env is only populated via the `set_local_api_key` side-effect
     // and may be empty when api_auth_key was resolved late or never set.
     let api_auth_note = if local_api_key.is_some() {
-        "\nAPI Authentication: REQUIRED. Add `-H \"Authorization: Bearer $SCREENPIPE_LOCAL_API_KEY\"` to ALL curl requests to the Screenpipe API. The env var is already set in your environment.\n"
+        "\nAPI Authentication: REQUIRED. Add `-H \"Authorization: Bearer $DAIMONION_LOCAL_API_KEY\"` to ALL curl requests to the Screenpipe API. The env var is already set in your environment.\n"
     } else {
         ""
     };
@@ -5784,7 +5784,7 @@ mod tests {
             sys.contains("API Authentication: REQUIRED"),
             "auth note must be emitted when local_api_key is Some"
         );
-        assert!(sys.contains("SCREENPIPE_LOCAL_API_KEY"));
+        assert!(sys.contains("DAIMONION_LOCAL_API_KEY"));
     }
 
     #[test]

@@ -570,15 +570,15 @@ pub struct RecordArgs {
     /// Enable mDNS LAN discovery (advertise this instance + browse for peers).
     /// Off by default: it opens a multicast socket, which triggers the macOS
     /// "Local Network" permission prompt. Opt in for multi-device sync.
-    #[arg(long, env = "SCREENPIPE_ENABLE_MDNS", default_value_t = false)]
+    #[arg(long, env = "DAIMONION_ENABLE_MDNS", default_value_t = false)]
     pub enable_mdns: bool,
 
     /// API token for cloud sync
-    #[arg(long, env = "SCREENPIPE_SYNC_TOKEN")]
+    #[arg(long, env = "DAIMONION_SYNC_TOKEN")]
     pub sync_token: Option<String>,
 
     /// Password for encrypting synced data
-    #[arg(long, env = "SCREENPIPE_SYNC_PASSWORD")]
+    #[arg(long, env = "DAIMONION_SYNC_PASSWORD")]
     pub sync_password: Option<String>,
 
     /// Interval between sync cycles in seconds
@@ -611,7 +611,7 @@ pub struct RecordArgs {
     pub disable_keyboard_capture: bool,
 
     /// Require authentication for remote API access. When enabled, non-localhost
-    /// requests must include Authorization: Bearer <SCREENPIPE_API_KEY>.
+    /// requests must include Authorization: Bearer <DAIMONION_API_KEY>.
     /// Localhost requests are always allowed.
     #[arg(long, default_value_t = true)]
     pub api_auth: bool,
@@ -1717,7 +1717,7 @@ pub struct SearchArgs {
 /// Mirrors the `screenpipe-team` skill 1:1 — same endpoints, same vocabulary.
 /// All three variants hit `https://screenpi.pe/api/enterprise/v1/*` directly
 /// with the admin's `team_api_token` from `~/.daimonion/enterprise.json`
-/// (or `SCREENPIPE_TEAM_API_TOKEN` env override). No daemon needed.
+/// (or `DAIMONION_TEAM_API_TOKEN` env override). No daemon needed.
 #[derive(Subcommand, Debug)]
 pub enum TeamCommand {
     /// List devices reporting to this org
@@ -1912,21 +1912,21 @@ pub enum RemoteSyncCommand {
 
 /// Shared connection flags for `screenpipe sync remote {test,now}`.
 ///
-/// All values can also come from env vars: SCREENPIPE_REMOTE_HOST,
-/// SCREENPIPE_REMOTE_USER, SCREENPIPE_REMOTE_KEY, SCREENPIPE_REMOTE_PATH.
+/// All values can also come from env vars: DAIMONION_REMOTE_HOST,
+/// DAIMONION_REMOTE_USER, DAIMONION_REMOTE_KEY, DAIMONION_REMOTE_PATH.
 #[derive(clap::Args, Debug)]
 pub struct RemoteSyncArgs {
     /// Remote host (IP or DNS, e.g. "myserver.tail-scale.ts.net")
-    #[arg(long, env = "SCREENPIPE_REMOTE_HOST")]
+    #[arg(long, env = "DAIMONION_REMOTE_HOST")]
     pub host: String,
     /// SSH user
-    #[arg(long, env = "SCREENPIPE_REMOTE_USER")]
+    #[arg(long, env = "DAIMONION_REMOTE_USER")]
     pub user: String,
     /// Path to SSH private key (e.g. ~/.ssh/id_ed25519)
-    #[arg(long, env = "SCREENPIPE_REMOTE_KEY")]
+    #[arg(long, env = "DAIMONION_REMOTE_KEY")]
     pub key_path: String,
     /// Absolute path on the remote where ~/.daimonion/ should land
-    #[arg(long, env = "SCREENPIPE_REMOTE_PATH")]
+    #[arg(long, env = "DAIMONION_REMOTE_PATH")]
     pub remote_path: String,
     /// SSH port
     #[arg(long, default_value_t = 22)]

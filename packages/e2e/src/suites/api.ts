@@ -167,7 +167,7 @@ export async function runApiTests(
 // ── Direct invocation ────────────────────────────────────────────────
 
 if (import.meta.main) {
-  const base = process.env.SCREENPIPE_BASE_URL ?? "http://localhost:3030";
+  const base = process.env.DAIMONION_BASE_URL ?? "http://localhost:3030";
   console.log(`\nAPI tests against ${base}\n`);
   const { passed, failed } = await runApiTests(base);
   console.log(`\n${passed} passed, ${failed} failed`);

@@ -175,4 +175,4 @@ Credentials are stored locally at `~/.daimonion/connections.json`.
 screenpipe pipe publish <pipe-name>
 ```
 
-Reads `~/.daimonion/pipes/<pipe-name>/pipe.md`, extracts title/description/icon/category from YAML frontmatter, and publishes to the screenpipe pipe store. Requires auth (SCREENPIPE_API_KEY env var or `~/.daimonion/auth.json`).
+Reads `~/.daimonion/pipes/<pipe-name>/pipe.md`, extracts title/description/icon/category from YAML frontmatter, and publishes to the screenpipe pipe store. Requires auth (DAIMONION_API_KEY env var or `~/.daimonion/auth.json`).

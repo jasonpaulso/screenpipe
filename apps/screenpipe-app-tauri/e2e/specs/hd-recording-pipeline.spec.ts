@@ -32,7 +32,7 @@
  *
  * Run (from apps/screenpipe-app-tauri, against a --features e2e debug build):
  *   bun run test:e2e:hd:macos
- *   # which is: SCREENPIPE_E2E_SEED=onboarding bun run wdio run e2e/wdio.conf.ts \
+ *   # which is: DAIMONION_E2E_SEED=onboarding bun run wdio run e2e/wdio.conf.ts \
  *   #             --spec e2e/specs/hd-recording-pipeline.spec.ts
  */
 

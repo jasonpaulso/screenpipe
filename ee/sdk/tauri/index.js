@@ -18,9 +18,9 @@ const DEFAULT_TAURI_COMMANDS = Object.freeze({
 
 /**
  * Tauri event name the Rust plugin emits every screenpipe session event
- * on. Keep in sync with `SCREENPIPE_EVENT_CHANNEL` in `lib.rs`.
+ * on. Keep in sync with `DAIMONION_EVENT_CHANNEL` in `lib.rs`.
  */
-const SCREENPIPE_EVENT_CHANNEL = "screenpipe://event";
+const DAIMONION_EVENT_CHANNEL = "screenpipe://event";
 
 async function defaultInvoke(command, payload) {
   const api = await import("@tauri-apps/api/core");
@@ -60,7 +60,7 @@ function createScreenpipeTauriClient(options = {}) {
   const invoke = options.invoke || defaultInvoke;
   const listen = options.listen || defaultListen;
   const commands = mergeCommands(options.commands);
-  const eventChannel = options.eventChannel || SCREENPIPE_EVENT_CHANNEL;
+  const eventChannel = options.eventChannel || DAIMONION_EVENT_CHANNEL;
 
   // Telemetry runs natively in the Rust plugin — crash reports to Sentry,
   // usage to PostHog — so there's no webview fetch and no Content-Security-
@@ -149,6 +149,6 @@ function createScreenpipeTauriClient(options = {}) {
 
 module.exports = {
   DEFAULT_TAURI_COMMANDS,
-  SCREENPIPE_EVENT_CHANNEL,
+  DAIMONION_EVENT_CHANNEL,
   createScreenpipeTauriClient,
 };

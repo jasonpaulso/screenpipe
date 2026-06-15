@@ -72,7 +72,7 @@ fn set_fd_limit() {
     use std::env;
 
     // Check if a custom limit was set via environment variable
-    let desired_limit: u64 = env::var("SCREENPIPE_FD_LIMIT")
+    let desired_limit: u64 = env::var("DAIMONION_FD_LIMIT")
         .ok()
         .and_then(|s| s.parse().ok())
         .unwrap_or(8192); // Default to 8192 if not set
@@ -211,7 +211,7 @@ fn setup_logging(
             // of "Reserving memory in BFCArena", "GraphTransformer modified",
             // "Saving initialized tensors" lines per session init. Suppress
             // unless the user asks for real issues (warn+) or overrides via
-            // SCREENPIPE_LOG=ort=info.
+            // DAIMONION_LOG=ort=info.
             .add_directive("ort=warn".parse().unwrap());
 
         // xcap probes stale monitor / window IDs on every refresh and emits
@@ -226,7 +226,7 @@ fn setup_logging(
             .add_directive("xcap::platform::impl_monitor=off".parse().unwrap())
             .add_directive("xcap::platform::utils=off".parse().unwrap());
 
-        let filter = env::var("SCREENPIPE_LOG")
+        let filter = env::var("DAIMONION_LOG")
             .unwrap_or_default()
             .split(',')
             .filter(|s| !s.is_empty())
@@ -554,7 +554,7 @@ async fn main() -> anyhow::Result<()> {
         // Attach non-sensitive CLI settings to all future Sentry events
         sentry::configure_scope(|scope| {
             // Set user.id to the same analytics ID used by PostHog. Embedded
-            // customers can set SCREENPIPE_SUPPORT_ID to make standalone CLI
+            // customers can set DAIMONION_SUPPORT_ID to make standalone CLI
             // events searchable by customer without using email.
             scope.set_user(Some(sentry::protocol::User {
                 id: Some(analytics::get_distinct_id().to_string()),
@@ -648,8 +648,8 @@ async fn main() -> anyhow::Result<()> {
         // log to .prev so we don't truncate the message we most need.
         crash_log::rotate_panic_log(&panic_dir);
 
-        // Reuse the existing embedder attribution (SCREENPIPE_EMBEDDER /
-        // SCREENPIPE_CUSTOMER_ID / ...) so the local crash record is identifiable
+        // Reuse the existing embedder attribution (DAIMONION_EMBEDDER /
+        // DAIMONION_CUSTOMER_ID / ...) so the local crash record is identifiable
         // even when telemetry is off. When telemetry is on, the Sentry scope is
         // already tagged with the same context above, so panic events inherit it
         // and no per-event tagging is needed here.
@@ -1237,9 +1237,9 @@ async fn main() -> anyhow::Result<()> {
     }
 
     // Standalone CLI users miss out on the chat/timeline UI — point them at the
-    // desktop app. SCREENPIPE_ANALYTICS_ID is only set when the Tauri app spawns
+    // desktop app. DAIMONION_ANALYTICS_ID is only set when the Tauri app spawns
     // the engine, so its absence is a reliable "this is a bare CLI run" signal.
-    if std::env::var("SCREENPIPE_ANALYTICS_ID").is_err() {
+    if std::env::var("DAIMONION_ANALYTICS_ID").is_err() {
         eprintln!();
         eprintln!("  tip: get the desktop app for chat, timeline, and search UI");
         eprintln!("       → https://screenpi.pe/onboarding");
@@ -1265,9 +1265,9 @@ async fn main() -> anyhow::Result<()> {
     server.api_auth = config.api_auth;
     server.api_auth_key = config.api_auth_key.clone();
     // Cloud JWT for the /v1/chat/completions proxy. CLI/binary path reads
-    // SCREENPIPE_API_KEY directly; desktop path overrides via
+    // DAIMONION_API_KEY directly; desktop path overrides via
     // SCServer::cloud_token_handle after spawn.
-    if let Ok(t) = std::env::var("SCREENPIPE_API_KEY") {
+    if let Ok(t) = std::env::var("DAIMONION_API_KEY") {
         if !t.is_empty() {
             server.cloud_token.store(std::sync::Arc::new(Some(t)));
         }
@@ -1354,7 +1354,7 @@ async fn main() -> anyhow::Result<()> {
     let pipes_dir = local_data_dir.join("pipes");
     std::fs::create_dir_all(&pipes_dir).ok();
 
-    let user_token = std::env::var("SCREENPIPE_API_KEY").ok();
+    let user_token = std::env::var("DAIMONION_API_KEY").ok();
     let pi_executor = std::sync::Arc::new(
         daimonion_core::agents::pi::PiExecutor::new(user_token.clone())
             .with_api_auth_key(config.api_auth_key.clone()),
@@ -1363,10 +1363,10 @@ async fn main() -> anyhow::Result<()> {
     // Workflow event classifier — opt-in cloud feature. Polls recent activity
     // and emits `WorkflowEvent`s on the bus so pipes with `trigger.events`
     // frontmatter can run. Routed through the gateway by default; self-host
-    // can override with SCREENPIPE_EVENT_CLASSIFIER_URL.
+    // can override with DAIMONION_EVENT_CLASSIFIER_URL.
     if config.enable_workflow_events {
         let classifier_url =
-            std::env::var("SCREENPIPE_EVENT_CLASSIFIER_URL").unwrap_or_else(|_| {
+            std::env::var("DAIMONION_EVENT_CLASSIFIER_URL").unwrap_or_else(|_| {
                 daimonion_engine::workflow_classifier::DEFAULT_CLASSIFIER_URL.to_string()
             });
         let token = user_token.clone().unwrap_or_default();
@@ -2010,7 +2010,7 @@ async fn main() -> anyhow::Result<()> {
         let mut detector_arc: Option<Arc<dyn ImageRedactor>> = None;
         #[cfg(all(feature = "rfdetr-mlx", target_os = "macos", target_arch = "aarch64"))]
         {
-            if std::env::var_os("SCREENPIPE_ENABLE_EXPERIMENTAL_RFDETR_MLX").is_some() {
+            if std::env::var_os("DAIMONION_ENABLE_EXPERIMENTAL_RFDETR_MLX").is_some() {
                 use daimonion_redact::adapters::rfdetr_mlx::{RfdetrMlxConfig, RfdetrMlxRedactor};
                 let mlx_cfg = RfdetrMlxConfig::default();
                 // Mirrors the ONNX adapter: download once, verify SHA-256,
@@ -2041,7 +2041,7 @@ async fn main() -> anyhow::Result<()> {
             } else {
                 tracing::info!(
                     "rfdetr-mlx disabled by default for CLI stability; \
-                     set SCREENPIPE_ENABLE_EXPERIMENTAL_RFDETR_MLX=1 to opt in"
+                     set DAIMONION_ENABLE_EXPERIMENTAL_RFDETR_MLX=1 to opt in"
                 );
             }
         }

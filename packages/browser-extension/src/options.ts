@@ -51,7 +51,7 @@ type PairStatusResponse = {
 const PAIR_POLL_MS = 1_000;
 const PAIR_TIMEOUT_MS = 2 * 60_000;
 const CONNECTED_RECHECK_MS = 5_000;
-const SCREENPIPE_FOCUS_URL = "http://127.0.0.1:11435/focus";
+const DAIMONION_FOCUS_URL = "http://127.0.0.1:11435/focus";
 let pairingInProgress = false;
 
 const $ = <T extends HTMLElement>(id: string): T =>
@@ -105,7 +105,7 @@ async function openScreenpipeForApproval(): Promise<boolean> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 2_000);
   try {
-    const res = await fetch(SCREENPIPE_FOCUS_URL, {
+    const res = await fetch(DAIMONION_FOCUS_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ target: "browser_pairing" }),

@@ -375,7 +375,7 @@ pub struct RecordingSettings {
     ///   frame). Data leaves the device but is end-to-end encrypted
     ///   into an attested confidential-compute enclave that even
     ///   Tinfoil ops can't read into. Requires network +
-    ///   `SCREENPIPE_PRIVACY_FILTER_API_KEY` (or the cloud auth key).
+    ///   `DAIMONION_PRIVACY_FILTER_API_KEY` (or the cloud auth key).
     ///
     /// Note on attestation: the proper attested-transport client
     /// (Tinfoil's secure-client SDK) is Go/Python/JS-only at time of

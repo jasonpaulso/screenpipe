@@ -72,13 +72,13 @@ describe("meeting note – bottom line is clickable", function () {
     await openHomeWindow();
 
     // Auth is on by default. On a dev box another screenpipe owns :3030, so the
-    // app is launched with SCREENPIPE_PORT pointing at a free port for its own
+    // app is launched with DAIMONION_PORT pointing at a free port for its own
     // isolated server. Wait until get_local_api_config reports THAT port (not
     // the :3030 fallback) AND the server answers an authenticated request — so
-    // the seed can never land on the real app. In CI (no SCREENPIPE_PORT) any
+    // the seed can never land on the real app. In CI (no DAIMONION_PORT) any
     // port is accepted.
-    const expectedPort = process.env.SCREENPIPE_PORT
-      ? Number(process.env.SCREENPIPE_PORT)
+    const expectedPort = process.env.DAIMONION_PORT
+      ? Number(process.env.DAIMONION_PORT)
       : null;
     let cfg: LocalApiConfig | null = null;
     await browser.waitUntil(

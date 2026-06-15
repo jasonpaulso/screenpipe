@@ -538,7 +538,7 @@ async getDiskUsage(forceRefresh: boolean | null, dataDir: string | null) : Promi
 }
 },
 /**
- * Returns which E2E seeds are requested (env SCREENPIPE_E2E_SEED, comma-separated).
+ * Returns which E2E seeds are requested (env DAIMONION_E2E_SEED, comma-separated).
  * Rust uses "onboarding" in setup to complete onboarding at startup.
  */
 async getE2eSeedFlags() : Promise<string[]> {
@@ -2680,7 +2680,7 @@ asyncImagePiiRedaction?: boolean;
  * frame). Data leaves the device but is end-to-end encrypted
  * into an attested confidential-compute enclave that even
  * Tinfoil ops can't read into. Requires network +
- * `SCREENPIPE_PRIVACY_FILTER_API_KEY` (or the cloud auth key).
+ * `DAIMONION_PRIVACY_FILTER_API_KEY` (or the cloud auth key).
  *
  * Note on attestation: the proper attested-transport client
  * (Tinfoil's secure-client SDK) is Go/Python/JS-only at time of

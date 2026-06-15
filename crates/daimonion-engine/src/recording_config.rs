@@ -199,10 +199,10 @@ pub struct RecordingConfig {
 
     /// Require authentication for remote (non-localhost) API access.
     /// When true, requests from other devices must include
-    /// `Authorization: Bearer <SCREENPIPE_API_KEY>`.
+    /// `Authorization: Bearer <DAIMONION_API_KEY>`.
     pub api_auth: bool,
 
-    /// The API key for this instance (from SCREENPIPE_API_KEY env or auth.json).
+    /// The API key for this instance (from DAIMONION_API_KEY env or auth.json).
     /// Used to validate incoming remote requests when api_auth is enabled.
     pub api_auth_key: Option<String>,
 

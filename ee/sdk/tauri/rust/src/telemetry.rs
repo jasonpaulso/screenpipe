@@ -13,8 +13,8 @@
 //!
 //! Privacy posture (screenpipe is sold local-first): ON by default, but a
 //! single flag (`telemetry: false` / `ScreenpipeConfig::telemetry(false)`) or
-//! env var (`SCREENPIPE_SDK_TELEMETRY=0`, `DO_NOT_TRACK=1`,
-//! `SCREENPIPE_DISABLE_ANALYTICS=1`) turns it off. Only PII-scrubbed fields
+//! env var (`DAIMONION_SDK_TELEMETRY=0`, `DO_NOT_TRACK=1`,
+//! `DAIMONION_DISABLE_ANALYTICS=1`) turns it off. Only PII-scrubbed fields
 //! leave: window titles, app names, urls and output paths are never sent to
 //! PostHog. Sends are fire-and-forget — a spawned task that never blocks the
 //! recorder and swallows all network errors.
@@ -52,13 +52,13 @@ fn resolve_enabled(flag: Option<bool>) -> bool {
     if flag == Some(false) {
         return false;
     }
-    if falsy_env("SCREENPIPE_SDK_TELEMETRY") {
+    if falsy_env("DAIMONION_SDK_TELEMETRY") {
         return false;
     }
     if truthy_env("DO_NOT_TRACK") {
         return false;
     }
-    if truthy_env("SCREENPIPE_DISABLE_ANALYTICS") {
+    if truthy_env("DAIMONION_DISABLE_ANALYTICS") {
         return false;
     }
     true
@@ -403,7 +403,7 @@ mod tests {
     fn resolve_enabled_default_on_explicit_off() {
         // Env-independent: only the explicit flag is asserted here so the
         // test doesn't depend on the runner's environment.
-        assert!(resolve_enabled(None) || falsy_env("SCREENPIPE_SDK_TELEMETRY"));
+        assert!(resolve_enabled(None) || falsy_env("DAIMONION_SDK_TELEMETRY"));
         assert!(!resolve_enabled(Some(false)));
     }
 

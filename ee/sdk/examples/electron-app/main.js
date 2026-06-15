@@ -119,7 +119,7 @@ async function runSmoke() {
 }
 
 app.whenReady().then(async () => {
-  if (process.env.SCREENPIPE_ELECTRON_EXAMPLE_SMOKE === "1") {
+  if (process.env.DAIMONION_ELECTRON_EXAMPLE_SMOKE === "1") {
     await runSmoke();
     app.quit();
     return;

@@ -11,11 +11,11 @@ recognize the deployment in Sentry/PostHog, set opaque support IDs before
 starting Screenpipe:
 
 ```bash
-export SCREENPIPE_SUPPORT_ID="spcust_acme_123"
-export SCREENPIPE_CUSTOMER_ID="acme"
-export SCREENPIPE_DEPLOYMENT_ID="prod-laptop-fleet-01"
-export SCREENPIPE_EMBEDDER="acme-agent"
-export SCREENPIPE_EMBEDDER_VERSION="2026.6.4"
+export DAIMONION_SUPPORT_ID="spcust_acme_123"
+export DAIMONION_CUSTOMER_ID="acme"
+export DAIMONION_DEPLOYMENT_ID="prod-laptop-fleet-01"
+export DAIMONION_EMBEDDER="acme-agent"
+export DAIMONION_EMBEDDER_VERSION="2026.6.4"
 ```
 
 Use IDs instead of emails. See
@@ -121,7 +121,7 @@ try await client.reveal(fileAt: stopped.outputURL)
 
 The Swift SDK uses a bundled Node JSON-lines bridge over the published
 `@screenpipe/sdk` native addon. For local development, pass `sdkRoot` to this
-checkout or set `SCREENPIPE_SDK_ROOT`. `nodeExecutable` may be an absolute path
+checkout or set `DAIMONION_SDK_ROOT`. `nodeExecutable` may be an absolute path
 or a command available on `PATH`, such as `node`.
 
 For tests and previews, `ScreenpipeClient(transport:)` accepts any

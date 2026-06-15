@@ -96,15 +96,15 @@ test("Swift example smoke runs when Swift is available", async (t) => {
     "swift",
     ["run", "--package-path", "examples/swift-app", "ScreenpipeExample"],
     {
-      env: { SCREENPIPE_SWIFT_EXAMPLE_SMOKE: "1" },
+      env: { DAIMONION_SWIFT_EXAMPLE_SMOKE: "1" },
       timeoutMs: 60_000,
     },
   );
 });
 
 test("Tauri native example compiles when native example builds are enabled", async (t) => {
-  if (process.env.SCREENPIPE_RUN_NATIVE_EXAMPLE_BUILDS !== "1") {
-    t.skip("set SCREENPIPE_RUN_NATIVE_EXAMPLE_BUILDS=1 to compile native examples");
+  if (process.env.DAIMONION_RUN_NATIVE_EXAMPLE_BUILDS !== "1") {
+    t.skip("set DAIMONION_RUN_NATIVE_EXAMPLE_BUILDS=1 to compile native examples");
     return;
   }
   if (!hasCommand("cargo")) {

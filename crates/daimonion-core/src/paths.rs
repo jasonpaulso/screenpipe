@@ -7,10 +7,10 @@
 use std::path::Path;
 use std::{env, path::PathBuf};
 
-/// Default Screenpipe data directory. When `SCREENPIPE_DATA_DIR` is set (e.g. for E2E tests),
+/// Default Screenpipe data directory. When `DAIMONION_DATA_DIR` is set (e.g. for E2E tests),
 /// that path is used; otherwise `~/.daimonion`.
 pub fn default_screenpipe_data_dir() -> PathBuf {
-    env::var("SCREENPIPE_DATA_DIR")
+    env::var("DAIMONION_DATA_DIR")
         .ok()
         .filter(|s| !s.is_empty())
         .map(PathBuf::from)

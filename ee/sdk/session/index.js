@@ -86,7 +86,7 @@ async function withTimeout(promise, timeoutMs, label) {
 // Event taxonomy — kept stable so Worktrace and other SDK consumers can
 // allow-list specific names without flinching every release. Adding a new
 // event is fine; removing or renaming requires a major version bump.
-const SCREENPIPE_EVENTS = Object.freeze([
+const DAIMONION_EVENTS = Object.freeze([
   // Recording lifecycle. `start`/`stop` predate the v0.4 event work; the
   // `recording_*` aliases match the taxonomy in the SDK docs.
   "start",
@@ -152,7 +152,7 @@ function createScreenpipeSession(options = {}) {
 
   // SDK telemetry — crash reports -> Sentry, usage -> PostHog, tagged with
   // `options.userId` so a specific end user shows up in screenpipe's
-  // dashboards. ON by default; `telemetry: false` or the SCREENPIPE_SDK_TELEMETRY
+  // dashboards. ON by default; `telemetry: false` or the DAIMONION_SDK_TELEMETRY
   // / DO_NOT_TRACK env vars turn it off. See ./telemetry.js.
   const telemetry = createTelemetry({
     userId: options.userId,
@@ -533,7 +533,7 @@ function createScreenpipeSession(options = {}) {
     on: events.on.bind(events),
     off: events.off.bind(events),
     /** Stable list of event names this session can emit. */
-    eventNames: () => SCREENPIPE_EVENTS.slice(),
+    eventNames: () => DAIMONION_EVENTS.slice(),
 
     async permissions(args = {}) {
       const timeoutMs = args.timeoutMs ?? options.permissionTimeoutMs ?? 7500;
@@ -647,6 +647,6 @@ function createScreenpipeSession(options = {}) {
 
 module.exports = {
   createScreenpipeSession,
-  SCREENPIPE_EVENTS,
+  DAIMONION_EVENTS,
   DEFAULT_EVENT_INTERVALS,
 };

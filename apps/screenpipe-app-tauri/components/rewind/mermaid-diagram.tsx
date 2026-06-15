@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 // white fills, black 1px borders, black text in light mode (inverted in dark).
 // Avoids the heavy filled-black-box look; matches the rest of the app's flat,
 // high-contrast, color-free aesthetic.
-const SCREENPIPE_THEME = {
+const DAIMONION_THEME = {
   theme: "base" as const,
   themeVariables: {
     primaryColor: "#ffffff",
@@ -43,7 +43,7 @@ const SCREENPIPE_THEME = {
   },
 };
 
-const SCREENPIPE_THEME_DARK = {
+const DAIMONION_THEME_DARK = {
   theme: "base" as const,
   themeVariables: {
     primaryColor: "#000000",
@@ -150,7 +150,7 @@ export function MermaidDiagram({ chart, className }: MermaidDiagramProps) {
       try {
         const { default: mermaid } = await import("mermaid");
 
-        const theme = isDark ? SCREENPIPE_THEME_DARK : SCREENPIPE_THEME;
+        const theme = isDark ? DAIMONION_THEME_DARK : DAIMONION_THEME;
 
         mermaid.initialize({
           startOnLoad: false,
