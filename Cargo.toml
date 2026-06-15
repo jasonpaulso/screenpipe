@@ -154,6 +154,14 @@ lto = true
 opt-level = "s"
 strip = true
 
+# Do NOT strip proc-macros / build-dependencies. Xcode 27 beta's `strip`
+# mis-aligns the Mach-O LINKEDIT string pool on dylibs, so dyld refuses to
+# dlopen a stripped proc-macro dylib at compile time ("mis-aligned LINKEDIT
+# string pool"). build-override targets only build-time artifacts; the final
+# binary above stays stripped.
+[profile.release.build-override]
+strip = false
+
 # Fast local release builds: cargo build --profile release-dev
 # ~3-5x faster than full release, still optimized for testing
 [profile.release-dev]
