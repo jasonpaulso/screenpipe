@@ -85,7 +85,7 @@ export type CreateScreenpipeTauriClientOptions = {
     callback: (event: { payload: ScreenpipeTauriEvent }) => void,
   ) => Promise<() => void>;
   commands?: Partial<ScreenpipeTauriCommands>;
-  /** Override the Tauri event channel — defaults to `screenpipe://event`. */
+  /** Override the Tauri event channel — defaults to `daimonion://event`. */
   eventChannel?: string;
   /**
    * Stable identifier for the end user of YOUR app. When set, the native

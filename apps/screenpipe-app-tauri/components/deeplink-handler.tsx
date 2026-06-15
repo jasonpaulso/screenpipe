@@ -77,7 +77,7 @@ export function DeeplinkHandler() {
 
       // Handle subscription activation deep link.
       // Louis's email/success page can include:
-      //   screenpipe://subscription-success?purchase_token=<token>
+      //   daimonion://subscription-success?purchase_token=<token>
       // This lets existing app users activate pro without re-logging in.
       if (
         parsedUrl.host === "subscription-success" ||
@@ -150,8 +150,8 @@ export function DeeplinkHandler() {
       }
 
       // Handle timeline deep links:
-      //   screenpipe://timeline?timestamp=ISO8601
-      //   screenpipe://timeline?start_time=ISO8601&end_time=ISO8601
+      //   daimonion://timeline?timestamp=ISO8601
+      //   daimonion://timeline?start_time=ISO8601&end_time=ISO8601
       if (parsedUrl.pathname === "timeline" || parsedUrl.host === "timeline") {
         const timestamp =
           parsedUrl.searchParams.get("timestamp") ||
@@ -182,7 +182,7 @@ export function DeeplinkHandler() {
         }
       }
 
-      // Handle pipe install deep links: screenpipe://install-pipe?url=<encoded-url>
+      // Handle pipe install deep links: daimonion://install-pipe?url=<encoded-url>
       if (
         parsedUrl.host === "install-pipe" ||
         parsedUrl.pathname === "install-pipe"
@@ -193,7 +193,7 @@ export function DeeplinkHandler() {
         }
       }
 
-      // Handle in-app file viewer: screenpipe://view?path=<encoded-path>
+      // Handle in-app file viewer: daimonion://view?path=<encoded-path>
       // Notification bodies with markdown links to local files are rewritten
       // to this scheme by the /notify route in src-tauri/src/notifications/rewrite.rs
       if (parsedUrl.host === "view" || parsedUrl.pathname === "view") {
@@ -212,7 +212,7 @@ export function DeeplinkHandler() {
         }
       }
 
-      // Handle frame deep links: screenpipe://frame/12345
+      // Handle frame deep links: daimonion://frame/12345
       if (parsedUrl.pathname?.startsWith("/frame/") || parsedUrl.host === "frame") {
         const frameId = url.split("frame/")[1]?.replace(/^\//, "");
         if (frameId) {
@@ -232,8 +232,8 @@ export function DeeplinkHandler() {
       }
 
       // Handle meeting note deep links:
-      //   screenpipe://meeting/123?live=1
-      //   screenpipe://meeting?id=123
+      //   daimonion://meeting/123?live=1
+      //   daimonion://meeting?id=123
       if (parsedUrl.host === "meeting" || parsedUrl.pathname?.startsWith("/meeting/")) {
         const pathId =
           parsedUrl.host === "meeting"

@@ -5,7 +5,7 @@
 // Regression for 2005157ec ("fix: centralize screenpipe viewer link
 // handling"). Before the centralization, notification panel, viewer, chat,
 // and the app-level deeplink handler each had their own copy of the
-// `screenpipe://view?path=...` parsing + `open_viewer_window` invocation.
+// `daimonion://view?path=...` parsing + `open_viewer_window` invocation.
 // They drifted: the notification panel raised on malformed input while the
 // deeplink handler swallowed it, etc.
 //

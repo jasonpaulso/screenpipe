@@ -56,13 +56,13 @@ use telemetry::Telemetry;
 /// ```ts
 /// import { listen } from "@tauri-apps/api/event";
 /// listen<{ event: string; data: unknown }>(
-///   "screenpipe://event",
+///   "daimonion://event",
 ///   (e) => console.log(e.payload.event, e.payload.data),
 /// );
 /// ```
 ///
 /// Or use the `onEvent` helper on `createScreenpipeTauriClient()`.
-pub const DAIMONION_EVENT_CHANNEL: &str = "screenpipe://event";
+pub const DAIMONION_EVENT_CHANNEL: &str = "daimonion://event";
 
 /// Stable taxonomy of event names the plugin will emit on
 /// [`DAIMONION_EVENT_CHANNEL`]. Keep in sync with `DAIMONION_EVENTS`

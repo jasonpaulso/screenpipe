@@ -185,7 +185,7 @@ redact-onnx-directml = ["daimonion-redact/onnx-directml"]
 jemalloc = ["tikv-jemallocator"]
 
 [[bin]]
-name = "screenpipe"
+name = "daimonion"
 path = "src/bin/daimonion-engine.rs"
 
 [[bench]]

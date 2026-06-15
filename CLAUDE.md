@@ -61,7 +61,7 @@ License-key auth, admin policy enforcement, managed updates, and the embeddable 
 ```bash
 # Engine (macOS)
 cargo build --release --features metal,apple-intelligence
-./target/release/screenpipe
+./target/release/daimonion
 
 # Desktop app (from apps/screenpipe-app-tauri)
 bun install

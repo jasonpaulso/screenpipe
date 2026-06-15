@@ -43,7 +43,7 @@ before you begin:
 
 5. **run screenpipe**:
    ```bash
-   ./target/release/screenpipe
+   ./target/release/daimonion
    ```
 
 6. **build the desktop app**:
@@ -119,7 +119,7 @@ before you begin:
 
 5. **run the application**:
    ```bash
-   ./target/release/screenpipe
+   ./target/release/daimonion
    ```
 
 6. **build the desktop app**:
@@ -212,7 +212,7 @@ cargo test
 one command i keep using to avoid having to kill my main "production" process is:
 
 ```bash
-./target/release/screenpipe --port 3035 --data-dir /tmp/sp
+./target/release/daimonion --port 3035 --data-dir /tmp/sp
 ```
 
 it will avoid conflicts with the port and avoid conflicts with the data dir

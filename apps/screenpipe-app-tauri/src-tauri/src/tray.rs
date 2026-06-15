@@ -257,7 +257,7 @@ pub(crate) fn force_tray_rebuild(app: &AppHandle) -> Result<()> {
 
     let data = prefetch_tray_menu_data(app);
     let menu = create_dynamic_menu(app, &new_state, update_item.as_ref(), &data)?;
-    if let Some(tray) = app.tray_by_id("screenpipe_main") {
+    if let Some(tray) = app.tray_by_id("daimonion_main") {
         install_tray_menu(&tray, menu)?;
         clear_pending_tray_menu();
     }
@@ -369,7 +369,7 @@ fn apply_pending_tray_menu(app: &AppHandle) -> Result<()> {
         .unwrap_or_else(|e| e.into_inner())
         .clone();
     let menu = create_dynamic_menu(app, &state, update_item.as_ref(), &data)?;
-    if let Some(tray) = app.tray_by_id("screenpipe_main") {
+    if let Some(tray) = app.tray_by_id("daimonion_main") {
         install_tray_menu(&tray, menu)?;
     }
     Ok(())
@@ -406,7 +406,7 @@ pub fn setup_tray(app: &AppHandle, update_item: Option<&tauri::menu::MenuItem<Wr
         *guard = update_item.cloned();
     }
 
-    if let Some(main_tray) = app.tray_by_id("screenpipe_main") {
+    if let Some(main_tray) = app.tray_by_id("daimonion_main") {
         // Initial menu setup with empty state
         let data = prefetch_tray_menu_data(app);
         let menu = create_dynamic_menu(app, &MenuState::default(), update_item, &data)?;
@@ -437,7 +437,7 @@ pub fn setup_tray(app: &AppHandle, update_item: Option<&tauri::menu::MenuItem<Wr
 /// Log the tray icon position for debugging notch visibility issues.
 #[allow(dead_code)] // called only on macOS
 pub fn log_tray_position(app: &AppHandle) {
-    if let Some(tray) = app.tray_by_id("screenpipe_main") {
+    if let Some(tray) = app.tray_by_id("daimonion_main") {
         match tray.rect() {
             Ok(Some(rect)) => {
                 info!(
@@ -453,7 +453,7 @@ pub fn log_tray_position(app: &AppHandle) {
             }
         }
     } else {
-        error!("tray icon 'screenpipe_main' not found");
+        error!("tray icon 'daimonion_main' not found");
     }
 }
 
@@ -476,23 +476,23 @@ pub fn recreate_tray(app: &AppHandle) {
 
                 // Remove the old tray icon (must be on main thread for NSStatusBar)
                 debug!("recreate_tray: removing old tray icon");
-                let _old = app.remove_tray_by_id("screenpipe_main");
+                let _old = app.remove_tray_by_id("daimonion_main");
                 // Drop the old tray icon explicitly on main thread
                 drop(_old);
                 debug!("recreate_tray: old tray removed, building new one");
 
                 // Create a new tray icon — macOS assigns it the rightmost position
                 let icon = match app.path().resolve(
-                    "assets/screenpipe-logo-tray-white.png",
+                    "assets/daimonion-logo-tray-white.png",
                     tauri::path::BaseDirectory::Resource,
                 ) {
                     Ok(path) => tauri::image::Image::from_path(path).ok(),
                     Err(_) => {
-                        tauri::image::Image::from_path("assets/screenpipe-logo-tray-white.png").ok()
+                        tauri::image::Image::from_path("assets/daimonion-logo-tray-white.png").ok()
                     }
                 };
 
-                let mut builder = TrayIconBuilder::<Wry>::with_id("screenpipe_main")
+                let mut builder = TrayIconBuilder::<Wry>::with_id("daimonion_main")
                     .icon_as_template(true)
                     .show_menu_on_left_click(!cfg!(target_os = "windows"));
 
@@ -1463,7 +1463,7 @@ async fn update_menu_if_needed(
     };
     let app_for_tooltip = app.clone();
     let _ = app.run_on_main_thread(move || {
-        if let Some(tray) = app_for_tooltip.tray_by_id("screenpipe_main") {
+        if let Some(tray) = app_for_tooltip.tray_by_id("daimonion_main") {
             let _ = tray.set_tooltip(Some(&tooltip));
         }
     });
@@ -1485,7 +1485,7 @@ async fn update_menu_if_needed(
             let update_item = update_item.clone();
             let _ = app.run_on_main_thread(move || {
                 if let Err(e) = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-                    if let Some(tray) = app_for_thread.tray_by_id("screenpipe_main") {
+                    if let Some(tray) = app_for_thread.tray_by_id("daimonion_main") {
                         debug!("tray_menu_update: setting menu");
                         if let Ok(menu) = create_dynamic_menu(
                             &app_for_thread,

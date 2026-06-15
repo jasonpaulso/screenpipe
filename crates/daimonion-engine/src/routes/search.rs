@@ -227,7 +227,7 @@ pub fn truncate_middle(text: &str, max_chars: usize) -> String {
 /// Case-insensitive check for whether an app row should be filtered out
 /// because it belongs to screenpipe itself.
 pub fn is_screenpipe_app(app_name: &str) -> bool {
-    app_name.to_lowercase().contains("screenpipe")
+    app_name.to_lowercase().contains("daimonion")
 }
 
 /// Convert a `SearchResult` row into the public `ContentItem` shape used by
@@ -728,7 +728,7 @@ pub(crate) async fn keyword_search_handler(
 
         let filtered: Vec<_> = matches
             .into_iter()
-            .filter(|m| !m.app_name.to_lowercase().contains("screenpipe"))
+            .filter(|m| !m.app_name.to_lowercase().contains("daimonion"))
             .collect();
 
         let groups = DatabaseManager::cluster_search_matches(filtered, 120);
@@ -758,7 +758,7 @@ pub(crate) async fn keyword_search_handler(
 
         let filtered: Vec<_> = matches
             .into_iter()
-            .filter(|m| !m.app_name.to_lowercase().contains("screenpipe"))
+            .filter(|m| !m.app_name.to_lowercase().contains("daimonion"))
             .collect();
 
         Ok(JsonResponse(json!(filtered)))

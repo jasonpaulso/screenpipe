@@ -761,13 +761,13 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
 // ---------------------------------------------------------------------------
 const RESOURCES = [
   {
-    uri: "screenpipe://context",
+    uri: "daimonion://context",
     name: "Current Context",
     description: "Current date/time, timezone, and pre-computed timestamps for common time ranges",
     mimeType: "application/json",
   },
   {
-    uri: "screenpipe://guide",
+    uri: "daimonion://guide",
     name: "Usage Guide",
     description: "How to use screenpipe tools effectively — search strategy, progressive disclosure, and common patterns",
     mimeType: "text/markdown",
@@ -781,7 +781,7 @@ server.setRequestHandler(ListResourcesRequestSchema, async () => {
 server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
   const { uri } = request.params;
 
-  if (uri === "screenpipe://context") {
+  if (uri === "daimonion://context") {
     const now = new Date();
     const ms = now.getTime();
     return {
@@ -816,7 +816,7 @@ server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
     };
   }
 
-  if (uri === "screenpipe://guide") {
+  if (uri === "daimonion://guide") {
     return {
       contents: [
         {
@@ -853,8 +853,8 @@ server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
 ## Deep Links
 
 When referencing specific moments in results, create clickable links:
-- Frame: [10:30 AM — Chrome](screenpipe://frame/{frame_id}) — use frame_id from search results
-- Timeline: [meeting at 3pm](screenpipe://timeline?timestamp=2024-01-15T15:00:00Z) — use exact timestamp from results
+- Frame: [10:30 AM — Chrome](daimonion://frame/{frame_id}) — use frame_id from search results
+- Timeline: [meeting at 3pm](daimonion://timeline?timestamp=2024-01-15T15:00:00Z) — use exact timestamp from results
 Never fabricate IDs or timestamps — only use values from actual results.
 `,
         },

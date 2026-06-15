@@ -37,7 +37,7 @@ teams use **AES-256-GCM** encryption. the encryption key is generated on the adm
     a 256-bit AES-GCM key is generated locally using the Web Crypto API. this key is stored in the Tauri secure store (`~/.screenpipe/store.bin`) — not in localStorage or anywhere web-accessible.
   </Step>
   <Step title="admin shares invite link">
-    the invite link contains the team ID and the base64-encoded encryption key: `screenpipe://join-team?team_id=...&key=...`. this is the only time the key is transmitted — via the link itself, not through our server.
+    the invite link contains the team ID and the base64-encoded encryption key: `daimonion://join-team?team_id=...&key=...`. this is the only time the key is transmitted — via the link itself, not through our server.
   </Step>
   <Step title="members join and store the key">
     when a member opens the invite link, the key is imported and stored in their local Tauri secure store. our server only records the membership — it never sees the key.

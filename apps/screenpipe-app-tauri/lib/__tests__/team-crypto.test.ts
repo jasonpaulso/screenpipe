@@ -199,7 +199,7 @@ describe("team-crypto", () => {
       const encrypted = await encryptConfig(pipeConfig, adminKey);
 
       // simulate invite URL
-      const inviteUrl = `screenpipe://join-team?team_id=abc-123&key=${encodeURIComponent(exportedKey)}`;
+      const inviteUrl = `daimonion://join-team?team_id=abc-123&key=${encodeURIComponent(exportedKey)}`;
 
       // member extracts key from URL
       const url = new URL(inviteUrl);

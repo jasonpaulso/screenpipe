@@ -479,9 +479,9 @@ impl UpdatesManager {
             {
                 let theme = dark_light::detect().unwrap_or(Mode::Dark);
                 let icon_path = if theme == Mode::Light {
-                    "assets/screenpipe-logo-tray-updates-black.png"
+                    "assets/daimonion-logo-tray-updates-black.png"
                 } else {
-                    "assets/screenpipe-logo-tray-updates-white.png"
+                    "assets/daimonion-logo-tray-updates-white.png"
                 };
 
                 let path = self
@@ -495,7 +495,7 @@ impl UpdatesManager {
                 let app_clone = self.app.clone();
                 let _ = self.app.run_on_main_thread(move || {
                     crate::window::with_autorelease_pool(|| {
-                        if let Some(tray) = app_clone.tray_by_id("screenpipe_main") {
+                        if let Some(tray) = app_clone.tray_by_id("daimonion_main") {
                             if let Err(e) =
                                 crate::safe_icon::safe_set_icon_as_template(&tray, image)
                             {

@@ -6,7 +6,7 @@ import { emit } from "@tauri-apps/api/event";
 import { commands } from "@/lib/utils/tauri";
 import { useTimelineStore } from "@/lib/hooks/use-timeline-store";
 
-// Jump the timeline to a captured moment. Mirrors the screenpipe:// deep-link
+// Jump the timeline to a captured moment. Mirrors the daimonion:// deep-link
 // handling already used for inline chat links: prime the store (covers the
 // case where the timeline isn't mounted yet), bring the main window forward,
 // then emit the navigate event the mounted timeline listens for.

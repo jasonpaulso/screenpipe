@@ -155,7 +155,7 @@ export function AppEntitlementGate({ children }: { children: React.ReactNode }) 
   }, [updateSettings]);
 
   // Dev/preview only: deep links do not reach the `bun tauri dev` binary on
-  // macOS, so paste the login token (or the whole screenpipe://...api_key=...
+  // macOS, so paste the login token (or the whole daimonion://...api_key=...
   // URL the browser tried to open) here to sign in without the OAuth callback.
   const devLogin = useCallback(async () => {
     const raw = devToken.trim();
@@ -230,7 +230,7 @@ export function AppEntitlementGate({ children }: { children: React.ReactNode }) 
         onKeyDown={(e) => {
           if (e.key === "Enter") void devLogin();
         }}
-        placeholder="paste token or screenpipe://…api_key=…"
+        placeholder="paste token or daimonion://…api_key=…"
         spellCheck={false}
         className="w-full border border-border bg-background px-3 py-2 font-mono text-[11px] outline-none focus:border-foreground"
       />

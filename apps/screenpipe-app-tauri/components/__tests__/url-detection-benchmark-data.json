@@ -1055,7 +1055,7 @@
       "frame_id": 51381,
       "browser_url": null,
       "app_name": "WezTerm",
-      "text": "INFO screenpipe_audio:: transcription::transcription_result: device MacBook Pro Microphone (input) inserting audio chunk: */Users/Louisbeaunont/.screenpipe/data/M",
+      "text": "INFO screenpipe_audio:: transcription::transcription_result: device MacBook Pro Microphone (input) inserting audio chunk: */Users/Louisbeaunont/.daimonion/data/M",
       "confidence": 1,
       "bounds": {
         "left": 0.07703,
@@ -19097,7 +19097,7 @@
       "frame_id": 5960,
       "browser_url": null,
       "app_name": "WezTerm",
-      "text": "• Bash(sqlite3 */.screenpipe/db.sqLite -SELECT app_name, window_nane, tinestanp FRON franes WHERE tinestanp LIKE 'X2826-81-29717: 08%-",
+      "text": "• Bash(sqlite3 */.daimonion/db.sqLite -SELECT app_name, window_nane, tinestanp FRON franes WHERE tinestanp LIKE 'X2826-81-29717: 08%-",
       "confidence": 0.30000001192092896,
       "bounds": {
         "left": 0.64535,
@@ -19363,7 +19363,7 @@
       "frame_id": 5960,
       "browser_url": null,
       "app_name": "WezTerm",
-      "text": "sqcates */.screenpipe/db.squite DELETE FROM frames WHERF app_name = **.",
+      "text": "sqcates */.daimonion/db.squite DELETE FROM frames WHERF app_name = **.",
       "confidence": 0.30000001192092896,
       "bounds": {
         "left": 0.64967,
@@ -41981,7 +41981,7 @@
       "frame_id": 14988,
       "browser_url": null,
       "app_name": "WezTerm",
-      "text": "-/.screenpipe/ Ea du -h -/.screenpdpe/db.sqlata° aegenandels -L",
+      "text": "-/.daimonion/ Ea du -h -/.screenpdpe/db.sqlata° aegenandels -L",
       "confidence": 0.30000001192092896,
       "bounds": {
         "left": 0.01744,
@@ -77641,7 +77641,7 @@
       "frame_id": 62305,
       "browser_url": null,
       "app_name": "Wallpaper",
-      "text": "1. deeptink-handler.tsx - Handle incoming screenpipe://tineline?tinestamp=",
+      "text": "1. deeptink-handler.tsx - Handle incoming daimonion://tineline?tinestamp=",
       "confidence": 1,
       "bounds": {
         "left": 0.00436,
@@ -138185,7 +138185,7 @@
       "frame_id": 51141,
       "browser_url": null,
       "app_name": "Wallpaper",
-      "text": "iranscription::transcription_result: device MacBook Pro Microphone (input) inserting audio chunk: */Users/louisbeaunont/.screenpipe/data/M",
+      "text": "iranscription::transcription_result: device MacBook Pro Microphone (input) inserting audio chunk: */Users/louisbeaunont/.daimonion/data/M",
       "confidence": 1,
       "bounds": {
         "left": -1.04797,
@@ -167808,7 +167808,7 @@
       "frame_id": 17307,
       "browser_url": null,
       "app_name": "Wallpaper",
-      "text": "bunx @screenpipe/sync --daemon -r user@server:-/.screenpipe/",
+      "text": "bunx @screenpipe/sync --daemon -r user@server:-/.daimonion/",
       "confidence": 0.5,
       "bounds": {
         "left": 0.00872,

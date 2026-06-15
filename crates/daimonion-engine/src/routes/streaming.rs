@@ -169,7 +169,7 @@ pub(crate) fn create_time_series_frame(chunk: FrameData) -> TimeSeriesFrame {
         .ocr_entries
         .into_iter()
         // Filter out screenpipe frames at display time
-        .filter(|device_data| !device_data.app_name.to_lowercase().contains("screenpipe"))
+        .filter(|device_data| !device_data.app_name.to_lowercase().contains("daimonion"))
         .map(|device_data| DeviceFrame {
             device_id: device_data.device_name,
             frame_id: chunk.frame_id,
@@ -516,7 +516,7 @@ async fn handle_stream_frames_socket(
                             drop(sent);
 
                             // Skip screenpipe's own frames
-                            if hot_frame.app_name.to_lowercase().contains("screenpipe") {
+                            if hot_frame.app_name.to_lowercase().contains("daimonion") {
                                 continue;
                             }
 

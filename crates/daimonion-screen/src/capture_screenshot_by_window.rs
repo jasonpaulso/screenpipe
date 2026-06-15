@@ -94,9 +94,9 @@ static SKIP_APPS: Lazy<HashSet<&'static str>> = Lazy::new(|| {
         "TheBoringNotch",
         "Grammarly Desktop",
         // Screenpipe's own UI should never be captured
-        "screenpipe",
-        "screenpipe - Development",
-        "screenpipe beta",
+        "daimonion",
+        "daimonion - Development",
+        "daimonion beta",
     ])
 });
 
@@ -111,9 +111,9 @@ static SKIP_APPS: Lazy<HashSet<&'static str>> = Lazy::new(|| {
         "Search",
         "TaskBar",
         // Screenpipe's own UI should never be captured
-        "screenpipe",
-        "screenpipe - Development",
-        "screenpipe beta",
+        "daimonion",
+        "daimonion - Development",
+        "daimonion beta",
     ])
 });
 
@@ -132,10 +132,10 @@ static SKIP_APPS: Lazy<HashSet<&'static str>> = Lazy::new(|| {
         "Muffin",
         "Budgie-panel",
         // Screenpipe's own UI should never be captured
-        "screenpipe",
-        "screenpipe - Development",
-        "screenpipe beta",
-        "screenpipe-app",
+        "daimonion",
+        "daimonion - Development",
+        "daimonion beta",
+        "daimonion-app",
     ])
 });
 
@@ -597,7 +597,7 @@ pub fn find_topmost_pid_on_monitor(
             continue;
         }
         // Skip screenpipe's own UI
-        if w.owner_name.to_lowercase().contains("screenpipe") {
+        if w.owner_name.to_lowercase().contains("daimonion") {
             continue;
         }
         // Skip known system title windows
@@ -1066,7 +1066,7 @@ pub async fn capture_all_visible_windows(
         // have internal windows with empty titles that create duplicate DB records
         // Also skip system UI elements that have no owning app (empty app_name)
         // Safety-net: always exclude screenpipe's own UI regardless of exact app name variant
-        let is_screenpipe_ui = app_name.to_lowercase().contains("screenpipe");
+        let is_screenpipe_ui = app_name.to_lowercase().contains("daimonion");
         let is_valid = !is_screenpipe_ui
             && !SKIP_APPS.contains(app_name.as_str())
             && !app_name.is_empty()
@@ -1780,7 +1780,7 @@ mod tests {
         #[test]
         fn test_topmost_skips_screenpipe_ui() {
             let windows = vec![
-                make_window(999, 0, 0, 0, 1920, 1080, "screenpipe", "Main"),
+                make_window(999, 0, 0, 0, 1920, 1080, "daimonion", "Main"),
                 make_window(100, 0, 0, 0, 1920, 1080, "WezTerm", "π - brain"),
             ];
             assert_eq!(
@@ -1799,7 +1799,7 @@ mod tests {
                     0,
                     1920,
                     1080,
-                    "screenpipe - Development",
+                    "daimonion - Development",
                     "Overlay",
                 ),
                 make_window(100, 0, 0, 0, 1920, 1080, "Arc", "GitHub"),

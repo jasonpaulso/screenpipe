@@ -340,7 +340,7 @@ impl MacosTreeWalker {
             "dashlane",
             "keepassxc",
             "keychain access",
-            "screenpipe",
+            "daimonion",
             "loginwindow",
         ];
         if EXCLUDED_APPS.iter().any(|ex| app_lower.contains(ex)) {

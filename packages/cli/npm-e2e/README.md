@@ -11,7 +11,7 @@ cd packages/cli
 bun run build
 ```
 
-Prints the binary path, e.g. `target/aarch64-apple-darwin/release/screenpipe`.
+Prints the binary path, e.g. `target/aarch64-apple-darwin/release/daimonion`.
 
 ### 2) Stage npm packages
 
@@ -19,7 +19,7 @@ Prints the binary path, e.g. `target/aarch64-apple-darwin/release/screenpipe`.
 bun run stage
 ```
 
-Auto-detects the binary from `target/<host-target>/release/screenpipe`. Pass `--binary <path>` to override. Copies wrapper + platform packages into `.work/stage`, injects the real binary, writes placeholder payloads for other platforms, validates the result.
+Auto-detects the binary from `target/<host-target>/release/daimonion`. Pass `--binary <path>` to override. Copies wrapper + platform packages into `.work/stage`, injects the real binary, writes placeholder payloads for other platforms, validates the result.
 
 ### 3) Serve the local registry
 

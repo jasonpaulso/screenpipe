@@ -24,8 +24,8 @@ const REPO_ROOT = import.meta.dir + "/../..";
 // ── Build & deploy ───────────────────────────────────────────────────
 
 async function buildAndDeploy(ip: string): Promise<void> {
-  const binary = `${REPO_ROOT}/target/release/screenpipe`;
-  const debugBinary = `${REPO_ROOT}/target/debug/screenpipe`;
+  const binary = `${REPO_ROOT}/target/release/daimonion`;
+  const debugBinary = `${REPO_ROOT}/target/debug/daimonion`;
 
   let src: string;
   if (await Bun.file(binary).exists()) {

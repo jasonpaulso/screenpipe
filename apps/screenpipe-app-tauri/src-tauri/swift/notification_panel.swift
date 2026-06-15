@@ -305,7 +305,7 @@ struct NotificationContentView: View {
         .shadow(color: .black.opacity(0.18), radius: 16, x: 0, y: 4)
         .shadow(color: .black.opacity(0.06), radius: 3, x: 0, y: 1)
         // Override link handling — SwiftUI's default openURL doesn't work
-        // in non-activating panels. screenpipe:// URLs go through the
+        // in non-activating panels. daimonion:// URLs go through the
         // action callback so they stay in-process (no macOS app activation
         // bounce); everything else opens via NSWorkspace.
         .environment(\.openURL, OpenURLAction { url in
@@ -358,7 +358,7 @@ struct MarkdownText: View {
     }
 
     /// A parsed inline segment.
-    /// `viewerOverridePath` is set when the link is a `screenpipe://view?path=…`
+    /// `viewerOverridePath` is set when the link is a `daimonion://view?path=…`
     /// deeplink (rewritten from a local file path by the /notify route). It
     /// carries the original file path so the panel can render an ↗ button
     /// next to the link to open the file in the OS default app — escape
@@ -369,7 +369,7 @@ struct MarkdownText: View {
         case link(label: String, url: URL, viewerOverridePath: String?)
     }
 
-    /// If `url` is `screenpipe://view?path=…`, return the decoded path. Else nil.
+    /// If `url` is `daimonion://view?path=…`, return the decoded path. Else nil.
     fileprivate static func viewerOverridePath(for url: URL) -> String? {
         guard url.scheme == "screenpipe" else { return nil }
         let isView = url.host == "view"
@@ -438,7 +438,7 @@ struct MarkdownText: View {
                             // already valid URLs almost always, and
                             // `addingPercentEncoding(.urlQueryAllowed)` will
                             // re-encode existing `%xx` escapes (e.g. the
-                            // `%2F`s in a `screenpipe://view?path=…` link
+                            // `%2F`s in a `daimonion://view?path=…` link
                             // produced by the /notify rewrite). That
                             // double-encoding silently corrupts the path,
                             // so the viewer ends up calling
@@ -514,7 +514,7 @@ struct MarkdownText: View {
     }
 }
 
-/// Tiny ↗ button rendered next to a `screenpipe://view?path=…` link so the
+/// Tiny ↗ button rendered next to a `daimonion://view?path=…` link so the
 /// user can open the underlying file in the OS default app instead of the
 /// in-app viewer (e.g. Obsidian for `.md`, Preview for `.json`).
 @available(macOS 13.0, *)
@@ -549,7 +549,7 @@ private struct ViewerOverrideButton: View {
     }
 }
 
-/// Open a URL with the right transport: in-app for screenpipe:// (no
+/// Open a URL with the right transport: in-app for daimonion:// (no
 /// macOS activation bounce), NSWorkspace for everything else.
 @available(macOS 13.0, *)
 private func openLinkUrl(_ url: URL) {

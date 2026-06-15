@@ -20,7 +20,7 @@ const DEFAULT_TAURI_COMMANDS = Object.freeze({
  * Tauri event name the Rust plugin emits every screenpipe session event
  * on. Keep in sync with `DAIMONION_EVENT_CHANNEL` in `lib.rs`.
  */
-const DAIMONION_EVENT_CHANNEL = "screenpipe://event";
+const DAIMONION_EVENT_CHANNEL = "daimonion://event";
 
 async function defaultInvoke(command, payload) {
   const api = await import("@tauri-apps/api/core");

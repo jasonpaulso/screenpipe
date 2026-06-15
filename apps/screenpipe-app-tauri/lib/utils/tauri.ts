@@ -246,7 +246,7 @@ async confirmBrowserCookieAccessForSession() : Promise<Result<null, string>> {
 }
 },
 /**
- * Copy a frame deeplink (screenpipe://frame/N) to clipboard. Native API only.
+ * Copy a frame deeplink (daimonion://frame/N) to clipboard. Native API only.
  */
 async copyDeeplinkToClipboard(frameId: number) : Promise<Result<null, string>> {
     try {
@@ -957,7 +957,7 @@ async oauthStatus(integrationId: string, instance: string | null) : Promise<Resu
 },
 /**
  * Open Google Calendar OAuth inside an in-app WebView.
- * Same pattern as `open_login_window` — intercepts the screenpipe:// deep-link
+ * Same pattern as `open_login_window` — intercepts the daimonion:// deep-link
  * redirect so we don't rely on Safari custom-scheme support.
  */
 async openGoogleCalendarAuthWindow(authUrl: string) : Promise<Result<null, string>> {
@@ -972,7 +972,7 @@ async openGoogleCalendarAuthWindow(authUrl: string) : Promise<Result<null, strin
  * Open the screenpi.pe login page.
  * On Windows, opens in the system browser (WebView2 has issues with some auth
  * providers; the registered deep-link scheme handles the redirect back).
- * On macOS/Linux, uses an in-app WebView that intercepts the screenpipe://
+ * On macOS/Linux, uses an in-app WebView that intercepts the daimonion://
  * deep-link redirect (Safari blocks custom-scheme redirects).
  */
 async openLoginWindow() : Promise<Result<null, string>> {

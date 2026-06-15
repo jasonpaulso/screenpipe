@@ -484,7 +484,7 @@ export default function Timeline({ embedded = false }: { embedded?: boolean }) {
 	}, [navigateToTimestamp]);
 
 
-	// Listen for navigate-to-frame events (deep link: screenpipe://frame/12345)
+	// Listen for navigate-to-frame events (deep link: daimonion://frame/12345)
 	useEffect(() => {
 		const fetchFrameMetadata = async (id: string, retries = 3): Promise<{ timestamp?: string } | null> => {
 			for (let i = 0; i < retries; i++) {
@@ -552,7 +552,7 @@ export default function Timeline({ embedded = false }: { embedded?: boolean }) {
 	}, [navigateToTimestamp, setPendingNavigation, toast]);
 
 	// Consume pending navigation from zustand store on mount (survives page navigation)
-	// e.g. app opened from cold start via screenpipe://frame/23 — Timeline mounts late
+	// e.g. app opened from cold start via daimonion://frame/23 — Timeline mounts late
 	useEffect(() => {
 		if (!pendingNavigation) return;
 

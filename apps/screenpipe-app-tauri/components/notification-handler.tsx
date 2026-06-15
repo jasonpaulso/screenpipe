@@ -28,8 +28,8 @@ type NotificationRequested = {
 };
 
 function windowForDeeplink(url: string) {
-  return url.startsWith("screenpipe://meeting/") ||
-    url.startsWith("screenpipe://meeting?")
+  return url.startsWith("daimonion://meeting/") ||
+    url.startsWith("daimonion://meeting?")
     ? { Home: { page: "meetings" } }
     : "Main";
 }
@@ -206,7 +206,7 @@ const NotificationHandler: React.FC = () => {
           await open(action.url);
 
           const deeplink = action.deeplink_url || action.deeplinkUrl;
-          if (typeof deeplink === "string" && deeplink.startsWith("screenpipe://")) {
+          if (typeof deeplink === "string" && deeplink.startsWith("daimonion://")) {
             await commands.showWindowActivated(windowForDeeplink(deeplink));
             await new Promise((r) => setTimeout(r, 150));
             const { emit } = await import("@tauri-apps/api/event");
@@ -218,7 +218,7 @@ const NotificationHandler: React.FC = () => {
         // URL-opening actions. Two explicit types so senders can't conflate
         // them:
         //   "link"      — external URL, opens in default browser
-        //   "deeplink"  — screenpipe:// in-app route
+        //   "deeplink"  — daimonion:// in-app route
         //
         // Note: these are also handled in Rust inside `native_notif_action_callback`
         // for the native macOS panel case (where this JS listener may not be
@@ -226,7 +226,7 @@ const NotificationHandler: React.FC = () => {
         // Routing is on URL scheme, not the declared type, so a mislabeled
         // payload still works.
         if ((action.type === "link" || action.type === "deeplink") && action.url) {
-          if (typeof action.url === "string" && action.url.startsWith("screenpipe://")) {
+          if (typeof action.url === "string" && action.url.startsWith("daimonion://")) {
             await commands.showWindowActivated(windowForDeeplink(action.url));
             await new Promise((r) => setTimeout(r, 150));
             const { emit } = await import("@tauri-apps/api/event");

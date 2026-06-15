@@ -83,7 +83,7 @@ test("onEvent dispatches filtered Tauri events to the callback", async () => {
   );
 
   const dispatch = (payload) => {
-    for (const cb of channelListeners.get("screenpipe://event") || []) {
+    for (const cb of channelListeners.get("daimonion://event") || []) {
       cb({ payload });
     }
   };

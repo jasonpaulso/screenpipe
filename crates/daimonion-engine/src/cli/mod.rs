@@ -154,9 +154,9 @@ pub enum OutputFormat {
 #[command(
     author,
     version,
-    about = "screenpipe: power AI by everything you've seen, said or heard",
+    about = "daimonion: power AI by everything you've seen, said or heard",
     long_about = None,
-    name = "screenpipe"
+    name = "daimonion"
 )]
 pub struct Cli {
     #[command(subcommand)]

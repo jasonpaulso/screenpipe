@@ -63,7 +63,7 @@ function unwrapMarkdownUrl(url: string): string {
 
 export function resolveLocalPathFromMarkdownUrl(url: string): string | null {
   const raw = unwrapMarkdownUrl(url);
-  if (!raw || raw.startsWith("screenpipe://")) {
+  if (!raw || raw.startsWith("daimonion://")) {
     return null;
   }
 
@@ -133,7 +133,7 @@ export function rewriteLocalMarkdownLinksForChat(text: string): string {
         return `[${label}](${wrapPathForMarkdown(normalizedMediaPath)})`;
       }
 
-      return `[${label}](screenpipe://view?path=${encodeURIComponent(localPath)})`;
+      return `[${label}](daimonion://view?path=${encodeURIComponent(localPath)})`;
     },
   );
 }

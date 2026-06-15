@@ -71,7 +71,7 @@ describe("Viewer preview flow", () => {
             kind: "text" as const,
             name: "alpha.md",
             path,
-            text: "Alpha file\n\n[open bravo](screenpipe://view?path=%2Ftmp%2Fbravo.md)",
+            text: "Alpha file\n\n[open bravo](daimonion://view?path=%2Ftmp%2Fbravo.md)",
             truncated: false,
             total_bytes: 32,
           },

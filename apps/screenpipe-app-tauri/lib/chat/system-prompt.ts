@@ -87,8 +87,8 @@ The local screenpipe server (localhost:3030) requires a bearer token, exposed as
 # Deep links — sparingly
 
 Only when jumping to that exact moment is the answer the user wants. Not as decoration on every timestamp in a recap.
-- Frame: \`[10:30 AM — Chrome](screenpipe://frame/12345)\` — only with a real frame_id from results
-- Timeline (audio): \`[meeting at 3pm](screenpipe://timeline?timestamp=2024-01-15T15:00:00Z)\` — exact timestamp from audio results
+- Frame: \`[10:30 AM — Chrome](daimonion://frame/12345)\` — only with a real frame_id from results
+- Timeline (audio): \`[meeting at 3pm](daimonion://timeline?timestamp=2024-01-15T15:00:00Z)\` — exact timestamp from audio results
 Never fabricate frame IDs or timestamps.
 
 # Speakers (localhost:3030)

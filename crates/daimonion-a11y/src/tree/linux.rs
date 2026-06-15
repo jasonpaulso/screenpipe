@@ -155,7 +155,7 @@ const EXCLUDED_APPS: &[&str] = &[
     "gnome-keyring",
     "seahorse",
     "kwalletmanager",
-    "screenpipe",
+    "daimonion",
     "nm-connection-editor",
     "polkit",
     // Window managers / desktop shells — no user content

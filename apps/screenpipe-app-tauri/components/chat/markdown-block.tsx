@@ -89,16 +89,16 @@ export function MarkdownBlock({
         },
         a({ href, children, ...props }) {
           if (
-            href?.startsWith("screenpipe://timeline") ||
-            href?.startsWith("screenpipe://frame") ||
-            href?.startsWith("screenpipe://view")
+            href?.startsWith("daimonion://timeline") ||
+            href?.startsWith("daimonion://frame") ||
+            href?.startsWith("daimonion://view")
           ) {
             const handleScreenpipeLinkClick = async (
               e: React.MouseEvent<HTMLAnchorElement>,
             ) => {
               e.preventDefault();
               try {
-                if (href.startsWith("screenpipe://view")) {
+                if (href.startsWith("daimonion://view")) {
                   const viewerPath = screenpipeViewerPathFromHref(href);
                   if (viewerPath && onOpenViewerPath) {
                     onOpenViewerPath(viewerPath);
@@ -107,7 +107,7 @@ export function MarkdownBlock({
                   if (await openScreenpipeViewerLink(href)) return;
                 }
 
-                if (href.startsWith("screenpipe://frame")) {
+                if (href.startsWith("daimonion://frame")) {
                   const frameId = href.split("frame/")[1]?.replace(/^\//, "");
                   if (frameId) {
                     useTimelineStore

@@ -843,15 +843,15 @@ pub async fn start_health_check(app: tauri::AppHandle) -> Result<()> {
                 // Resolve icon path on this thread (no AppKit calls)
                 let icon_path = if is_unhealthy_icon(current_status) {
                     if theme == Mode::Light {
-                        "assets/screenpipe-logo-tray-black-failed.png"
+                        "assets/daimonion-logo-tray-black-failed.png"
                     } else {
-                        "assets/screenpipe-logo-tray-white-failed.png"
+                        "assets/daimonion-logo-tray-white-failed.png"
                     }
                 } else {
                     if theme == Mode::Light {
-                        "assets/screenpipe-logo-tray-black.png"
+                        "assets/daimonion-logo-tray-black.png"
                     } else {
-                        "assets/screenpipe-logo-tray-white.png"
+                        "assets/daimonion-logo-tray-white.png"
                     }
                 };
 
@@ -876,7 +876,7 @@ pub async fn start_health_check(app: tauri::AppHandle) -> Result<()> {
                 let app_clone = app.clone();
                 let _ = app.run_on_main_thread(move || {
                     crate::window::with_autorelease_pool(|| {
-                        if let Some(main_tray) = app_clone.tray_by_id("screenpipe_main") {
+                        if let Some(main_tray) = app_clone.tray_by_id("daimonion_main") {
                             if let Err(e) =
                                 crate::safe_icon::safe_set_icon_as_template(&main_tray, image)
                             {

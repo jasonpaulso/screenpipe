@@ -246,7 +246,7 @@ describe("Logout is not resurrected by an in-flight loadUser", function () {
   it("stays logged out after one click even when a slow loadUser resolves afterwards", async () => {
     // ── Phase A: log in (fast mock) so the logout button is present ──────────
     await tuneUserFetchMock(0, FAKE_EMAIL);
-    await emitDeepLink(`screenpipe://login?api_key=${FAKE_TOKEN}`);
+    await emitDeepLink(`daimonion://login?api_key=${FAKE_TOKEN}`);
     // Poll the FULL condition (status carries the fake email), not just
     // "logged in as", so a one-frame settle can't slip a stale status into the
     // assertion below. Phase A is setup; the real regression assertion is in
@@ -271,7 +271,7 @@ describe("Logout is not resurrected by an in-flight loadUser", function () {
 
     const callsBefore = await userFetchCalls();
     // Fire the resurrection trigger: a loadUser that will resolve a beat late.
-    await emitDeepLink(`screenpipe://login?api_key=${FAKE_TOKEN}`);
+    await emitDeepLink(`daimonion://login?api_key=${FAKE_TOKEN}`);
     // Deterministically wait until that fetch has actually STARTED (so loadUser
     // has snapshotted the auth generation) before we log out. This removes the
     // ordering flake where logout could bump the generation before loadUser

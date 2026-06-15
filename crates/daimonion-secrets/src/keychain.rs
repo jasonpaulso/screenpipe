@@ -16,7 +16,7 @@ use std::sync::Mutex;
 use std::sync::OnceLock;
 use tracing::{debug, info, warn};
 
-const SERVICE: &str = "com.screenpipe.app";
+const SERVICE: &str = "studio.schulz.daimonion";
 const KEY_NAME: &str = "store-encryption-key";
 
 /// Cache successful keychain keys for the process lifetime.

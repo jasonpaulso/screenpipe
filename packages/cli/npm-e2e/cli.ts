@@ -22,7 +22,7 @@ Commands:
   serve    Start Verdaccio on port 4873 and publish staged packages
 
 Options:
-  --binary <path>          Binary to stage (default: target/<host-target>/release/screenpipe)
+  --binary <path>          Binary to stage (default: target/<host-target>/release/daimonion)
   --version <semver>       Local package version (default: 0.0.0-local.<time>)
   --port <port>            Verdaccio port (default: 4873)
 `);

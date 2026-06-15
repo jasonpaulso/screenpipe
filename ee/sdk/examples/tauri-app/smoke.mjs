@@ -90,12 +90,12 @@ const off = await client.onEvent(
   (frame) => received.push(frame),
   { filter: ["frames_progress"] },
 );
-fakeEmit("screenpipe://event", { event: "app_switched", data: { focused: null } });
-fakeEmit("screenpipe://event", { event: "frames_progress", data: { frames: 12 } });
+fakeEmit("daimonion://event", { event: "app_switched", data: { focused: null } });
+fakeEmit("daimonion://event", { event: "frames_progress", data: { frames: 12 } });
 assert.equal(received.length, 1, "filter must drop non-matching events");
 assert.equal(received[0].data.frames, 12);
 await off();
-fakeEmit("screenpipe://event", { event: "frames_progress", data: { frames: 99 } });
+fakeEmit("daimonion://event", { event: "frames_progress", data: { frames: 99 } });
 assert.equal(received.length, 1, "unsubscribe must stop further events");
 
 assert.equal(await client.reveal("/tmp/screenpipe-tauri-smoke.mp4"), true);

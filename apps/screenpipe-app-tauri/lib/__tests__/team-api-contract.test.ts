@@ -206,7 +206,7 @@ describe("team API contract", () => {
       const mockClaimToken = "claim-abc-123";
 
       // Step 5: invite link contains NO key material
-      const inviteLink = `screenpipe://join-team?team_id=${MOCK_TEAM_ID}&invite_token=tok-xyz&claim=${mockClaimToken}`;
+      const inviteLink = `daimonion://join-team?team_id=${MOCK_TEAM_ID}&invite_token=tok-xyz&claim=${mockClaimToken}`;
       const url = new URL(inviteLink);
 
       expect(url.searchParams.get("team_id")).toBe(MOCK_TEAM_ID);
@@ -243,7 +243,7 @@ describe("team API contract", () => {
       const encrypted = await encryptConfig(pipeConfig, adminKey);
 
       // old-style link with key= param
-      const inviteLink = `screenpipe://join-team?team_id=${MOCK_TEAM_ID}&key=${encodeURIComponent(keyBase64)}`;
+      const inviteLink = `daimonion://join-team?team_id=${MOCK_TEAM_ID}&key=${encodeURIComponent(keyBase64)}`;
       const url = new URL(inviteLink);
       const keyParam = url.searchParams.get("key");
 

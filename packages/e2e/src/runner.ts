@@ -12,7 +12,7 @@
  *   bun packages/e2e/src/runner.ts --suite cli        # CLI tests only
  *   bun packages/e2e/src/runner.ts --suite app        # App UI tests (WebDriver)
  *   bun packages/e2e/src/runner.ts --base-url http://localhost:3030
- *   bun packages/e2e/src/runner.ts --binary ./target/release/screenpipe
+ *   bun packages/e2e/src/runner.ts --binary ./target/release/daimonion
  *
  * Environment:
  *   DAIMONION_BASE_URL  — API base URL (default: http://localhost:3030)

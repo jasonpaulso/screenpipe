@@ -565,7 +565,7 @@ mod tests {
     async fn test_screenpipe_app_filtering() {
         // Simulate the filtering logic from create_time_series_frame
         fn should_include_entry(app_name: &str) -> bool {
-            !app_name.to_lowercase().contains("screenpipe")
+            !app_name.to_lowercase().contains("daimonion")
         }
 
         // Regular apps should be included
@@ -580,22 +580,22 @@ mod tests {
             "Empty app name should be included"
         );
 
-        // Screenpipe variants should be filtered out
+        // daimonion variants should be filtered out
         assert!(
-            !should_include_entry("screenpipe"),
-            "screenpipe should be filtered"
+            !should_include_entry("daimonion"),
+            "daimonion should be filtered"
         );
         assert!(
-            !should_include_entry("Screenpipe"),
-            "Screenpipe should be filtered"
+            !should_include_entry("Daimonion"),
+            "Daimonion should be filtered"
         );
         assert!(
-            !should_include_entry("SCREENPIPE"),
-            "SCREENPIPE should be filtered"
+            !should_include_entry("DAIMONION"),
+            "DAIMONION should be filtered"
         );
         assert!(
-            !should_include_entry("screenpipe-app"),
-            "screenpipe-app should be filtered"
+            !should_include_entry("daimonion-app"),
+            "daimonion-app should be filtered"
         );
     }
 

@@ -64,13 +64,13 @@ rg -l "AI that knows everything you've seen" | wc -l          # source-file head
 rg -o '^name = "(screenpipe[^"]*)"' -g Cargo.toml | sort -u   # crate name declarations
 rg -n '"name":\s*"(@?screenpipe[^"]*)"' -g package.json       # npm package names
 rg -on "DAIMONION_[A-Z0-9_]+" | sort -u                      # env var tokens
-rg -c "screenpipe://"                                         # deep-link scheme
+rg -c "daimonion://"                                         # deep-link scheme
 rg -l "\.daimonion" | wc -l                                  # data-dir refs
 ```
 
 **Snapshot at authoring (approx):** ~1,375 files mention the name · 1,125 carry the header ·
 33 crate-name declarations (~30 distinct crates; 19 dirs under `crates/`) · 14 npm names ·
-47 `screenpipe://` hits · 192 files reference `.daimonion` · 8 files hold the PostHog key ·
+47 `daimonion://` hits · 192 files reference `.daimonion` · 8 files hold the PostHog key ·
 1 Sentry DSN · ~15 distinct network domains.
 
 ### Phase 1 — Cosmetic / SOFT (zero functional risk)
@@ -115,7 +115,7 @@ Independent of naming; grouped here as a clean-identity step. You do not own the
 - **Bundle id** `screenpi.pe.dev` → `<pe.new.id>` (`src-tauri/tauri.conf.json`, signing config).
   ⚠️ **This resets macOS TCC** — mic, screen-recording, and accessibility permissions re-prompt on
   first launch. Document the re-grant flow; the existing onboarding "continue anyway" path covers it.
-- **Deep-link scheme** `screenpipe://` → `<newname://>` across the dispatch sites in Rust
+- **Deep-link scheme** `daimonion://` → `<newname://>` across the dispatch sites in Rust
   (`main.rs`, `commands.rs`), Swift (`notification_panel.swift`), and JS (`ee/sdk/tauri`). Update the
   scheme registration in the bundle config.
 - **Data dir** `~/.daimonion` → `~/.<newname>` (`crates/screenpipe-config/src/persistence.rs`,

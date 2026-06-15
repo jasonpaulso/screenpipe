@@ -47,8 +47,8 @@ interface NotificationPayload {
 }
 
 function windowForDeeplink(url: string) {
-  return url.startsWith("screenpipe://meeting/") ||
-    url.startsWith("screenpipe://meeting?")
+  return url.startsWith("daimonion://meeting/") ||
+    url.startsWith("daimonion://meeting?")
     ? { Home: { page: "meetings" } }
     : "Main";
 }
@@ -168,7 +168,7 @@ export default function NotificationPanelPage() {
             }
             case "deeplink": {
               if (actionObj.url) {
-                if (actionObj.url.startsWith("screenpipe://")) {
+                if (actionObj.url.startsWith("daimonion://")) {
                   // Show the Main window FIRST — its DeeplinkHandler only
                   // routes events once mounted, and on macOS the window
                   // won't actually come to the foreground unless we activate
@@ -208,7 +208,7 @@ export default function NotificationPanelPage() {
                 }
               }
               const deeplink = actionObj.deeplink_url || actionObj.deeplinkUrl;
-              if (typeof deeplink === "string" && deeplink.startsWith("screenpipe://")) {
+              if (typeof deeplink === "string" && deeplink.startsWith("daimonion://")) {
                 await commands.showWindowActivated(windowForDeeplink(deeplink));
                 await new Promise((r) => setTimeout(r, 150));
                 await emit("deep-link-received", deeplink);

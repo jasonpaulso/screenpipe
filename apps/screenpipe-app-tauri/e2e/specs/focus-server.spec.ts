@@ -167,7 +167,7 @@ describe("Focus server", function () {
       this.skip();
     }
 
-    const deepLink = `screenpipe://e2e/deep-link?ts=${Date.now()}`;
+    const deepLink = `daimonion://e2e/deep-link?ts=${Date.now()}`;
     const args = ["--e2e", "second-instance", `ts=${Date.now()}`];
 
     const res = await postFocus({

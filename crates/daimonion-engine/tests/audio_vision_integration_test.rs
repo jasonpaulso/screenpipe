@@ -7,7 +7,7 @@ async fn test_screen_capture_to_api_delay() {
     // rm the data directory
     std::fs::remove_dir_all("../data-test").unwrap_or_default();
 
-    println!("Run: ./target/release/screenpipe --data-dir ./data-test");
+    println!("Run: ./target/release/daimonion --data-dir ./data-test");
 
     let wikipedia_url = "https://en.wikipedia.org/wiki/Rust_(programming_language)";
     println!("Go to this Wikipedia page: {}", wikipedia_url);

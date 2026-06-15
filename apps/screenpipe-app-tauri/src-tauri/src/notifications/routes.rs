@@ -73,7 +73,7 @@ pub async fn send_notification(
         }));
     }
 
-    // Rewrite file-path markdown links to screenpipe://view?path=… so they
+    // Rewrite file-path markdown links to daimonion://view?path=… so they
     // open in the in-app viewer instead of the OS default app (Xcode for
     // .md, Preview for .json, etc.). External URLs pass through untouched.
     let body = rewrite_file_links(&payload.body);

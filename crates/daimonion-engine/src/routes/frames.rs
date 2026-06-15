@@ -480,7 +480,7 @@ pub struct FrameMetadataResponse {
     pub timestamp: DateTime<Utc>,
 }
 
-/// Get frame metadata (timestamp) for deep link navigation. screenpipe://frame/123 → resolve to timestamp.
+/// Get frame metadata (timestamp) for deep link navigation. daimonion://frame/123 → resolve to timestamp.
 #[oasgen]
 pub async fn get_frame_metadata(
     State(state): State<Arc<AppState>>,

@@ -437,7 +437,7 @@ paths:
       summary: Get frame context
   /frames/{frame_id}/metadata:
     get:
-      description: Get frame metadata (timestamp) for deep link navigation. screenpipe://frame/123 → resolve to timestamp.
+      description: Get frame metadata (timestamp) for deep link navigation. daimonion://frame/123 → resolve to timestamp.
       operationId: routes_frames_get_frame_metadata
       parameters:
       - name: frame_id

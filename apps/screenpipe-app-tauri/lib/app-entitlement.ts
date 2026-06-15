@@ -78,7 +78,7 @@ export function isDevBillingBypassEnabled() {
   return true;
 }
 
-// Show the dev-only login helper (paste a token / screenpipe:// URL) when we are
+// Show the dev-only login helper (paste a token / daimonion:// URL) when we are
 // not in a plain production build, i.e. dev, a forced gate, or pointed at a
 // non-prod website. Never shows in a normal prod release.
 export function isDevLoginEnabled() {

@@ -391,7 +391,7 @@ commits: `f1255eac`, `25cbdc6b`, `2529367d`, `d9821624`, `e61501da`, `039d5fea`,
 - [ ] **window-focused refresh** — opening app via shortcut/tray refreshes timeline data immediately (`0b057046`).
 - [ ] **code block colors in memories** — Verify that code block colors in the memories page match the current app theme. (`1c8d785fc`)
 - [ ] **memories page pagination** — Verify that memories page pagination works correctly and tags are loaded from the API. (`3e00b70b4`)
-- [ ] **frame deep link navigation** — `screenpipe://frame/N` or `screenpipe://frames/N` opens main window and jumps to frame N. works from cold start; invalid IDs show clear error.
+- [ ] **frame deep link navigation** — `daimonion://frame/N` or `daimonion://frames/N` opens main window and jumps to frame N. works from cold start; invalid IDs show clear error.
 - [ ] **missing frames return 404** — Attempt to access a non-existent frame via the API. Verify that it returns a 404 error. (`2e63282b8`)
 - [ ] **Search result exact navigation** — Click a search result. Verify it navigates exactly to the associated `frame_id`. (`a98fa2991`)
 - [ ] **Search navigation persistence** — Navigate to a frame from search results. Shift focus away from the app and back. Verify the navigation is not reset. (`71dee4ca3`)
@@ -436,7 +436,7 @@ commits: `f1255eac`, `25cbdc6b`, `2529367d`, `d9821624`
 - [ ] **app context popover** — clicking app icon in timeline shows context (time, windows, urls, audio) (`be3ecffb`).
 - [ ] **daily summary in timeline** — Apple Intelligence summary shows in timeline, compact when no summary (`d9821624`).
 - [ ] **window-focused refresh** — opening app via shortcut/tray refreshes timeline data immediately (`0b057046`).
-- [ ] **frame deep link navigation** — `screenpipe://frame/N` or `screenpipe://frames/N` opens main window and jumps to frame N. works from cold start; invalid IDs show clear error.
+- [ ] **frame deep link navigation** — `daimonion://frame/N` or `daimonion://frames/N` opens main window and jumps to frame N. works from cold start; invalid IDs show clear error.
 - [ ] **Keyword search accessibility** — Keyword search should find content within accessibility-only frames and utilize `frames_fts` for comprehensive accessibility text searching.
 - [ ] **Keyword search logic** — Verify that keyword search SQL correctly uses `OR` instead of `UNION` within `IN()`.
 - [ ] **Search prompt accuracy** — Verify that search prompts are improved to prevent false negatives from over-filtering.

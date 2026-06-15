@@ -4458,7 +4458,7 @@ impl DatabaseManager {
         }
     }
 
-    /// Get timestamp for a frame. Used for deep link navigation (screenpipe://frame/123).
+    /// Get timestamp for a frame. Used for deep link navigation (daimonion://frame/123).
     pub async fn get_frame_timestamp(
         &self,
         frame_id: i64,

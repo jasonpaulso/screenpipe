@@ -109,11 +109,11 @@ describe("Notification → viewer link rewrite + render", function () {
     rmSync(tmpDir, { recursive: true, force: true });
   });
 
-  it("POST /notify rewrites a file-path markdown link to screenpipe://view", async () => {
+  it("POST /notify rewrites a file-path markdown link to daimonion://view", async () => {
     // Real local file path inside the body — the regression we're guarding
     // is `rewrite_file_links` either not running or skipping absolute Unix
     // paths. Pre-rewrite body must contain a bare `(/path)`; post-rewrite
-    // body returned by GET /notifications must contain `screenpipe://view`.
+    // body returned by GET /notifications must contain `daimonion://view`.
     const rawPath = filePath();
     await postNotification({
       id: notificationId,
@@ -126,13 +126,13 @@ describe("Notification → viewer link rewrite + render", function () {
     const ours = entries.find((e) => e.id === notificationId);
     if (!ours) throw new Error("notification not persisted to /notifications");
     const body = ours.body ?? "";
-    if (!body.includes("screenpipe://view?path=")) {
+    if (!body.includes("daimonion://view?path=")) {
       throw new Error(`body was not rewritten — still contains raw path. body=${body}`);
     }
     if (body.includes(rawPath)) {
       throw new Error(`body still contains the raw file path AFTER rewrite. body=${body}`);
     }
-    expect(body).toContain("screenpipe://view?path=");
+    expect(body).toContain("daimonion://view?path=");
     expect(body).not.toContain(rawPath);
   });
 
@@ -153,7 +153,7 @@ describe("Notification → viewer link rewrite + render", function () {
     expect(ours).toBeTruthy();
     const body = ours?.body ?? "";
     expect(body).toContain("https://screenpi.pe/docs");
-    expect(body).not.toContain("screenpipe://view");
+    expect(body).not.toContain("daimonion://view");
   });
 
   it("persists every notification we posted, regardless of panel render timing", async () => {

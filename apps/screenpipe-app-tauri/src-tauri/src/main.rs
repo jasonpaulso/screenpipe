@@ -449,7 +449,7 @@ async fn main() {
         let args: Vec<String> = std::env::args().collect();
         let deep_link_url = args
             .iter()
-            .find(|a| a.starts_with("screenpipe://"))
+            .find(|a| a.starts_with("daimonion://"))
             .cloned();
 
         let focus_port: u16 = std::env::var("DAIMONION_FOCUS_PORT")
@@ -884,7 +884,7 @@ async fn main() {
             }
 
             // Forward deep-link URL from args
-            if let Some(url) = args_clone.iter().find(|a| a.starts_with("screenpipe://")) {
+            if let Some(url) = args_clone.iter().find(|a| a.starts_with("daimonion://")) {
                 let _ = app_for_closure.emit("deep-link-received", url.clone());
             }
 
@@ -1629,7 +1629,7 @@ async fn main() {
             app_handle.manage(update_manager.clone()); // Register for state::<Arc<UpdatesManager>>()
 
             // Setup tray
-            if let Some(_) = app_handle.tray_by_id("screenpipe_main") {
+            if let Some(_) = app_handle.tray_by_id("daimonion_main") {
                 if let Err(e) = tray::setup_tray(&app_handle, update_manager.update_now_menu_item_ref()) {
                     error!("Failed to setup tray: {}", e);
                 }

@@ -503,7 +503,7 @@ curl -X POST http://localhost:11435/notify \
 # Markdown body with links
 curl -X POST http://localhost:11435/notify \
   -H "Content-Type: application/json" \
-  -d '{"title": "Meeting summary", "body": "**Q3 Planning** notes saved\n\nopen [meeting notes](~/Documents/notes/q3.md) or view [recording](screenpipe://timeline)"}'
+  -d '{"title": "Meeting summary", "body": "**Q3 Planning** notes saved\n\nopen [meeting notes](~/Documents/notes/q3.md) or view [recording](daimonion://timeline)"}'
 
 # Link to a local file (absolute path or ~ path)
 curl -X POST http://localhost:11435/notify \
@@ -512,10 +512,10 @@ curl -X POST http://localhost:11435/notify \
 
 # With action buttons
 # Use `type: "link"` for external URLs and `type: "deeplink"` for
-# screenpipe:// in-app routes. `type: "dismiss"` closes the notification.
+# daimonion:// in-app routes. `type: "dismiss"` closes the notification.
 curl -X POST http://localhost:11435/notify \
   -H "Content-Type: application/json" \
-  -d '{"title": "Meeting summary", "body": "**Q3 Planning**\n- Budget approved", "actions": [{"id": "view", "label": "view", "type": "deeplink", "url": "screenpipe://timeline"}, {"id": "skip", "label": "skip", "type": "dismiss"}]}'
+  -d '{"title": "Meeting summary", "body": "**Q3 Planning**\n- Budget approved", "actions": [{"id": "view", "label": "view", "type": "deeplink", "url": "daimonion://timeline"}, {"id": "skip", "label": "skip", "type": "dismiss"}]}'
 
 # External URL action (opens in browser)
 curl -X POST http://localhost:11435/notify \
@@ -540,7 +540,7 @@ curl -X POST http://localhost:11435/notify \
 **Supported link types in body markdown:**
 - Web URLs: `[docs](https://docs.screenpi.pe)` — opens in browser
 - File paths: `[notes](~/notes/file.md)` or `[log](/var/log/app.log)` — opens in default app
-- Deeplinks: `[timeline](screenpipe://timeline)` — navigates within screenpipe
+- Deeplinks: `[timeline](daimonion://timeline)` — navigates within screenpipe
 
 Returns `{"success": true, "message": "Notification sent successfully"}`.
 
@@ -561,8 +561,8 @@ curl http://localhost:3030/vision/list          # Monitors
 Reference specific moments with clickable links:
 
 ```markdown
-[10:30 AM — Chrome](screenpipe://frame/12345)           # screen text results (use frame_id)
-[meeting at 3pm](screenpipe://timeline?timestamp=ISO8601) # Audio results (use timestamp)
+[10:30 AM — Chrome](daimonion://frame/12345)           # screen text results (use frame_id)
+[meeting at 3pm](daimonion://timeline?timestamp=ISO8601) # Audio results (use timestamp)
 ```
 
 Only use IDs/timestamps from actual search results. Never fabricate.

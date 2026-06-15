@@ -118,7 +118,7 @@
           "requireLiteralLeadingDot": false
         },
         {
-          "path": "$RESOURCE/.screenpipe/*",
+          "path": "$RESOURCE/.daimonion/*",
           "requireLiteralLeadingDot": false
         },
         {
@@ -138,7 +138,7 @@
           "requireLiteralLeadingDot": false
         },
         {
-          "path": "$HOME/.screenpipe/*",
+          "path": "$HOME/.daimonion/*",
           "requireLiteralLeadingDot": false
         },
         {
@@ -146,15 +146,15 @@
           "requireLiteralLeadingDot": false
         },
         {
-          "path": "$HOME/.screenpipe/data/**",
+          "path": "$HOME/.daimonion/data/**",
           "requireLiteralLeadingDot": false
         },
         {
-          "path": "$HOME/.screenpipe/**",
+          "path": "$HOME/.daimonion/**",
           "requireLiteralLeadingDot": false
         },
         {
-          "path": "$RESOURCE/.screenpipe/**",
+          "path": "$RESOURCE/.daimonion/**",
           "requireLiteralLeadingDot": false
         },
         {

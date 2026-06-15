@@ -153,7 +153,7 @@ fn native_notif_action_callback_inner(json_ptr: *const std::os::raw::c_char) {
     // URL-opening actions. Two distinct semantics, explicit types so senders
     // can't conflate them:
     //   "link"      → external URL, opened in the user's default browser
-    //   "deeplink"  → screenpipe:// in-app route, dispatched to DeeplinkHandler
+    //   "deeplink"  → daimonion:// in-app route, dispatched to DeeplinkHandler
     //
     // Both are handled in Rust rather than via JS emit so clicks work even
     // when the overlay window (which hosts the JS listener in
@@ -177,9 +177,9 @@ fn native_notif_action_callback_inner(json_ptr: *const std::os::raw::c_char) {
         };
 
         // Guard against senders putting a browser URL into "deeplink" or a
-        // screenpipe:// URL into "link". We route on actual scheme, not on
+        // daimonion:// URL into "link". We route on actual scheme, not on
         // the declared type, so a typo doesn't break the click.
-        let is_in_app = url.starts_with("screenpipe://");
+        let is_in_app = url.starts_with("daimonion://");
         let app_clone = app.clone();
         std::thread::spawn(move || {
             if is_in_app {
@@ -223,7 +223,7 @@ fn native_notif_action_callback_inner(json_ptr: *const std::os::raw::c_char) {
 
 #[cfg(any(target_os = "macos", test))]
 fn is_meeting_deeplink(url: &str) -> bool {
-    url.starts_with("screenpipe://meeting/") || url.starts_with("screenpipe://meeting?")
+    url.starts_with("daimonion://meeting/") || url.starts_with("daimonion://meeting?")
 }
 
 #[cfg(target_os = "macos")]
@@ -234,7 +234,7 @@ fn parse_meeting_deeplink(url: &str) -> Option<(u64, bool)> {
 
     let (base, query) = url.split_once('?').unwrap_or((url, ""));
     let path_id = base
-        .strip_prefix("screenpipe://meeting/")
+        .strip_prefix("daimonion://meeting/")
         .and_then(|rest| rest.split('/').next())
         .filter(|id| !id.is_empty());
     let query_id = query.split('&').find_map(|part| {
@@ -288,7 +288,7 @@ mod tests {
     #[test]
     fn parses_meeting_deeplink_path_id() {
         assert_eq!(
-            parse_meeting_deeplink("screenpipe://meeting/123"),
+            parse_meeting_deeplink("daimonion://meeting/123"),
             Some((123, true))
         );
     }
@@ -296,7 +296,7 @@ mod tests {
     #[test]
     fn parses_meeting_deeplink_query_id_and_live_flag() {
         assert_eq!(
-            parse_meeting_deeplink("screenpipe://meeting?id=456&live=0"),
+            parse_meeting_deeplink("daimonion://meeting?id=456&live=0"),
             Some((456, false))
         );
     }
@@ -304,10 +304,10 @@ mod tests {
     #[test]
     fn rejects_invalid_meeting_deeplink() {
         assert_eq!(
-            parse_meeting_deeplink("screenpipe://meeting/not-a-number"),
+            parse_meeting_deeplink("daimonion://meeting/not-a-number"),
             None
         );
-        assert_eq!(parse_meeting_deeplink("screenpipe://settings"), None);
+        assert_eq!(parse_meeting_deeplink("daimonion://settings"), None);
     }
 
     // Regression for b7dc02415: `get_local_api_config` returned {key: null}
@@ -896,8 +896,8 @@ pub fn write_browser_logs(entries: Vec<BrowserLogEntry>) {
 pub fn set_tray_unhealth_icon(app_handle: tauri::AppHandle) {
     let app = app_handle.clone();
     let _ = app_handle.run_on_main_thread(move || {
-        if let Some(main_tray) = app.tray_by_id("screenpipe_main") {
-            match tauri::image::Image::from_path("icons/screenpipe-logo-tray-failed.png") {
+        if let Some(main_tray) = app.tray_by_id("daimonion_main") {
+            match tauri::image::Image::from_path("icons/daimonion-logo-tray-failed.png") {
                 Ok(icon) => {
                     if let Err(e) = crate::safe_icon::safe_set_icon(&main_tray, icon) {
                         error!("failed to set tray unhealthy icon: {}", e);
@@ -916,8 +916,8 @@ pub fn set_tray_unhealth_icon(app_handle: tauri::AppHandle) {
 pub fn set_tray_health_icon(app_handle: tauri::AppHandle) {
     let app = app_handle.clone();
     let _ = app_handle.run_on_main_thread(move || {
-        if let Some(main_tray) = app.tray_by_id("screenpipe_main") {
-            match tauri::image::Image::from_path("icons/screenpipe-logo-tray-black.png") {
+        if let Some(main_tray) = app.tray_by_id("daimonion_main") {
+            match tauri::image::Image::from_path("icons/daimonion-logo-tray-black.png") {
                 Ok(icon) => {
                     if let Err(e) = crate::safe_icon::safe_set_icon(&main_tray, icon) {
                         error!("failed to set tray healthy icon: {}", e);
@@ -1470,13 +1470,13 @@ pub async fn get_disk_usage(
 /// Open the screenpi.pe login page.
 /// On Windows, opens in the system browser (WebView2 has issues with some auth
 /// providers; the registered deep-link scheme handles the redirect back).
-/// On macOS/Linux, uses an in-app WebView that intercepts the screenpipe://
+/// On macOS/Linux, uses an in-app WebView that intercepts the daimonion://
 /// deep-link redirect (Safari blocks custom-scheme redirects).
 #[tauri::command]
 #[specta::specta]
 pub async fn open_login_window(app_handle: tauri::AppHandle) -> Result<(), String> {
     // Windows: open in system browser — deep link is registered via
-    // tauri_plugin_deep_link::register_all() so the screenpipe:// redirect works
+    // tauri_plugin_deep_link::register_all() so the daimonion:// redirect works
     #[cfg(target_os = "windows")]
     {
         use tauri_plugin_opener::OpenerExt;
@@ -1548,7 +1548,7 @@ pub async fn open_login_window(app_handle: tauri::AppHandle) -> Result<(), Strin
 }
 
 /// Open Google Calendar OAuth inside an in-app WebView.
-/// Same pattern as `open_login_window` — intercepts the screenpipe:// deep-link
+/// Same pattern as `open_login_window` — intercepts the daimonion:// deep-link
 /// redirect so we don't rely on Safari custom-scheme support.
 #[allow(dead_code)] // invoked via Tauri IPC, not direct Rust calls
 #[tauri::command]
@@ -3146,11 +3146,11 @@ pub async fn copy_frame_to_clipboard(app: tauri::AppHandle, frame_id: i64) -> Re
     Ok(())
 }
 
-/// Copy a frame deeplink (screenpipe://frame/N) to clipboard. Native API only.
+/// Copy a frame deeplink (daimonion://frame/N) to clipboard. Native API only.
 #[tauri::command]
 #[specta::specta]
 pub async fn copy_deeplink_to_clipboard(frame_id: i64) -> Result<(), String> {
-    let link = format!("screenpipe://frame/{}", frame_id);
+    let link = format!("daimonion://frame/{}", frame_id);
     let mut clipboard = arboard::Clipboard::new().map_err(|e| format!("clipboard error: {}", e))?;
     clipboard
         .set_text(link)
