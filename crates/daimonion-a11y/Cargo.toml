@@ -83,7 +83,10 @@ tokio = { workspace = true }
 tempfile = { workspace = true }
 # Linux debug examples are compiled by `cargo clippy --all-targets` on every
 # developer OS, so keep their D-Bus dependency available outside Linux too.
-zbus = { workspace = true }
+# Workspace zbus is default-features=false (+blocking); add a runtime here or
+# zbus refuses to compile ("async-io or tokio must be enabled") when a11y's
+# dev-deps are active on macOS (the engine build never activates them).
+zbus = { workspace = true, features = ["blocking", "async-io"] }
 
 [target.'cfg(target_os = "macos")'.dev-dependencies]
 libc = { workspace = true }

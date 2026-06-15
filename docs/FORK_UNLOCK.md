@@ -99,9 +99,27 @@ renders the same disabled + tooltip pattern from one place. Flipping a feature f
 "live" later then becomes a one-line change per site (or one registry flip).
 
 **Constraints.** Keep the disable **client-only**; do not also alter server-guard expectations. When
-an alternative ships, the same site flips to enabled and points at the new local/own backend. This
-work is **future execution** — this catalog records the directive, the inventory, and the proposed
-component; it is not yet implemented.
+an alternative ships, the same site flips to enabled and points at the new local/own backend.
+
+**Status: IMPLEMENTED + verified.** The shared affordance lives in
+`components/ui/coming-soon.tsx` (`ComingSoon` wrapper, `ComingSoonButton`, `ComingSoonBadge`,
+`COMING_SOON_REASON`). It is wired into every gate site in the inventory above
+(`recording-settings.tsx`, `ai-presets.tsx`, the `*-card.tsx` connectors, `sync-settings.tsx`,
+`archive-settings.tsx`, `account-section.tsx`, onboarding `connect-apps.tsx`, etc.). `cloud_subscribed`
+is falsy by default — no code path sets it true except the live billing fetch in
+`sync-settings.tsx` (`hasSubscription` branch), which never fires without a backend, so cloud
+controls stay disabled. Verified by `bunx vitest run components/ui/coming-soon.test.tsx
+components/app-entitlement-gate.test.tsx lib/app-entitlement.test.ts` — 20 tests pass.
+
+### 4b. What each deferred feature needs to go live
+
+| Coming-soon feature | To implement |
+|---|---|
+| Cloud transcription | Set a Deepgram API key (own account) → flip the `screenpipe-cloud`/`deepgram` engine option enabled; or keep local Whisper/Parakeet (already default). |
+| Cloud LLM / Opus presets | Point AI presets at Ollama (local) or your own provider key; flip the cloud provider tile enabled. |
+| Cloud sync / archive | Implement a sync destination — `daimonion-sync` is pluggable; supply your own storage/encryption backend, then enable the sync panel. |
+| AI chat quota | Run your own AI gateway; remove the server-side quota assumption. |
+| OAuth (Gmail/GCal/Docs/Sheets) | Register your own OAuth app + credentials and a local callback broker; flip the connector cards enabled. |
 
 ## 5. Env / flag reference
 
