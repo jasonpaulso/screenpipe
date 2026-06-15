@@ -41,7 +41,7 @@ export async function getInstalledMcpVersion(): Promise<string | null> {
     const configPath = await getClaudeConfigPath();
     if (!configPath) return null;
     const config = JSON.parse(await readTextFile(configPath));
-    return config?.mcpServers?.screenpipe ? "installed" : null;
+    return config?.mcpServers?.daimonion ? "installed" : null;
   } catch { return null; }
 }
 
@@ -53,7 +53,7 @@ export async function getCursorMcpConfigPath(): Promise<string> {
 export async function isCursorMcpInstalled(): Promise<boolean> {
   try {
     const content = await readTextFile(await getCursorMcpConfigPath());
-    return !!JSON.parse(content)?.mcpServers?.screenpipe;
+    return !!JSON.parse(content)?.mcpServers?.daimonion;
   } catch { return false; }
 }
 
@@ -62,7 +62,7 @@ export async function getCodexConfigPath(): Promise<string> {
   return join(home, ".codex", "config.toml");
 }
 
-const CODEX_SCREENPIPE_TABLE = /(?:^|\n)\[mcp_servers\.screenpipe\][\s\S]*?(?=\n\[(?!mcp_servers\.screenpipe(?:\.|\]))[^\]]+\]|\s*$)/;
+const CODEX_SCREENPIPE_TABLE = /(?:^|\n)\[mcp_servers\.daimonion\][\s\S]*?(?=\n\[(?!mcp_servers\.daimonion(?:\.|\]))[^\]]+\]|\s*$)/;
 
 export function hasEnabledCodexMcp(content: string): boolean {
   const table = content.match(CODEX_SCREENPIPE_TABLE)?.[0] ?? "";

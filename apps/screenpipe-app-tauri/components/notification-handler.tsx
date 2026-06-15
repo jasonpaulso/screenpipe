@@ -308,7 +308,7 @@ it runs a local API at http://localhost:3030 that lets you query everything you'
 
 ## what is a pipe?
 
-a pipe is a scheduled AI agent defined as a single markdown file: ~/.screenpipe/pipes/{name}/pipe.md
+a pipe is a scheduled AI agent defined as a single markdown file: ~/.daimonion/pipes/{name}/pipe.md
 every N minutes, screenpipe runs a coding agent with the pipe's prompt.
 the agent can query screen data, write files, call external APIs, send notifications, etc.
 

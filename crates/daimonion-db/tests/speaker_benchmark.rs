@@ -1,6 +1,6 @@
 /// Speaker clustering experiments
 ///
-/// Replays all embeddings from `~/.screenpipe/db.sqlite` through different
+/// Replays all embeddings from `~/.daimonion/db.sqlite` through different
 /// clustering strategies and scores each one. No production code is touched.
 ///
 /// Run with: cargo test -p screenpipe-db --test speaker_benchmark -- --nocapture --ignored

@@ -292,7 +292,7 @@ export default function NotificationPanelPage() {
         // Log loudly instead of swallowing silently — this is the place a
         // bug like "click Open does nothing" used to vanish. We still hide
         // the panel so the user isn't left with a stuck UI, but the failure
-        // now shows up in DevTools + ~/.screenpipe/logs (via tracing from
+        // now shows up in DevTools + ~/.daimonion/logs (via tracing from
         // any Tauri command that errored) + PostHog as a distinct event.
         console.error(
           "notification action failed",
@@ -794,7 +794,7 @@ it runs a local API at http://localhost:3030 that lets you query everything you'
 
 ## what is a pipe?
 
-a pipe is a scheduled AI agent defined as a single markdown file: ~/.screenpipe/pipes/{name}/pipe.md
+a pipe is a scheduled AI agent defined as a single markdown file: ~/.daimonion/pipes/{name}/pipe.md
 every N minutes, screenpipe runs a coding agent with the pipe's prompt.
 the agent can query screen data, write files, call external APIs, send notifications, etc.
 

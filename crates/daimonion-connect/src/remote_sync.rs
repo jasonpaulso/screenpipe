@@ -4,7 +4,7 @@
 
 //! Pure-Rust SSH/SFTP sync for screenpipe data.
 //!
-//! Copies the entire ~/.screenpipe directory to a remote server over SFTP.
+//! Copies the entire ~/.daimonion directory to a remote server over SFTP.
 //! No rsync, scp, or any CLI dependency required.
 
 use anyhow::{Context, Result};
@@ -439,7 +439,7 @@ async fn sync_dir(
 
 // ── Public API ──────────────────────────────────────────────────────────
 
-/// Sync the entire ~/.screenpipe directory to the remote server.
+/// Sync the entire ~/.daimonion directory to the remote server.
 pub async fn sync_to_remote(config: &SyncConfig, data_dir: &Path) -> SyncResult {
     // Wrap the entire sync in a timeout
     match tokio::time::timeout(SYNC_TIMEOUT, sync_to_remote_inner(config, data_dir)).await {

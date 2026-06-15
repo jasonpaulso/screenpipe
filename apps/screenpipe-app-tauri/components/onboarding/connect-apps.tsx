@@ -109,7 +109,7 @@ async function readMcpConfig(configPath: string): Promise<Record<string, unknown
 
 async function writeMcpConfig(configPath: string, config: Record<string, unknown>): Promise<void> {
   if (!config.mcpServers || typeof config.mcpServers !== "object") config.mcpServers = {};
-  (config.mcpServers as Record<string, unknown>).screenpipe = await buildMcpConfig();
+  (config.mcpServers as Record<string, unknown>).daimonion = await buildMcpConfig();
   // Ensure parent directory exists (Claude Desktop may not have created it yet)
   await mkdir(await dirname(configPath), { recursive: true });
   await writeFile(configPath, new TextEncoder().encode(JSON.stringify(config, null, 2)));
@@ -124,7 +124,7 @@ async function getCursorMcpConfigPath(): Promise<string> {
 async function isCursorMcpInstalled(): Promise<boolean> {
   try {
     const content = await readTextFile(await getCursorMcpConfigPath());
-    return !!JSON.parse(content)?.mcpServers?.screenpipe;
+    return !!JSON.parse(content)?.mcpServers?.daimonion;
   } catch { return false; }
 }
 
@@ -150,7 +150,7 @@ async function isClaudeMcpInstalled(): Promise<boolean> {
     const configPath = await getClaudeMcpConfigPath();
     console.log("[claude-mcp] checking install at:", configPath);
     const content = await readTextFile(configPath);
-    return !!JSON.parse(content)?.mcpServers?.screenpipe;
+    return !!JSON.parse(content)?.mcpServers?.daimonion;
   } catch (e) {
     console.log("[claude-mcp] isInstalled check failed:", e);
     return false;
@@ -177,7 +177,7 @@ async function getCodexConfigPath(): Promise<string> {
   return join(home, ".codex", "config.toml");
 }
 
-const CODEX_SCREENPIPE_TABLE = /(?:^|\n)\[mcp_servers\.screenpipe\][\s\S]*?(?=\n\[(?!mcp_servers\.screenpipe(?:\.|\]))[^\]]+\]|\s*$)/;
+const CODEX_SCREENPIPE_TABLE = /(?:^|\n)\[mcp_servers\.daimonion\][\s\S]*?(?=\n\[(?!mcp_servers\.daimonion(?:\.|\]))[^\]]+\]|\s*$)/;
 
 async function isCodexMcpInstalled(): Promise<boolean> {
   try {
@@ -200,7 +200,7 @@ async function installCodexMcp(): Promise<void> {
     .trimEnd();
 
   const block = [
-    "[mcp_servers.screenpipe]",
+    "[mcp_servers.daimonion]",
     `command = ${JSON.stringify(command)}`,
     `args = [${args.map(a => JSON.stringify(a)).join(", ")}]`,
     "enabled = true",

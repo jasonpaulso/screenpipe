@@ -122,7 +122,7 @@ it runs a local API at http://localhost:3030 that lets you query everything you'
 
 ## what is a pipe?
 
-a pipe is a scheduled AI agent defined as a single markdown file: ~/.screenpipe/pipes/{name}/pipe.md
+a pipe is a scheduled AI agent defined as a single markdown file: ~/.daimonion/pipes/{name}/pipe.md
 every N minutes, screenpipe runs a coding agent (like pi or claude-code) with the pipe's prompt.
 the agent can query your screen data, write files, call external APIs, send notifications, etc.
 
@@ -172,7 +172,7 @@ curl "http://localhost:3030/search?limit=20&content_type=all&start_time=<ISO8601
 
 IMPORTANT: always use "bun x screenpipe@latest" (not "bun x screenpipe" or "screenpipe") to ensure the latest CLI version:
 
-install: bun x screenpipe@latest pipe install ~/.screenpipe/pipes/my-pipe
+install: bun x screenpipe@latest pipe install ~/.daimonion/pipes/my-pipe
 enable:  bun x screenpipe@latest pipe enable my-pipe
 test:    bun x screenpipe@latest pipe run my-pipe
 
@@ -227,7 +227,7 @@ function buildOptimizePrompt(pipeName: string): string {
 ## your task
 
 1. first, ask me: what do i expect this pipe to produce? what's the ideal output?
-2. then read the pipe prompt: ~/.screenpipe/pipes/${pipeName}/pipe.md
+2. then read the pipe prompt: ~/.daimonion/pipes/${pipeName}/pipe.md
 3. check the last few execution logs by querying the screenpipe API: GET http://localhost:3030/pipes/${pipeName}/executions?limit=5
 4. look at the pi agent session files in ${sessionDir} for the full conversation history (tool calls, reasoning, errors)
 5. based on all of this, suggest specific improvements to the pipe.md prompt
@@ -1087,7 +1087,7 @@ export function PipesSection() {
     let forkName = `${base}-fork`;
     try {
       const home = await homeDir();
-      const pipesDir = await join(home, ".screenpipe", "pipes");
+      const pipesDir = await join(home, ".daimonion", "pipes");
       let i = 1;
       while (await exists(await join(pipesDir, forkName))) {
         i += 1;
@@ -1136,7 +1136,7 @@ export function PipesSection() {
       const updatedPipes: string[] = [];
       try {
         const home = await homeDir();
-        const pipesDir = await join(home, ".screenpipe", "pipes");
+        const pipesDir = await join(home, ".daimonion", "pipes");
         for (const c of receivedConfigs) {
           const v = c.value as Partial<TeamPipePayload> | undefined;
           if (!c.key || !isSafePipeName(c.key)) continue;

@@ -9,7 +9,7 @@
 //!   cargo run --example v45_phase3_smoke --features onnx-coreml   # macOS GPU
 //!   cargo run --example v45_phase3_smoke --features onnx-directml # Windows GPU
 //!
-//! Expects the model at `~/.screenpipe/models/v45_phase3_onnx/`
+//! Expects the model at `~/.daimonion/models/v45_phase3_onnx/`
 //! (model_quantized.onnx + tokenizer.json + config.json).
 
 use daimonion_redact::adapters::onnx::{OnnxConfig, OnnxRedactor};

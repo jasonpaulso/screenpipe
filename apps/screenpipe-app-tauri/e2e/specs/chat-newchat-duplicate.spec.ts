@@ -44,7 +44,7 @@ import { join } from "node:path";
 import { openHomeWindow, waitForAppReady, t } from "../helpers/test-utils.js";
 import { saveScreenshot } from "../helpers/screenshot-utils.js";
 
-const CHATS_DIR = join(homedir(), ".screenpipe", "chats");
+const CHATS_DIR = join(homedir(), ".daimonion", "chats");
 const MARKER = "E2E-NEWCHAT-DUP-MARKER-K3J8WQ";
 
 // Two ids for ONE logical conversation — the production fork signature.

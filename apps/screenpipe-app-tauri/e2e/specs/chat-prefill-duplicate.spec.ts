@@ -40,7 +40,7 @@ import { openHomeWindow, waitForAppReady, t } from "../helpers/test-utils.js";
 import { showWindow, waitForWindowHandle } from "../helpers/tauri.js";
 import { saveScreenshot } from "../helpers/screenshot-utils.js";
 
-const CHATS_DIR = join(homedir(), ".screenpipe", "chats");
+const CHATS_DIR = join(homedir(), ".daimonion", "chats");
 // Unique, unlikely to collide with any real or seeded conversation content.
 const MARKER = "E2E-PREFILL-DUP-MARKER-7Q4X9Z";
 

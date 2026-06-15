@@ -47,7 +47,7 @@ let PERMS: Permissions | null = null;
 try {
   const fs = require("fs");
   const path = require("path");
-  const filePath = path.join(process.cwd(), ".screenpipe-permissions.json");
+  const filePath = path.join(process.cwd(), ".daimonion-permissions.json");
   if (fs.existsSync(filePath)) {
     const raw = fs.readFileSync(filePath, "utf-8");
     const parsed = JSON.parse(raw);

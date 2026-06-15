@@ -12,7 +12,7 @@
 //! `/records`) so a terminal user and the pi-agent skill share one
 //! vocabulary.
 //!
-//! Auth: `team_api_token` from `~/.screenpipe/enterprise.json` (admin
+//! Auth: `team_api_token` from `~/.daimonion/enterprise.json` (admin
 //! mints it once at <https://screenpi.pe/enterprise?tab=tokens>). Override
 //! via `SCREENPIPE_TEAM_API_TOKEN` env var for scripts/CI. Base URL
 //! override: `SCREENPIPE_CLOUD_BASE_URL` (default `https://screenpi.pe`).
@@ -42,7 +42,7 @@ Open https://screenpi.pe/enterprise?tab=tokens, mint a token with scopes
 `read:devices`, `read:search`, `read:records`, then either:
 
   - paste it into desktop Settings → Privacy → Admin Team API Token
-    (writes ~/.screenpipe/enterprise.json), or
+    (writes ~/.daimonion/enterprise.json), or
   - export SCREENPIPE_TEAM_API_TOKEN=<token> for this shell.";
 
 pub async fn handle_team_command(cmd: &TeamCommand) -> anyhow::Result<()> {
@@ -80,7 +80,7 @@ impl TeamEnv {
 
 fn read_token_from_enterprise_json() -> anyhow::Result<String> {
     let home = dirs::home_dir().context("could not resolve $HOME")?;
-    let path: PathBuf = home.join(".screenpipe").join("enterprise.json");
+    let path: PathBuf = home.join(".daimonion").join("enterprise.json");
     if !path.exists() {
         anyhow::bail!("{TOKEN_HELP}");
     }

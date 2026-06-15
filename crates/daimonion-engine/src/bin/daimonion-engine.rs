@@ -641,7 +641,7 @@ async fn main() -> anyhow::Result<()> {
         // Write to the resolved data dir (honors --data-dir) so the crash log
         // sits next to screenpipe.log, and an embedder running with its own
         // --data-dir doesn't collide with the desktop app's
-        // ~/.screenpipe/last-panic.log (the app runs its engine in-process and
+        // ~/.daimonion/last-panic.log (the app runs its engine in-process and
         // owns that file).
         let panic_dir = local_data_dir.clone();
         // A relaunch right after a crash is the common case: rotate last run's
@@ -1891,7 +1891,7 @@ async fn main() -> anyhow::Result<()> {
             let policy = TextRedactionPolicy::from_labels(&labels);
             info!(
                 "fetching v45 phase 3 ONNX text redactor (~278 MB INT8 on first run, \
-                 cached at ~/.screenpipe/models/v45_phase3_onnx/)"
+                 cached at ~/.daimonion/models/v45_phase3_onnx/)"
             );
             let pipeline = match OnnxRedactor::load_or_download(OnnxConfig::default()).await {
                 Ok(adapter) => {
@@ -1915,7 +1915,7 @@ async fn main() -> anyhow::Result<()> {
                     );
                     info!(
                         "fetching local OPF v6 checkpoint (~2.8 GB on first run, cached at \
-                         ~/.screenpipe/models/opf-v6/)"
+                         ~/.daimonion/models/opf-v6/)"
                     );
                     match OpfAdapter::load_or_download(OpfConfig::default()).await {
                         Ok(adapter) => {
@@ -2014,7 +2014,7 @@ async fn main() -> anyhow::Result<()> {
                 use daimonion_redact::adapters::rfdetr_mlx::{RfdetrMlxConfig, RfdetrMlxRedactor};
                 let mlx_cfg = RfdetrMlxConfig::default();
                 // Mirrors the ONNX adapter: download once, verify SHA-256,
-                // cache at ~/.screenpipe/models/rfdetr_v9.safetensors.
+                // cache at ~/.daimonion/models/rfdetr_v9.safetensors.
                 if let Err(e) = mlx_cfg.ensure_model_present().await {
                     tracing::info!(
                         "rfdetr-mlx safetensors download failed ({e}); falling back to ONNX adapter"
@@ -2059,7 +2059,7 @@ async fn main() -> anyhow::Result<()> {
                     tracing::warn!(
                         "image-PII redaction enabled but couldn't load model; skipping: {e}. \
                          check network reachability to huggingface.co or pre-stage \
-                         rfdetr_v9.onnx at ~/.screenpipe/models/."
+                         rfdetr_v9.onnx at ~/.daimonion/models/."
                     );
                 }
             }

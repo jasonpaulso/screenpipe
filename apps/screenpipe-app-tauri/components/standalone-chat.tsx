@@ -770,7 +770,7 @@ async function externalizeLargeContextIfNeeded(
   const contextDirName = `${createdAt}-${filePart}`;
   const fileName = "full.txt";
   const home = await homeDir();
-  const dir = await join(home, ".screenpipe", "pi-chat", "large-context", sessionPart, contextDirName);
+  const dir = await join(home, ".daimonion", "pi-chat", "large-context", sessionPart, contextDirName);
   await mkdir(dir, { recursive: true });
   const filePath = await join(dir, fileName);
   await writeTextFile(filePath, text);
@@ -3134,7 +3134,7 @@ export function StandaloneChat({
     reader.readAsDataURL(file);
   }, [resizeImage]);
 
-  // Chat conversations — stored as individual JSON files in ~/.screenpipe/chats/
+  // Chat conversations — stored as individual JSON files in ~/.daimonion/chats/
   const {
     showHistory,
     setShowHistory,
@@ -4628,7 +4628,7 @@ export function StandaloneChat({
     }
 
     const home = await homeDir();
-    const dir = await join(home, ".screenpipe", "pi-chat");
+    const dir = await join(home, ".daimonion", "pi-chat");
     const result = await commands.piStart(
       piSessionIdRef.current,
       dir,
@@ -5721,7 +5721,7 @@ export function StandaloneChat({
             try {
               const providerConfig = buildProviderConfig();
               const home = await homeDir();
-              const dir = await join(home, ".screenpipe", "pi-chat");
+              const dir = await join(home, ".daimonion", "pi-chat");
               const result = await commands.piStart(piSessionIdRef.current, dir, settings.user?.token ?? null, providerConfig);
               if (result.status === "ok") {
                 setPiInfo(result.data);
@@ -5836,7 +5836,7 @@ export function StandaloneChat({
       if (!mounted) return;
       try {
         const home = await homeDir();
-        const dir = await join(home, ".screenpipe", "pi-chat");
+        const dir = await join(home, ".daimonion", "pi-chat");
         const result = await commands.piStart(piSessionIdRef.current, dir, event.payload.apiKey, buildProviderConfig());
         if (result.status === "ok") {
           setPiInfo(result.data);
@@ -6386,7 +6386,7 @@ export function StandaloneChat({
         const providerConfig = buildProviderConfig();
         try {
           const home = await homeDir();
-          const dir = await join(home, ".screenpipe", "pi-chat");
+          const dir = await join(home, ".daimonion", "pi-chat");
           const result = await commands.piStart(piSessionIdRef.current, dir, settings.user?.token ?? null, providerConfig);
           if (result.status === "ok" && result.data.running) {
             setPiInfo(result.data);
@@ -6669,7 +6669,7 @@ export function StandaloneChat({
         console.log("[Pi] session not registered yet — auto-spawning and retrying");
         try {
           const home = await homeDir();
-          const dir = await join(home, ".screenpipe", "pi-chat");
+          const dir = await join(home, ".daimonion", "pi-chat");
           const providerConfig = buildProviderConfig();
           const startRes = await commands.piStart(
             piSessionIdRef.current,

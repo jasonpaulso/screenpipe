@@ -27,11 +27,11 @@ pub fn get_base_dir(
 /// Resolve the recording data directory from the store's `data_dir` setting.
 ///
 /// Returns `(resolved_path, fell_back)` where `fell_back` is true when the
-/// custom path was unusable and we silently fell back to default (~/.screenpipe or SCREENPIPE_DATA_DIR).
+/// custom path was unusable and we silently fell back to default (~/.daimonion or SCREENPIPE_DATA_DIR).
 pub fn resolve_data_dir(data_dir_setting: &str) -> (PathBuf, bool) {
     let default_path = default_screenpipe_data_dir();
 
-    // "default" or empty → use ~/.screenpipe
+    // "default" or empty → use ~/.daimonion
     if data_dir_setting.is_empty() || data_dir_setting == "default" {
         let _ = fs::create_dir_all(default_path.join("data"));
         ensure_spotlight_excluded(&default_path);
@@ -102,21 +102,21 @@ mod tests {
     fn test_resolve_default() {
         let (path, fell_back) = resolve_data_dir("default");
         assert!(!fell_back);
-        assert!(path.ends_with(".screenpipe"));
+        assert!(path.ends_with(".daimonion"));
     }
 
     #[test]
     fn test_resolve_empty() {
         let (path, fell_back) = resolve_data_dir("");
         assert!(!fell_back);
-        assert!(path.ends_with(".screenpipe"));
+        assert!(path.ends_with(".daimonion"));
     }
 
     #[test]
     fn test_resolve_relative_path_falls_back() {
         let (path, fell_back) = resolve_data_dir("relative/path");
         assert!(fell_back);
-        assert!(path.ends_with(".screenpipe"));
+        assert!(path.ends_with(".daimonion"));
     }
 
     #[test]

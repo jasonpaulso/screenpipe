@@ -225,7 +225,7 @@ async function finalizeBuffer(sid: string, buf: PipeRunBuffer): Promise<void> {
 
   // Sidebar reads the in-memory chat-store, not disk. Without this
   // upsert the new pipe-run row wouldn't show up until the next app
-  // restart (when hydrate() re-scans ~/.screenpipe/chats/). We use the
+  // restart (when hydrate() re-scans ~/.daimonion/chats/). We use the
   // same meta → SessionRecord transform as the boot hydrate path so
   // both surfaces produce identically-shaped rows.
   try {

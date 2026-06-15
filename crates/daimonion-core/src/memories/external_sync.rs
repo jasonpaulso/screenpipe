@@ -301,7 +301,7 @@ fn sibling_tmp_path(target_path: &Path) -> PathBuf {
         .file_name()
         .map(|n| n.to_os_string())
         .unwrap_or_default();
-    name.push(".screenpipe-tmp");
+    name.push(".daimonion-tmp");
     target_path.with_file_name(name)
 }
 
@@ -564,7 +564,7 @@ mod tests {
             .collect();
 
         assert!(
-            entries.iter().all(|n| !n.contains(".screenpipe-tmp")),
+            entries.iter().all(|n| !n.contains(".daimonion-tmp")),
             "expected no temp sidecar, got: {:?}",
             entries
         );

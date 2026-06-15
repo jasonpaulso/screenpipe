@@ -167,7 +167,7 @@ export default function RootLayout({
     // The buffered console interceptor in app/providers.tsx flushes every
     // 2s — that's enough for steady-state logs but loses entries when the
     // page is mid-teardown. Going straight through __TAURI_INTERNALS__.invoke
-    // bypasses the buffer so the stack lands in ~/.screenpipe/screenpipe-app
+    // bypasses the buffer so the stack lands in ~/.daimonion/screenpipe-app
     // immediately. Wired in layout.tsx specifically because it mounts before
     // providers.tsx finishes its first effect.
     const handleWindowError = (e: ErrorEvent) => {

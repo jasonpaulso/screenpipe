@@ -455,7 +455,7 @@ pub(crate) struct ArtifactListResponse {
 /// GET /artifacts — unified listing of AI-generated artifacts.
 ///
 /// Merges registered outputs (DB rows whose files live under
-/// `~/.screenpipe/outputs/`) with artifacts derived from pipe directories
+/// `~/.daimonion/outputs/`) with artifacts derived from pipe directories
 /// at request time, deduped by path (the registered copy wins). Filtering
 /// and pagination happen server-side; `pagination.total` counts the
 /// filtered set. `/outputs` and `/pipes/artifacts` remain as the
@@ -628,7 +628,7 @@ pub(crate) async fn list_artifacts_unified_handler(
 // ---------------------------------------------------------------------------
 
 /// Register (or refresh) declared artifacts for a pipe into the
-/// centralized `~/.screenpipe/outputs/` directory and the DB.
+/// centralized `~/.daimonion/outputs/` directory and the DB.
 ///
 /// Takes pre-collected `(ArtifactDeclaration, PathBuf)` items so the caller
 /// can drop the `PipeManager` lock before calling this. Skips artifacts

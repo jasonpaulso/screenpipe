@@ -168,7 +168,7 @@ log replay can be diffed against any hand-written scenario.
 ### The Meeting 72 trace
 
 `evals/traces/meeting72_arc_real.jsonl` is extracted from
-`~/.screenpipe/screenpipe-app.2026-05-11.log` — the user's 70-minute
+`~/.daimonion/screenpipe-app.2026-05-11.log` — the user's 70-minute
 Google Meet call in Arc that triggered the bug investigation.
 Replaying it through today's state machine reproduces:
 
@@ -197,7 +197,7 @@ scenarios only.
 
 To grow coverage from real usage without leaking content, add a
 debug-build trace dumper to `run_meeting_detection_loop` that
-appends one JSON line per scan to `~/.screenpipe/meeting_traces/`.
+appends one JSON line per scan to `~/.daimonion/meeting_traces/`.
 Only canonical signal types should be recorded — never raw AX node
 names, URLs, or window titles. The user can then share a trace
 file; it replays through `advance_state` to reproduce exactly what

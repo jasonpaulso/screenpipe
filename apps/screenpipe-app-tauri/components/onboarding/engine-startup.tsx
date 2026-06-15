@@ -816,7 +816,7 @@ if the input is sparse, just describe what little you have warmly. don't apologi
   const openLogsFolder = async () => {
     try {
       const home = await homeDir();
-      const screenpipeDir = await join(home, ".screenpipe");
+      const screenpipeDir = await join(home, ".daimonion");
       await revealItemInDir(screenpipeDir);
     } catch (err) {
       console.error("Failed to open logs folder:", err);

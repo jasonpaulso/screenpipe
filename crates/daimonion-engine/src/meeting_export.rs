@@ -793,13 +793,13 @@ mod tests {
     #[test]
     fn device_key_parses_name_and_output_flag() {
         let (k, out) = audio_device_key(
-            "/Users/x/.screenpipe/data/System Audio (output)_2026-05-28_18-05-16.mp4",
+            "/Users/x/.daimonion/data/System Audio (output)_2026-05-28_18-05-16.mp4",
         );
         assert_eq!(k, "System Audio (output)");
         assert!(out, "system audio should be detected as output");
 
         let (k, out) = audio_device_key(
-            "/Users/x/.screenpipe/data/MacBook Pro Microphone (input)_2026-05-28_18-05-22.mp4",
+            "/Users/x/.daimonion/data/MacBook Pro Microphone (input)_2026-05-28_18-05-22.mp4",
         );
         assert_eq!(k, "MacBook Pro Microphone (input)");
         assert!(!out, "microphone should not be output");
@@ -820,7 +820,7 @@ mod tests {
         assert!(!is_chunk_timestamp_suffix("_2026X05-28_18-05-16")); // wrong separator
     }
 
-    /// Real-data smoke test: exports an actual meeting from `~/.screenpipe/db.sqlite` and opens the
+    /// Real-data smoke test: exports an actual meeting from `~/.daimonion/db.sqlite` and opens the
     /// resulting MP4 so it can be eyeballed for A/V sync. Ignored by default (needs real local data,
     /// ffmpeg, and a desktop to open the file). Run with:
     ///   SP_EXPORT_TEST_MEETING_ID=185 cargo test -p screenpipe-engine \
@@ -829,7 +829,7 @@ mod tests {
     #[ignore]
     async fn export_real_meeting_opens_mp4() {
         let home = std::env::var("HOME").expect("HOME not set");
-        let base = PathBuf::from(home).join(".screenpipe");
+        let base = PathBuf::from(home).join(".daimonion");
         let db_path = base.join("db.sqlite");
         assert!(db_path.exists(), "no db at {}", db_path.display());
 

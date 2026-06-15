@@ -192,7 +192,7 @@ describe("source citations", () => {
           type: "tool",
           toolCall: {
             toolName: "tool_functions.read",
-            args: { path: "/Users/louisbeaumont/.screenpipe/pipes/lead-radar/pipe.ts" },
+            args: { path: "/Users/louisbeaumont/.daimonion/pipes/lead-radar/pipe.ts" },
             result: "code",
             isRunning: false,
           },
@@ -526,7 +526,7 @@ describe("source citations", () => {
           type: "tool",
           toolCall: {
             toolName: "read",
-            args: { path: "/Users/me/.screenpipe/pipes/sync/state.json" },
+            args: { path: "/Users/me/.daimonion/pipes/sync/state.json" },
             result: "{}",
             isRunning: false,
           },

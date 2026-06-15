@@ -84,7 +84,7 @@ export type AgentCardProps = {
   /** One or more installable screenpipe skills (e.g. API + CLI). First is shown by default. */
   skills: SkillVariant[];
   sync: {
-    /** Default remote path on the VPS where ~/.screenpipe gets pushed. */
+    /** Default remote path on the VPS where ~/.daimonion gets pushed. */
     defaultRemotePath: string;
     /** Prefix used for localStorage keys + posthog event names. */
     storageKeyPrefix: string;
@@ -331,7 +331,7 @@ function SkillVariantBody({ name, variant }: { name: string; variant: SkillVaria
 }
 
 // ---------------------------------------------------------------------------
-// Sync section — SSH/rsync ~/.screenpipe to a remote VPS
+// Sync section — SSH/rsync ~/.daimonion to a remote VPS
 // (extracted from the original OpenClawCard so Hermes can reuse it)
 // ---------------------------------------------------------------------------
 
@@ -568,7 +568,7 @@ function RemoteSyncSection({
   return (
     <div className="space-y-3">
       <p className="text-xs text-muted-foreground leading-relaxed">
-        Push your <code className="bg-muted px-1 rounded">~/.screenpipe</code> over
+        Push your <code className="bg-muted px-1 rounded">~/.daimonion</code> over
         SFTP to the host where {agentName} runs. Use this when {agentName} lives on
         a VPS, home server, or another machine.
       </p>

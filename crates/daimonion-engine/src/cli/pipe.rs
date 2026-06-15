@@ -31,7 +31,7 @@ pub async fn handle_pipe_command(command: &PipeCommand) -> anyhow::Result<()> {
                 println!("{}", serde_json::to_string_pretty(&pipes)?);
             } else if pipes.is_empty() {
                 println!("no pipes installed");
-                println!("\nhint: create one at ~/.screenpipe/pipes/my-pipe/pipe.md");
+                println!("\nhint: create one at ~/.daimonion/pipes/my-pipe/pipe.md");
             } else {
                 println!(
                     "{:<20} {:<10} {:<12} {:<20}",
@@ -160,7 +160,7 @@ pub fn api_base_url() -> String {
 
 /// Get the auth token, checking in order:
 /// 1. SCREENPIPE_API_KEY env var
-/// 2. ~/.screenpipe/store.bin (settings.user.token — written by desktop app or `screenpipe login`)
+/// 2. ~/.daimonion/store.bin (settings.user.token — written by desktop app or `screenpipe login`)
 pub fn get_auth_token() -> Option<String> {
     if let Ok(key) = std::env::var("SCREENPIPE_API_KEY") {
         return Some(key);
@@ -185,7 +185,7 @@ async fn handle_publish_command(name: &str, pipes_dir: &std::path::Path) -> anyh
 
     if !pipe_md_path.exists() {
         anyhow::bail!(
-            "pipe.md not found at {}\nhint: make sure the pipe '{}' exists in ~/.screenpipe/pipes/",
+            "pipe.md not found at {}\nhint: make sure the pipe '{}' exists in ~/.daimonion/pipes/",
             pipe_md_path.display(),
             name
         );
@@ -212,7 +212,7 @@ async fn handle_publish_command(name: &str, pipes_dir: &std::path::Path) -> anyh
 
     let token = get_auth_token().ok_or_else(|| {
         anyhow::anyhow!(
-            "no auth token found. set SCREENPIPE_API_KEY env var or create ~/.screenpipe/auth.json"
+            "no auth token found. set SCREENPIPE_API_KEY env var or create ~/.daimonion/auth.json"
         )
     })?;
 
@@ -431,7 +431,7 @@ async fn handle_info_command(slug: &str) -> anyhow::Result<()> {
 async fn handle_status_command(slug: &str) -> anyhow::Result<()> {
     let token = get_auth_token().ok_or_else(|| {
         anyhow::anyhow!(
-            "no auth token found. set SCREENPIPE_API_KEY env var or create ~/.screenpipe/auth.json"
+            "no auth token found. set SCREENPIPE_API_KEY env var or create ~/.daimonion/auth.json"
         )
     })?;
 

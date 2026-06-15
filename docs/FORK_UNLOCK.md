@@ -46,7 +46,7 @@ signed in.
 |---|---|---|---|
 | Central app entitlement | `lib/app-entitlement.ts` | `hasAppEntitlement()` | **Done** (§2) |
 | Enterprise layer (locked settings, hidden UI, kiosk mode, managed presets, license prompt) | all `ee/` + `src-tauri` `cfg!(feature = "enterprise-build")` sites | Compiled only with the `enterprise-build` Cargo feature | **No action.** This fork does not compile that feature → the entire layer is already absent. **Do not add the flag.** |
-| Pi-agent enterprise skill (`screenpipe-team`) | `crates/screenpipe-core/src/agents/pi.rs:315` | reads `~/.screenpipe/enterprise.json` (`is_admin`, `license_active`, `license_key`, `team_api_token`) | Document only; irrelevant to consumer use. |
+| Pi-agent enterprise skill (`screenpipe-team`) | `crates/screenpipe-core/src/agents/pi.rs:315` | reads `~/.daimonion/enterprise.json` (`is_admin`, `license_active`, `license_key`, `team_api_token`) | Document only; irrelevant to consumer use. |
 | Cloud LLM proxy local guard | `crates/screenpipe-engine/src/routes/cloud_proxy.rs:33` | empty `cloud_token` → `503 cloud_token_missing` | Patchable, but **pointless without a backend** — the proxy targets screenpipe's servers (see §4). |
 
 ## 4. Server-enforced gates (need alternatives — "implement over time")
@@ -109,8 +109,8 @@ component; it is not yet implemented.
 |---|---|
 | `NEXT_PUBLIC_SCREENPIPE_DEV_BILLING_BYPASS`, `_FORCE_BILLING_GATE`, `_E2E` | **Dead** as bypass inputs after §2 — the bypass is hardcoded. Harmless if still referenced in CI/docs. |
 | `enterprise-build` (Cargo feature) | **Keep OFF.** Enabling it compiles the entire enterprise lock layer (§3). |
-| `~/.screenpipe/enterprise.json` | Local admin/license file read by the Pi enterprise skill (§3). Absent by default. |
-| `~/.screenpipe/cloud_media_analysis.disabled` | Opt-out file; absence = cloud media analysis instructions enabled in the Pi skill. |
+| `~/.daimonion/enterprise.json` | Local admin/license file read by the Pi enterprise skill (§3). Absent by default. |
+| `~/.daimonion/cloud_media_analysis.disabled` | Opt-out file; absence = cloud media analysis instructions enabled in the Pi skill. |
 
 ## 6. Related
 

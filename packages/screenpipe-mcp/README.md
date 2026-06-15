@@ -203,7 +203,7 @@ anything.
 ### Data storage
 Nothing is stored by the MCP server itself. Recordings, OCR text,
 audio transcripts, and UI events are stored by the Screenpipe app in a
-SQLite database under `~/.screenpipe/` on your device. Retention is
+SQLite database under `~/.daimonion/` on your device. Retention is
 whatever you configure inside the Screenpipe app — typically you
 control it via the storage settings panel.
 
@@ -217,7 +217,7 @@ Screenpipe app's privacy policy, not this MCP server's data flow.
 ### Retention
 The MCP server has no persistent state. The data your Screenpipe app
 captures is retained according to your Screenpipe storage configuration
-and is deletable at any time (`rm -rf ~/.screenpipe` removes everything).
+and is deletable at any time (`rm -rf ~/.daimonion` removes everything).
 
 ### Source code
 The Screenpipe MCP server is MIT-licensed and the entire source is

@@ -20,7 +20,7 @@
  *      B. saveConversation then writes A's messages under chat B's id —
  *      corrupting B's file on disk.
  *   3. After the dust settles, read both chat files from
- *      `~/.screenpipe/chats/` and assert:
+ *      `~/.daimonion/chats/` and assert:
  *         - chat A's file contains A's messages
  *         - chat B's file contains B's messages (NOT A's)
  *
@@ -43,7 +43,7 @@ import { saveScreenshot } from "../helpers/screenshot-utils.js";
 
 const CHAT_A = "11111111-aaaa-aaaa-aaaa-aaaaaaaaaaaa";
 const CHAT_B = "22222222-bbbb-bbbb-bbbb-bbbbbbbbbbbb";
-const CHATS_DIR = join(homedir(), ".screenpipe", "chats");
+const CHATS_DIR = join(homedir(), ".daimonion", "chats");
 
 const A_USER_MARKER = "(e2e-A) BANANA-CONTEXT-LOSS-A-SIDE";
 const B_USER_MARKER = "(e2e-B) PINEAPPLE-B-SIDE-UNIQUE";

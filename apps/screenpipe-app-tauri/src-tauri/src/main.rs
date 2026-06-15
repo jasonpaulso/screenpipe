@@ -372,7 +372,7 @@ async fn main() {
     windows_webview_env::install_user_data_dir();
 
     // Refuse to launch while a `screenpipe db recover|cleanup` operation is in
-    // progress. The CLI writes ~/.screenpipe/.db_recovery.lock before doing
+    // progress. The CLI writes ~/.daimonion/.db_recovery.lock before doing
     // anything destructive; if the user double-clicks the app icon mid-recovery,
     // we'd otherwise race the swap and corrupt the DB again. The CLI heartbeats
     // the lock every 30 s, so a fresh mtime means the op is genuinely live.
@@ -380,7 +380,7 @@ async fn main() {
     // Escape hatches (in order of preference):
     //   1. `screenpipe db unlock` — friendly path
     //   2. SCREENPIPE_IGNORE_DB_LOCK=1 env var — bypass on this launch only
-    //   3. `rm ~/.screenpipe/.db_recovery.lock` — manual
+    //   3. `rm ~/.daimonion/.db_recovery.lock` — manual
     //
     // See `crates/screenpipe-engine/src/cli/db.rs`.
     if std::env::var("SCREENPIPE_IGNORE_DB_LOCK").ok().as_deref() != Some("1") {
@@ -1152,7 +1152,7 @@ async fn main() {
                 info!("Chinese HuggingFace mirror enabled (HF_ENDPOINT set early)");
             }
 
-            // Resolve data directory from user setting (custom dir or ~/.screenpipe)
+            // Resolve data directory from user setting (custom dir or ~/.daimonion)
             let (data_dir, data_dir_fell_back) = config::resolve_data_dir(&store.data_dir);
             info!("Recording data directory: {}", data_dir.display());
             if data_dir_fell_back {

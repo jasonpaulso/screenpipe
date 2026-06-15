@@ -501,7 +501,7 @@ fn parse_where_output(stdout: &str) -> Option<String> {
 }
 
 /// Find pi executable
-/// Returns the screenpipe-managed pi install directory (`~/.screenpipe/pi-agent/`).
+/// Returns the screenpipe-managed pi install directory (`~/.daimonion/pi-agent/`).
 fn pi_local_install_dir() -> Option<PathBuf> {
     Some(daimonion_core::paths::default_screenpipe_data_dir().join("pi-agent"))
 }
@@ -1541,7 +1541,7 @@ pub async fn pi_start_inner(
                         let install_err = take_pi_install_error()
                             .map(|e| format!(" Install error: {}", e))
                             .unwrap_or_default();
-                        format!("Pi not found after install attempt.{} Try restarting the app or delete ~/.screenpipe/pi-agent and restart.", install_err)
+                        format!("Pi not found after install attempt.{} Try restarting the app or delete ~/.daimonion/pi-agent and restart.", install_err)
                     } else {
                         format!("Pi not found: bun is not installed. Screenpipe needs bun to run the AI assistant. Expected bundled bun next to the app executable.")
                     }
@@ -2131,7 +2131,7 @@ pub async fn pi_start_inner(
                         m.child = None;
                         m.stdin = None;
                         let install_hint = take_pi_install_error()
-                            .map(|e| format!(" The Pi install previously failed: {} Try removing ~/.screenpipe/pi-agent and restarting.", e))
+                            .map(|e| format!(" The Pi install previously failed: {} Try removing ~/.daimonion/pi-agent and restarting.", e))
                             .unwrap_or_default();
                         let stderr_hint = first_stderr_line
                             .lock()
@@ -2689,7 +2689,7 @@ fn find_bun_executable() -> Option<String> {
 }
 
 /// Background Pi installation — call once from app setup.
-/// Installs pi into `~/.screenpipe/pi-agent/` (local install, not global)
+/// Installs pi into `~/.daimonion/pi-agent/` (local install, not global)
 /// so we fully control the dependency tree and avoid version conflicts.
 /// Runs on a dedicated thread, never panics, never blocks the caller.
 /// Sets `PI_INSTALL_DONE` when finished so `pi_start` can wait for it.

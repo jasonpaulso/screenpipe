@@ -19,7 +19,7 @@ use std::path::Path;
 /// 1. `SCREENPIPE_API_KEY` env var
 /// 2. `settings_key` (non-empty)
 /// 3. plaintext `api_auth_key` in the `db.sqlite` secret store
-/// 4. legacy `~/.screenpipe/auth.json`
+/// 4. legacy `~/.daimonion/auth.json`
 /// 5. auto-generated `sp-<uuid8>`, persisted to the secret store before return
 pub async fn resolve_api_auth_key(data_dir: &Path, settings_key: Option<&str>) -> Result<String> {
     let store = open_secret_store(data_dir).await.ok();
@@ -121,7 +121,7 @@ pub async fn set_api_auth_key(data_dir: &Path, key: &str) -> Result<()> {
         .await
         .map_err(|e| anyhow::anyhow!("failed to persist api auth key: {e}"))?;
     if let Some(home) = dirs::home_dir() {
-        let _ = std::fs::remove_file(home.join(".screenpipe/auth.json"));
+        let _ = std::fs::remove_file(home.join(".daimonion/auth.json"));
     }
     tracing::info!("api auth: key updated by user");
     Ok(())
@@ -143,7 +143,7 @@ pub async fn regenerate_api_auth_key(data_dir: &Path) -> Result<String> {
     }
     // Best-effort cleanup of legacy file so it doesn't shadow the new key.
     if let Some(home) = dirs::home_dir() {
-        let _ = std::fs::remove_file(home.join(".screenpipe/auth.json"));
+        let _ = std::fs::remove_file(home.join(".daimonion/auth.json"));
     }
     tracing::info!("api auth: key regenerated (new prefix: {})", &new_key[..6]);
     Ok(new_key)
@@ -179,7 +179,7 @@ async fn open_secret_store(data_dir: &Path) -> Result<daimonion_secrets::SecretS
 
 fn read_legacy_auth_json() -> Option<String> {
     let home = dirs::home_dir()?;
-    let content = std::fs::read_to_string(home.join(".screenpipe/auth.json")).ok()?;
+    let content = std::fs::read_to_string(home.join(".daimonion/auth.json")).ok()?;
     let json: serde_json::Value = serde_json::from_str(&content).ok()?;
     json["token"]
         .as_str()

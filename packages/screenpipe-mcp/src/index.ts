@@ -38,7 +38,7 @@ const SCREENPIPE_API = `http://localhost:${port}`;
 //   3. CLI via node-adjacent npx — for dev environments that have node but
 //      not the desktop app.
 //   4. CLI via PATH-based npx — last CLI fallback.
-//   5. Direct sqlite3 read of ~/.screenpipe/db.sqlite — plaintext entries
+//   5. Direct sqlite3 read of ~/.daimonion/db.sqlite — plaintext entries
 //      only (encrypted entries need the keychain, which only the CLI can
 //      reach). Kept as a final last-resort for users who have screenpipe
 //      *data* but no working CLI install (rare). Demoted below the CLI
@@ -142,7 +142,7 @@ function discoverApiKey(): string {
       ? ["sqlite3", "/usr/bin/sqlite3", "/opt/homebrew/bin/sqlite3", "/usr/local/bin/sqlite3"]
       : ["sqlite3", "/usr/bin/sqlite3", "/usr/local/bin/sqlite3"];
   try {
-    const dbPath = path.join(home, ".screenpipe", "db.sqlite");
+    const dbPath = path.join(home, ".daimonion", "db.sqlite");
     if (fs.existsSync(dbPath)) {
       let row: string | null = null;
       for (const candidate of sqliteCandidates) {
@@ -182,7 +182,7 @@ function discoverApiKey(): string {
       "  - env vars (SCREENPIPE_LOCAL_API_KEY / SCREENPIPE_API_KEY) not set",
       "  - bundled `bun` from screenpipe.app not found at any known install path",
       "  - npx fallback unavailable",
-      "  - direct sqlite3 read of ~/.screenpipe/db.sqlite failed",
+      "  - direct sqlite3 read of ~/.daimonion/db.sqlite failed",
       "Fix: set SCREENPIPE_LOCAL_API_KEY in your MCP launcher's env block,",
       "or install the screenpipe desktop app (https://screenpi.pe).",
       "",
@@ -202,7 +202,7 @@ const API_KEY = discoverApiKey();
 //
 // Resolution order matches discoverApiKey() in spirit:
 //   1. SCREENPIPE_ENTERPRISE_TOKEN env var (Claude config, terminal)
-//   2. team_api_token field in ~/.screenpipe/enterprise.json (written by
+//   2. team_api_token field in ~/.daimonion/enterprise.json (written by
 //      the desktop app's Settings → Privacy → Admin Team API Token)
 //
 // Token format is `sk_ent_…`. Empty / missing → team tools are not
@@ -212,7 +212,7 @@ function discoverTeamToken(): string {
   const envTok = process.env.SCREENPIPE_ENTERPRISE_TOKEN;
   if (envTok && envTok.startsWith("sk_ent_")) return envTok;
   try {
-    const entPath = path.join(os.homedir(), ".screenpipe", "enterprise.json");
+    const entPath = path.join(os.homedir(), ".daimonion", "enterprise.json");
     if (fs.existsSync(entPath)) {
       const raw = fs.readFileSync(entPath, "utf-8");
       const parsed = JSON.parse(raw);

@@ -80,7 +80,7 @@ const CLASSES: [SpanLabel; NUM_CLASSES] = [
 /// Configuration for [`RfdetrRedactor`].
 #[derive(Debug, Clone)]
 pub struct RfdetrConfig {
-    /// Path to `rfdetr_vN.onnx`. We default to `~/.screenpipe/models/rfdetr_v12.onnx`
+    /// Path to `rfdetr_vN.onnx`. We default to `~/.daimonion/models/rfdetr_v12.onnx`
     /// in [`Self::default_model_path`] but callers may override (e.g.
     /// for an INT8-quantized variant in the future).
     pub model_path: PathBuf,
@@ -111,12 +111,12 @@ impl Default for RfdetrConfig {
 }
 
 impl RfdetrConfig {
-    /// `~/.screenpipe/models/rfdetr_v12.onnx`. Created lazily by
+    /// `~/.daimonion/models/rfdetr_v12.onnx`. Created lazily by
     /// [`Self::ensure_model_present`] on first run.
     pub fn default_model_path() -> PathBuf {
         dirs::home_dir()
             .unwrap_or_else(|| PathBuf::from("."))
-            .join(".screenpipe")
+            .join(".daimonion")
             .join("models")
             .join("rfdetr_v12.onnx")
     }
@@ -541,7 +541,7 @@ mod tests {
     fn default_path_lives_under_screenpipe_dir() {
         let p = RfdetrConfig::default_model_path();
         let s = p.to_string_lossy();
-        assert!(s.contains(".screenpipe/models/rfdetr_v12.onnx"));
+        assert!(s.contains(".daimonion/models/rfdetr_v12.onnx"));
     }
 
     #[test]

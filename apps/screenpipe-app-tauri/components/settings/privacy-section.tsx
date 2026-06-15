@@ -983,7 +983,7 @@ export function PrivacySection() {
               <div>
                 <h3 className="text-sm font-medium text-foreground flex items-center gap-1.5">
                   Capture clipboard
-                  <HelpTooltip text="when on, screenpipe records clipboard copy/paste events and contents. turn off if you ship ~/.screenpipe to a remote LLM or share it — passwords, API keys, and private keys frequently pass through the clipboard." />
+                  <HelpTooltip text="when on, screenpipe records clipboard copy/paste events and contents. turn off if you ship ~/.daimonion to a remote LLM or share it — passwords, API keys, and private keys frequently pass through the clipboard." />
                 </h3>
                 <p className="text-xs text-muted-foreground">
                   Skip if your data leaves the machine (passwords, keys often
@@ -1453,7 +1453,7 @@ export function PrivacySection() {
  * `read:search` / `read:records` scopes that the `screenpipe-team` pi
  * skill calls v1 endpoints with. An admin mints one at
  * https://screenpi.pe/enterprise?tab=tokens, pastes it here, and the
- * desktop persists it to ~/.screenpipe/enterprise.json. Every new pi
+ * desktop persists it to ~/.daimonion/enterprise.json. Every new pi
  * chat reads that file at boot and (un)installs the skill accordingly —
  * no app restart needed, just open a new chat. Revoke from the same
  * dashboard page to kill team access immediately.

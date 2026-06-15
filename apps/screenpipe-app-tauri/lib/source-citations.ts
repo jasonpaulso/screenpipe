@@ -419,8 +419,8 @@ function fileKind(path: string): SourceCitationKind {
   if (path.includes("/.codex/memories/") || /(^|\/)MEMORY\.md$/.test(path)) {
     return "memory";
   }
-  if (path.includes("/.screenpipe/pipes/")) return "pipe";
-  if (path.includes("/.screenpipe/chats/")) return "screenpipe";
+  if (path.includes("/.daimonion/pipes/")) return "pipe";
+  if (path.includes("/.daimonion/chats/")) return "screenpipe";
   return "file";
 }
 

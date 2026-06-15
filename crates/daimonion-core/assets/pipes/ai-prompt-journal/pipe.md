@@ -143,7 +143,7 @@ curl -s http://localhost:3030/connections/obsidian
 
 Choose the output directory:
 - If Obsidian is connected: use `{vault_path}/screenpipe/ai-prompts/`
-- If Obsidian is NOT connected: use `~/.screenpipe/ai-prompts/` as fallback (works for everyone)
+- If Obsidian is NOT connected: use `~/.daimonion/ai-prompts/` as fallback (works for everyone)
 
 Create the directory:
 ```bash

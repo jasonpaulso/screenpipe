@@ -576,7 +576,7 @@ fn persist_api_auth_key_to_settings(
 /// in the screenpipe-api skill that Pi installs on every run.
 ///
 /// Mechanism: the screenpipe-core `Pi::ensure_screenpipe_skill` reads
-/// `~/.screenpipe/cloud_media_analysis.disabled` at install time and
+/// `~/.daimonion/cloud_media_analysis.disabled` at install time and
 /// conditionally appends the Gemma 4 E4B confidential-enclave section
 /// to `<project>/.pi/skills/screenpipe-api/SKILL.md`. Default (no
 /// marker) = enabled. This command just creates or removes the marker.
@@ -592,7 +592,7 @@ fn persist_api_auth_key_to_settings(
 #[specta::specta]
 pub fn set_cloud_media_analysis_skill(enabled: bool) -> Result<(), String> {
     let home = dirs::home_dir().ok_or_else(|| "no home directory".to_string())?;
-    let dir = home.join(".screenpipe");
+    let dir = home.join(".daimonion");
     let marker = dir.join("cloud_media_analysis.disabled");
 
     if enabled {
@@ -623,7 +623,7 @@ pub fn set_cloud_media_analysis_skill(enabled: bool) -> Result<(), String> {
 /// Read the enterprise license key from `enterprise.json`.
 /// Checks in order:
 /// 1. Next to executable (pushed via Intune/MDM to Program Files / .app bundle)
-/// 2. `~/.screenpipe/enterprise.json` (entered manually by employee via in-app prompt)
+/// 2. `~/.daimonion/enterprise.json` (entered manually by employee via in-app prompt)
 /// Returns None if no file is found or is invalid.
 #[tauri::command]
 #[specta::specta]
@@ -633,7 +633,7 @@ pub fn get_enterprise_license_key() -> Option<String> {
         return Some(key);
     }
 
-    // Fallback: ~/.screenpipe/enterprise.json (manually entered by employee)
+    // Fallback: ~/.daimonion/enterprise.json (manually entered by employee)
     let user_path = daimonion_core::paths::default_screenpipe_data_dir().join("enterprise.json");
     if user_path.exists() {
         info!(
@@ -710,7 +710,7 @@ fn read_enterprise_key_from_path(path: &std::path::Path) -> Option<String> {
     key
 }
 
-/// Save the enterprise license key to `~/.screenpipe/enterprise.json`.
+/// Save the enterprise license key to `~/.daimonion/enterprise.json`.
 /// Used by the in-app prompt when enterprise.json is not deployed via MDM.
 #[tauri::command]
 #[specta::specta]
@@ -732,7 +732,7 @@ pub fn save_enterprise_license_key(license_key: String) -> Result<(), String> {
 }
 
 /// Read the enterprise admin API token (`team_api_token`) from
-/// `~/.screenpipe/enterprise.json`. Returns None when the file is
+/// `~/.daimonion/enterprise.json`. Returns None when the file is
 /// missing, malformed, or the field is empty.
 ///
 /// Used by the Settings → Enterprise → Admin API token card to render
@@ -753,7 +753,7 @@ pub fn get_enterprise_team_api_token() -> Option<String> {
         .map(String::from)
 }
 
-/// Read the user's screenpipe cloud session JWT from `~/.screenpipe/
+/// Read the user's screenpipe cloud session JWT from `~/.daimonion/
 /// auth.json`. Returns None when the file is missing, malformed, or the
 /// token field is empty.
 ///
@@ -3279,7 +3279,7 @@ pub async fn list_cache_files() -> Result<Vec<CacheFile>, String> {
     let home_dir = dirs::home_dir().ok_or("no home directory")?;
     let mut files = Vec::new();
 
-    // Pi agent node_modules (~/.screenpipe/pi-agent/)
+    // Pi agent node_modules (~/.daimonion/pi-agent/)
     let pi_agent = data_dir.join("pi-agent");
     if pi_agent.exists() {
         let size = dir_size(&pi_agent);
@@ -3301,7 +3301,7 @@ pub async fn list_cache_files() -> Result<Vec<CacheFile>, String> {
         });
     }
 
-    // Stale root-level node_modules (~/.screenpipe/node_modules/)
+    // Stale root-level node_modules (~/.daimonion/node_modules/)
     let root_nm = data_dir.join("node_modules");
     if root_nm.exists() {
         let size = dir_size(&root_nm);

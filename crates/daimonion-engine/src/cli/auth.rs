@@ -13,7 +13,7 @@ pub async fn handle_auth_command(command: &AuthCommand) -> Result<()> {
 
 async fn print_token() -> Result<()> {
     // All sources (env vars, encrypted SecretStore in db.sqlite, legacy
-    // ~/.screenpipe/auth.json) live behind one resolver in `auth_key.rs`.
+    // ~/.daimonion/auth.json) live behind one resolver in `auth_key.rs`.
     // Don't reimplement the priority chain here — divergent copies are
     // exactly what caused agent-driven `connection list` to silently 403.
     if let Some(key) = crate::auth_key::find_api_auth_key().await {

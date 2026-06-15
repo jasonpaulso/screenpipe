@@ -6,12 +6,12 @@
 //!
 //! ## Safety model
 //!
-//! These commands rewrite or delete files inside `~/.screenpipe/`. A racing
+//! These commands rewrite or delete files inside `~/.daimonion/`. A racing
 //! desktop-app launch (or a second CLI invocation) would silently corrupt the
 //! database again. The reliability story is built around **one PID lock file**
 //! that every mutating path acquires:
 //!
-//!   * `~/.screenpipe/.db_recovery.lock` — JSON `{pid, host, started_at, op}`
+//!   * `~/.daimonion/.db_recovery.lock` — JSON `{pid, host, started_at, op}`
 //!   * Created with `O_CREAT|O_EXCL` (atomic) so two CLI runs can't both win.
 //!   * Heartbeated every 30 s by a background thread so a long recovery
 //!     (multi-GB DB) doesn't look stale.

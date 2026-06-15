@@ -4,7 +4,7 @@
 
 /// Get or create a persistent machine ID.
 ///
-/// Reads from `~/.screenpipe/machine_id` if it exists.
+/// Reads from `~/.daimonion/machine_id` if it exists.
 /// Otherwise generates a UUID v4, writes it to that file, and returns it.
 pub fn get_or_create_machine_id() -> String {
     let machine_id_path = crate::paths::default_screenpipe_data_dir().join("machine_id");

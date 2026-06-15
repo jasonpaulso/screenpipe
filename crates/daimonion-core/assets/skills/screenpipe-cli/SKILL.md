@@ -22,7 +22,7 @@ cd "$(mktemp -d)" && bun x screenpipe@latest <command>
 
 ## Pipe Management
 
-Pipes are markdown-based AI automations that run on schedule. Each pipe lives at `~/.screenpipe/pipes/<name>/pipe.md`.
+Pipes are markdown-based AI automations that run on schedule. Each pipe lives at `~/.daimonion/pipes/<name>/pipe.md`.
 
 ### Commands
 
@@ -39,7 +39,7 @@ bun x screenpipe@latest pipe models list             # View AI model presets
 
 ### Creating a Pipe
 
-Create `~/.screenpipe/pipes/<name>/pipe.md` with YAML frontmatter + prompt:
+Create `~/.daimonion/pipes/<name>/pipe.md` with YAML frontmatter + prompt:
 
 ```markdown
 ---
@@ -85,14 +85,14 @@ Screenpipe prepends a context header with time range, timezone, OS, and API URL 
 
 After creating:
 ```bash
-bun x screenpipe@latest pipe install ~/.screenpipe/pipes/my-pipe
+bun x screenpipe@latest pipe install ~/.daimonion/pipes/my-pipe
 bun x screenpipe@latest pipe enable my-pipe
 bun x screenpipe@latest pipe run my-pipe   # test immediately
 ```
 
 ### Editing Config
 
-Edit frontmatter in `~/.screenpipe/pipes/<name>/pipe.md` directly, or use the API:
+Edit frontmatter in `~/.daimonion/pipes/<name>/pipe.md` directly, or use the API:
 
 ```bash
 curl -X POST http://localhost:3030/pipes/<name>/config \
@@ -165,7 +165,7 @@ bun x screenpipe@latest connection list
 
 Connection IDs: `telegram`, `slack`, `discord`, `email`, `todoist`, `teams`, `google-calendar`, `apple-intelligence`, `openclaw`
 
-Credentials are stored locally at `~/.screenpipe/connections.json`.
+Credentials are stored locally at `~/.daimonion/connections.json`.
 
 **Per-integration details**: don't guess API shapes from this skill. Run `connection list` or `connection get <id>` — each entry includes a self-describing `description` with credential fields, endpoints, and example bodies. Only fetch the integration you need.
 
@@ -175,4 +175,4 @@ Credentials are stored locally at `~/.screenpipe/connections.json`.
 screenpipe pipe publish <pipe-name>
 ```
 
-Reads `~/.screenpipe/pipes/<pipe-name>/pipe.md`, extracts title/description/icon/category from YAML frontmatter, and publishes to the screenpipe pipe store. Requires auth (SCREENPIPE_API_KEY env var or `~/.screenpipe/auth.json`).
+Reads `~/.daimonion/pipes/<pipe-name>/pipe.md`, extracts title/description/icon/category from YAML frontmatter, and publishes to the screenpipe pipe store. Requires auth (SCREENPIPE_API_KEY env var or `~/.daimonion/auth.json`).

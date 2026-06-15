@@ -146,8 +146,8 @@ function stageBinaries(stagedCliRoot: string, binaryPath: string, host: Platform
 
 export function validateStage(stagedCliRoot: string, host: PlatformPackage): void {
   const wrapperJson = readJson(path.join(stagedCliRoot, WRAPPER.dir, "package.json"));
-  if (wrapperJson.bin?.screenpipe !== WRAPPER.bin) {
-    fail("wrapper package must expose bin.screenpipe = lib/cli.js");
+  if (wrapperJson.bin?.daimonion !== WRAPPER.bin) {
+    fail("wrapper package must expose bin.daimonion = lib/cli.js");
   }
   if (!fs.existsSync(path.join(stagedCliRoot, WRAPPER.dir, WRAPPER.bin))) {
     fail("wrapper launcher lib/cli.js is missing");

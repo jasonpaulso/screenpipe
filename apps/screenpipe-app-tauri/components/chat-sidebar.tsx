@@ -22,7 +22,7 @@
  *            ▼                                                     ▼ to Pi stdout
  *   ┌────────────────────────┐         ┌────────────────────────────────┐
  *   │ chat-storage.ts        │         │ pi-event-router.ts             │
- *   │ (~/.screenpipe/chats/) │         │ listens app-wide for pi_event  │
+ *   │ (~/.daimonion/chats/) │         │ listens app-wide for pi_event  │
  *   │                        │         │ writes status/preview to store │
  *   └────────────────────────┘         └────────────────────────────────┘
  *

@@ -1442,7 +1442,7 @@ mod tests {
     #[test]
     fn extract_device_output() {
         let (name, is_input) = extract_device_from_path(
-            "/Users/user/.screenpipe/data/Display 3 (output)_2026-02-27_23-15-38.mp4",
+            "/Users/user/.daimonion/data/Display 3 (output)_2026-02-27_23-15-38.mp4",
         );
         assert_eq!(name, "Display 3");
         assert!(!is_input);
@@ -1451,7 +1451,7 @@ mod tests {
     #[test]
     fn extract_device_input() {
         let (name, is_input) = extract_device_from_path(
-            "/Users/user/.screenpipe/data/input (input)_2026-02-27_23-15-38.mp4",
+            "/Users/user/.daimonion/data/input (input)_2026-02-27_23-15-38.mp4",
         );
         assert_eq!(name, "input");
         assert!(is_input);

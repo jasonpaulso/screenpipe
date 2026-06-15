@@ -514,7 +514,7 @@ async getCachedSuggestions() : Promise<Result<CachedSuggestions, string>> {
 }
 },
 /**
- * Read the user's screenpipe cloud session JWT from `~/.screenpipe/
+ * Read the user's screenpipe cloud session JWT from `~/.daimonion/
  * auth.json`. Returns None when the file is missing, malformed, or the
  * token field is empty.
  *
@@ -551,7 +551,7 @@ async getEnterpriseInstallMetadata() : Promise<EnterpriseInstallMetadata> {
  * Read the enterprise license key from `enterprise.json`.
  * Checks in order:
  * 1. Next to executable (pushed via Intune/MDM to Program Files / .app bundle)
- * 2. `~/.screenpipe/enterprise.json` (entered manually by employee via in-app prompt)
+ * 2. `~/.daimonion/enterprise.json` (entered manually by employee via in-app prompt)
  * Returns None if no file is found or is invalid.
  */
 async getEnterpriseLicenseKey() : Promise<string | null> {
@@ -559,7 +559,7 @@ async getEnterpriseLicenseKey() : Promise<string | null> {
 },
 /**
  * Read the enterprise admin API token (`team_api_token`) from
- * `~/.screenpipe/enterprise.json`. Returns None when the file is
+ * `~/.daimonion/enterprise.json`. Returns None when the file is
  * missing, malformed, or the field is empty.
  *
  * Used by the Settings → Enterprise → Admin API token card to render
@@ -1628,7 +1628,7 @@ async rollbackToVersion(version: string) : Promise<Result<null, string>> {
 }
 },
 /**
- * Save the enterprise license key to `~/.screenpipe/enterprise.json`.
+ * Save the enterprise license key to `~/.daimonion/enterprise.json`.
  * Used by the in-app prompt when enterprise.json is not deployed via MDM.
  */
 async saveEnterpriseLicenseKey(licenseKey: string) : Promise<Result<null, string>> {
@@ -1735,7 +1735,7 @@ async setBrowserCookieAccessState(granted: boolean, disabled: boolean) : Promise
  * in the screenpipe-api skill that Pi installs on every run.
  *
  * Mechanism: the screenpipe-core `Pi::ensure_screenpipe_skill` reads
- * `~/.screenpipe/cloud_media_analysis.disabled` at install time and
+ * `~/.daimonion/cloud_media_analysis.disabled` at install time and
  * conditionally appends the Gemma 4 E4B confidential-enclave section
  * to `<project>/.pi/skills/screenpipe-api/SKILL.md`. Default (no
  * marker) = enabled. This command just creates or removes the marker.
@@ -2663,7 +2663,7 @@ asyncPiiRedaction?: boolean;
  * default — orthogonal to `async_pii_redaction` (text path),
  * independently togglable. Requires the `screenpipe-redact`
  * crate to be built with one of the `onnx-*` cargo features and
- * the `rfdetr_v8.onnx` model present at `~/.screenpipe/models/`.
+ * the `rfdetr_v8.onnx` model present at `~/.daimonion/models/`.
  */
 asyncImagePiiRedaction?: boolean;
 /**

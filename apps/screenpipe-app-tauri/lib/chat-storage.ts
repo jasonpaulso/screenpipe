@@ -61,7 +61,7 @@ export interface ConversationListOptions {
 async function getChatsDir(): Promise<string> {
   if (_chatsDir) return _chatsDir;
   const home = await homeDir();
-  _chatsDir = await join(home, ".screenpipe", "chats");
+  _chatsDir = await join(home, ".daimonion", "chats");
   return _chatsDir;
 }
 
@@ -589,7 +589,7 @@ export async function migrateFromStoreBin(): Promise<void> {
     }
 
     console.log(
-      `[chat-storage] migrating ${history.conversations.length} conversations from store.bin to ~/.screenpipe/chats/`
+      `[chat-storage] migrating ${history.conversations.length} conversations from store.bin to ~/.daimonion/chats/`
     );
 
     await ensureChatsDir();

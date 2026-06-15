@@ -12,7 +12,7 @@
 //!
 //! Storage model:
 //! * Public config (id, name, url, enabled, created_at) lives in
-//!   `~/.screenpipe/mcp_servers.json` so it survives without the secret
+//!   `~/.daimonion/mcp_servers.json` so it survives without the secret
 //!   store.
 //! * Header values are secret — stored in [`SecretStore`] under
 //!   `mcp:{id}` and never written to the JSON file.

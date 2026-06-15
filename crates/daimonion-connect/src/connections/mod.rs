@@ -323,7 +323,7 @@ pub fn all_integrations() -> Vec<Box<dyn Integration>> {
 }
 
 // ---------------------------------------------------------------------------
-// Credential store (~/.screenpipe/connections.json)
+// Credential store (~/.daimonion/connections.json)
 // ---------------------------------------------------------------------------
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]

@@ -90,7 +90,7 @@ const canDriveOwnedBrowser = process.platform !== "linux";
 // gated, so nothing attaches and `home` survives for the block below.
 const OWN_CHAT = "33333333-cccc-cccc-cccc-cccccccccccc";
 const FOREIGN_OWNER = "pipe:e2e-background-poster";
-const CHATS_DIR = join(homedir(), ".screenpipe", "chats");
+const CHATS_DIR = join(homedir(), ".daimonion", "chats");
 const FOREIGN_URL = "https://example.com/e2e-foreign-pipe";
 
 function removeChatFile(id: string): void {

@@ -4,7 +4,7 @@
 
 //! JPEG snapshot writer for event-driven capture.
 //!
-//! Writes individual JPEG files to `~/.screenpipe/data/YYYY-MM-DD/`
+//! Writes individual JPEG files to `~/.daimonion/data/YYYY-MM-DD/`
 //! instead of encoding into H.265 video chunks.
 
 use anyhow::Result;
@@ -29,7 +29,7 @@ pub struct SnapshotWriter {
 impl SnapshotWriter {
     /// Create a new SnapshotWriter.
     ///
-    /// - `base_dir`: root data directory (e.g., `~/.screenpipe/data`)
+    /// - `base_dir`: root data directory (e.g., `~/.daimonion/data`)
     /// - `quality`: JPEG quality 1-100
     /// - `max_width`: max snapshot width in pixels (0 = no limit)
     pub fn new(base_dir: impl Into<PathBuf>, quality: u8, max_width: u32) -> Self {

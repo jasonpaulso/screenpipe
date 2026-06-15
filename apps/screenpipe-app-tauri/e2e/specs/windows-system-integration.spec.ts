@@ -197,7 +197,7 @@ Add-Type -AssemblyName System.Windows.Forms
     if (!isWindows || !api) this.skip();
 
     expect(E2E_DATA_DIR.toLowerCase()).toContain(".e2e");
-    expect(E2E_DATA_DIR.toLowerCase()).not.toContain("\\appdata\\roaming\\.screenpipe");
+    expect(E2E_DATA_DIR.toLowerCase()).not.toContain("\\appdata\\roaming\\.daimonion");
     expect(existsSync(E2E_DATA_DIR)).toBe(true);
     expect(statSync(E2E_DATA_DIR).isDirectory()).toBe(true);
 

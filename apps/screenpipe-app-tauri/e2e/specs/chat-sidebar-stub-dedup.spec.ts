@@ -23,7 +23,7 @@ import { homedir } from "node:os";
 import { join } from "node:path";
 import { openHomeWindow, t, waitForAppReady } from "../helpers/test-utils.js";
 
-const CHATS_DIR = join(homedir(), ".screenpipe", "chats");
+const CHATS_DIR = join(homedir(), ".daimonion", "chats");
 const MARKER = "E2E-SIDEBAR-STUB-DEDUP-MARKER-8M2QK7";
 const CHAT_X = "66666666-aaaa-4aaa-8aaa-aaaaaaaaaaaa";
 const CHAT_Y = "77777777-bbbb-4bbb-8bbb-bbbbbbbbbbbb";

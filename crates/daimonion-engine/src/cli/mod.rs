@@ -178,7 +178,7 @@ pub enum Command {
         /// Output format
         #[arg(long, default_value_t = false)]
         json: bool,
-        /// Data directory. Default to $HOME/.screenpipe
+        /// Data directory. Default to $HOME/.daimonion
         #[arg(long, value_hint = ValueHint::DirPath)]
         data_dir: Option<String>,
         /// Port to check for running server
@@ -187,7 +187,7 @@ pub enum Command {
     },
 
     /// Search screen + audio history directly from the local SQLite DB
-    /// (no daemon required — opens `~/.screenpipe/db.sqlite` read-side
+    /// (no daemon required — opens `~/.daimonion/db.sqlite` read-side
     /// via WAL while sp may be writing).
     Search(SearchArgs),
 
@@ -282,7 +282,7 @@ pub enum Command {
     Backup {
         #[command(subcommand)]
         subcommand: BackupCommand,
-        /// Data directory. Default to $HOME/.screenpipe
+        /// Data directory. Default to $HOME/.daimonion
         #[arg(long, value_hint = ValueHint::DirPath)]
         data_dir: Option<String>,
     },
@@ -290,7 +290,7 @@ pub enum Command {
     /// Export a recording to a single MP4 (screen frames + synced audio).
     /// Pass `--meeting-id` to export a meeting (start/end resolved for you),
     /// or `--start`/`--end` for an arbitrary time range. Reads
-    /// `~/.screenpipe/db.sqlite` directly — no daemon required.
+    /// `~/.daimonion/db.sqlite` directly — no daemon required.
     #[command(alias = "export-meeting")]
     Export(ExportArgs),
 }
@@ -324,7 +324,7 @@ pub struct ExportArgs {
     #[arg(short = 'o', long, value_hint = ValueHint::FilePath)]
     pub output: Option<String>,
 
-    /// Data directory. Default to $HOME/.screenpipe
+    /// Data directory. Default to $HOME/.daimonion
     #[arg(long, value_hint = ValueHint::DirPath)]
     pub data_dir: Option<String>,
 
@@ -375,7 +375,7 @@ pub struct RecordArgs {
     #[arg(long, default_value_t = false)]
     pub macos_input_vpio_enabled: bool,
 
-    /// Data directory. Default to $HOME/.screenpipe
+    /// Data directory. Default to $HOME/.daimonion
     #[arg(long, value_hint = ValueHint::DirPath)]
     pub data_dir: Option<String>,
 
@@ -418,7 +418,7 @@ pub struct RecordArgs {
     /// of `--async-pii-redaction` (text). Runs the rfdetr_v11 detector
     /// over each captured frame, blacks out detected PII regions in
     /// the JPG (atomic overwrite of the source file). Requires
-    /// `rfdetr_v11.onnx` at `~/.screenpipe/models/` and the binary
+    /// `rfdetr_v11.onnx` at `~/.daimonion/models/` and the binary
     /// built with one of the `onnx-*` cargo features. Off by default.
     #[arg(long, default_value_t = false)]
     pub async_image_pii_redaction: bool,
@@ -598,14 +598,14 @@ pub struct RecordArgs {
 
     /// Disable clipboard capture entirely. The UI recorder will not record
     /// clipboard copy/paste events or contents — useful when piping
-    /// ~/.screenpipe data into a remote LLM (passwords, keys, secrets often
+    /// ~/.daimonion data into a remote LLM (passwords, keys, secrets often
     /// pass through the clipboard).
     #[arg(long, default_value_t = false)]
     pub disable_clipboard_capture: bool,
 
     /// Disable persisting keyboard / typed-text rows. Keyboard events still
     /// wake event-driven capture, and the accessibility tree + OCR still
-    /// capture on-screen text. Useful when piping ~/.screenpipe data into a
+    /// capture on-screen text. Useful when piping ~/.daimonion data into a
     /// remote LLM (secrets get typed).
     #[arg(long, default_value_t = false)]
     pub disable_keyboard_capture: bool,
@@ -1378,7 +1378,7 @@ pub enum PipeCommand {
     },
     /// Publish a local pipe to the registry
     Publish {
-        /// Pipe name (directory name under ~/.screenpipe/pipes/)
+        /// Pipe name (directory name under ~/.daimonion/pipes/)
         name: String,
     },
     /// Search the pipe registry
@@ -1700,7 +1700,7 @@ pub struct SearchArgs {
     #[arg(long)]
     pub max_content_length: Option<usize>,
 
-    /// Data directory. Default `$HOME/.screenpipe`.
+    /// Data directory. Default `$HOME/.daimonion`.
     #[arg(long, value_hint = ValueHint::DirPath)]
     pub data_dir: Option<String>,
 
@@ -1716,7 +1716,7 @@ pub struct SearchArgs {
 
 /// Mirrors the `screenpipe-team` skill 1:1 — same endpoints, same vocabulary.
 /// All three variants hit `https://screenpi.pe/api/enterprise/v1/*` directly
-/// with the admin's `team_api_token` from `~/.screenpipe/enterprise.json`
+/// with the admin's `team_api_token` from `~/.daimonion/enterprise.json`
 /// (or `SCREENPIPE_TEAM_API_TOKEN` env override). No daemon needed.
 #[derive(Subcommand, Debug)]
 pub enum TeamCommand {
@@ -1831,7 +1831,7 @@ pub enum VisionCommand {
 pub enum McpCommand {
     /// Setup MCP server configuration
     Setup {
-        /// Directory to save MCP files (default: $HOME/.screenpipe/mcp)
+        /// Directory to save MCP files (default: $HOME/.daimonion/mcp)
         #[arg(long, value_hint = ValueHint::DirPath)]
         directory: Option<String>,
         /// Output format
@@ -1875,14 +1875,14 @@ pub enum SyncCommand {
         #[arg(short = 'p', long, default_value_t = 3030)]
         port: u16,
     },
-    /// Sync ~/.screenpipe to a remote SSH server (SFTP, no cloud account)
+    /// Sync ~/.daimonion to a remote SSH server (SFTP, no cloud account)
     Remote {
         #[command(subcommand)]
         subcommand: RemoteSyncCommand,
     },
 }
 
-/// SSH/SFTP-based sync of `~/.screenpipe` to a remote server.
+/// SSH/SFTP-based sync of `~/.daimonion` to a remote server.
 ///
 /// No cloud account or screenpipe-cloud dependency — pushes the entire data
 /// directory over SFTP using a private key from `~/.ssh/`. Use this to
@@ -1894,11 +1894,11 @@ pub enum RemoteSyncCommand {
         #[command(flatten)]
         cfg: RemoteSyncArgs,
     },
-    /// Push `~/.screenpipe/` to the remote once
+    /// Push `~/.daimonion/` to the remote once
     Now {
         #[command(flatten)]
         cfg: RemoteSyncArgs,
-        /// Override the local data directory (default: $HOME/.screenpipe)
+        /// Override the local data directory (default: $HOME/.daimonion)
         #[arg(long)]
         data_dir: Option<String>,
     },
@@ -1925,7 +1925,7 @@ pub struct RemoteSyncArgs {
     /// Path to SSH private key (e.g. ~/.ssh/id_ed25519)
     #[arg(long, env = "SCREENPIPE_REMOTE_KEY")]
     pub key_path: String,
-    /// Absolute path on the remote where ~/.screenpipe/ should land
+    /// Absolute path on the remote where ~/.daimonion/ should land
     #[arg(long, env = "SCREENPIPE_REMOTE_PATH")]
     pub remote_path: String,
     /// SSH port

@@ -42,7 +42,7 @@ impl Integration for Codex {
         std::fs::create_dir_all(&path)
             .map_err(|e| anyhow::anyhow!("cannot create {}: {}", path.display(), e))?;
 
-        let probe = path.join(".screenpipe-write-probe");
+        let probe = path.join(".daimonion-write-probe");
         std::fs::write(&probe, "ok")
             .map_err(|e| anyhow::anyhow!("{} is not writable: {}", path.display(), e))?;
         let _ = std::fs::remove_file(&probe);

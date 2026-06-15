@@ -2,7 +2,7 @@
 
 ## Current Architecture
 
-All pipe state lives in-memory (`Arc<Mutex<HashMap>>`). Logs written as JSON files to `~/.screenpipe/pipes/{name}/logs/`. A global `Semaphore::new(1)` serializes all pipe execution. The Pi agent subprocess uses `wait_with_output()` with **no timeout**. PID is captured from `child.id()` at spawn (line 198 of pi.rs) but stored as `ExecutionHandle { pid: 0 }` in the running map (lines 371, 756 of mod.rs) — the real PID from spawn is never written back.
+All pipe state lives in-memory (`Arc<Mutex<HashMap>>`). Logs written as JSON files to `~/.daimonion/pipes/{name}/logs/`. A global `Semaphore::new(1)` serializes all pipe execution. The Pi agent subprocess uses `wait_with_output()` with **no timeout**. PID is captured from `child.id()` at spawn (line 198 of pi.rs) but stored as `ExecutionHandle { pid: 0 }` in the running map (lines 371, 756 of mod.rs) — the real PID from spawn is never written back.
 
 ### State Dependencies (what a single pipe run touches)
 
@@ -117,7 +117,7 @@ Every one of these can fail independently, mid-execution.
 **Required:** At minimum, log to stderr (tracing). For DB: SQLite will return SQLITE_FULL — handle gracefully, don't crash.
 
 #### C3. Logs accumulate indefinitely
-**Current:** No rotation. Every run creates a new JSON file in `~/.screenpipe/pipes/{name}/logs/`. Over months, thousands of small files.
+**Current:** No rotation. Every run creates a new JSON file in `~/.daimonion/pipes/{name}/logs/`. Over months, thousands of small files.
 **Required:**
 - DB: prune executions older than 30 days (configurable)
 - File cleanup: delete JSON logs older than 7 days on startup

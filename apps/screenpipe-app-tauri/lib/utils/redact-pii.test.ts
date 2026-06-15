@@ -142,14 +142,14 @@ describe("redactPii", () => {
   // ====== Path redaction ======
 
   it("redacts Unix home paths", () => {
-    expect(redactPii("/Users/louisbeaumont/.screenpipe")).toBe(
-      "/Users/[USER]/.screenpipe"
+    expect(redactPii("/Users/louisbeaumont/.daimonion")).toBe(
+      "/Users/[USER]/.daimonion"
     );
   });
 
   it("redacts Windows home paths", () => {
-    expect(redactPii("C:\\Users\\DavidBattaglia\\.screenpipe")).toBe(
-      "C:\\Users\\[USER]\\.screenpipe"
+    expect(redactPii("C:\\Users\\DavidBattaglia\\.daimonion")).toBe(
+      "C:\\Users\\[USER]\\.daimonion"
     );
   });
 

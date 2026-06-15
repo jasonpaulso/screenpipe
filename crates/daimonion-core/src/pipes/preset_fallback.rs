@@ -9,7 +9,7 @@
 //! (rate limit, credits exhausted, provider error), its circuit breaker opens
 //! and subsequent requests skip it until the cooldown expires.
 //!
-//! State is persisted to `~/.screenpipe/ai_preset_fallback.json` so it survives
+//! State is persisted to `~/.daimonion/ai_preset_fallback.json` so it survives
 //! restarts.
 
 use serde::{Deserialize, Serialize};

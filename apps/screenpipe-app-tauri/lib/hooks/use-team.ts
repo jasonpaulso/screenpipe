@@ -16,7 +16,7 @@ import { encodePlainConfig, parsePlainConfigValue } from "../team-pipes";
 
 const API = "https://screenpi.pe/api/team";
 
-// key stored under "team_key_<team_id>" in ~/.screenpipe/store.bin
+// key stored under "team_key_<team_id>" in ~/.daimonion/store.bin
 // this is the same Tauri secure store used for settings, auth tokens, etc.
 // NOT in localStorage — not accessible to web extensions or XSS
 

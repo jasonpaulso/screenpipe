@@ -4,7 +4,7 @@
 
 //! AI preset store IO + validation.
 //!
-//! Reads/writes presets in `~/.screenpipe/store.bin` (plain JSON or the
+//! Reads/writes presets in `~/.daimonion/store.bin` (plain JSON or the
 //! app-encrypted `SPSTORE1` form). The desktop app owns the schema; this module
 //! touches only the keys it knows about and round-trips the rest verbatim so the
 //! app's private state survives a CLI write.
@@ -548,7 +548,7 @@ pub fn delete(id: &str, force: bool) -> Result<DeleteReport> {
     })
 }
 
-/// Scan `~/.screenpipe/pipes/*/pipe.md` and return the names of pipes whose
+/// Scan `~/.daimonion/pipes/*/pipe.md` and return the names of pipes whose
 /// frontmatter `preset:` contains the given id. Best-effort — failure to read
 /// or parse a pipe is logged and skipped.
 fn pipes_referencing_preset(id: &str) -> Result<Vec<String>> {

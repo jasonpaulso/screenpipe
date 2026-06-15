@@ -33,9 +33,9 @@ describe("screenpipeViewerPathFromHref", () => {
   it("extracts the path query param from a well-formed screenpipe://view URL", () => {
     expect(
       screenpipeViewerPathFromHref(
-        "screenpipe://view?path=/Users/me/.screenpipe/data/frame_123.jpg",
+        "screenpipe://view?path=/Users/me/.daimonion/data/frame_123.jpg",
       ),
-    ).toBe("/Users/me/.screenpipe/data/frame_123.jpg");
+    ).toBe("/Users/me/.daimonion/data/frame_123.jpg");
   });
 
   it("URL-decodes percent-encoded paths so Windows-style backslashes round-trip", () => {

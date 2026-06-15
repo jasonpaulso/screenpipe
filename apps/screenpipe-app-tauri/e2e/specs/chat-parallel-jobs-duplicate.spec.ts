@@ -16,7 +16,7 @@ import { openHomeWindow, waitForAppReady, t } from "../helpers/test-utils.js";
 import { showWindow, waitForWindowHandle } from "../helpers/tauri.js";
 import { saveScreenshot } from "../helpers/screenshot-utils.js";
 
-const CHATS_DIR = join(homedir(), ".screenpipe", "chats");
+const CHATS_DIR = join(homedir(), ".daimonion", "chats");
 // Unique marker — embedded in the prompt so the file-content scan can pick
 // up exactly the conversations produced by THIS test run, ignoring any
 // pre-existing user data on disk.

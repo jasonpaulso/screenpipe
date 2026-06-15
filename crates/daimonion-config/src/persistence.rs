@@ -4,14 +4,14 @@
 
 //! Load and save [`RecordingSettings`] from/to a TOML config file.
 //!
-//! Used by the CLI binary to persist settings in `~/.screenpipe/config.toml`.
+//! Used by the CLI binary to persist settings in `~/.daimonion/config.toml`.
 //! The desktop app uses its own persistence (tauri-plugin-store / store.bin)
 //! but shares the same [`RecordingSettings`] type.
 
 use crate::RecordingSettings;
 use std::path::{Path, PathBuf};
 
-/// Default config file path: `~/.screenpipe/config.toml`.
+/// Default config file path: `~/.daimonion/config.toml`.
 pub fn default_config_path() -> Option<PathBuf> {
     dirs_next().map(|d| d.join("config.toml"))
 }
@@ -42,9 +42,9 @@ pub fn save_toml(settings: &RecordingSettings, path: &Path) -> Result<(), String
     std::fs::write(path, contents).map_err(|e| format!("failed to write {}: {}", path.display(), e))
 }
 
-/// Resolve the screenpipe config directory: `~/.screenpipe/`
+/// Resolve the screenpipe config directory: `~/.daimonion/`
 fn dirs_next() -> Option<PathBuf> {
-    dirs::home_dir().map(|h| h.join(".screenpipe"))
+    dirs::home_dir().map(|h| h.join(".daimonion"))
 }
 
 #[cfg(test)]

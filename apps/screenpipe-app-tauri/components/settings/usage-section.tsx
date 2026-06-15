@@ -57,7 +57,7 @@ const EMPTY_CACHE: UsageCache = {
 
 async function getCachePath(): Promise<string> {
   const home = await homeDir();
-  return await join(home, ".screenpipe", "usage-cache.json");
+  return await join(home, ".daimonion", "usage-cache.json");
 }
 
 async function loadCache(): Promise<UsageCache> {

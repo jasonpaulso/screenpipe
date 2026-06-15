@@ -24,7 +24,7 @@ shippable and verifiable.
 - [ ] **Phase 3b — env vars** `SCREENPIPE_ → DAIMONION_` + back-compat alias shim (engine-verifiable)
 - [ ] **Phase 4 — distribution**: 14 npm names, MCP server name, CLI binary, **app binary** rename
       (e2e/log/process/packaging blast radius — needs the app buildable)
-- [ ] **Phase 5 — system identity**: bundle id, `daimonion://` scheme, `~/.screenpipe → ~/.daimonion`
+- [ ] **Phase 5 — system identity**: bundle id, `daimonion://` scheme, `~/.daimonion → ~/.daimonion`
       **data-dir migration shim** (riskiest; build + run the app to verify before it touches real data)
 - [ ] **Phase 6 — external URLs**: defer/centralize `screenpi.pe`/`api.screenpipe.com` behind one seam
 
@@ -65,12 +65,12 @@ rg -o '^name = "(screenpipe[^"]*)"' -g Cargo.toml | sort -u   # crate name decla
 rg -n '"name":\s*"(@?screenpipe[^"]*)"' -g package.json       # npm package names
 rg -on "SCREENPIPE_[A-Z0-9_]+" | sort -u                      # env var tokens
 rg -c "screenpipe://"                                         # deep-link scheme
-rg -l "\.screenpipe" | wc -l                                  # data-dir refs
+rg -l "\.daimonion" | wc -l                                  # data-dir refs
 ```
 
 **Snapshot at authoring (approx):** ~1,375 files mention the name · 1,125 carry the header ·
 33 crate-name declarations (~30 distinct crates; 19 dirs under `crates/`) · 14 npm names ·
-47 `screenpipe://` hits · 192 files reference `.screenpipe` · 8 files hold the PostHog key ·
+47 `screenpipe://` hits · 192 files reference `.daimonion` · 8 files hold the PostHog key ·
 1 Sentry DSN · ~15 distinct network domains.
 
 ### Phase 1 — Cosmetic / SOFT (zero functional risk)
@@ -118,7 +118,7 @@ Independent of naming; grouped here as a clean-identity step. You do not own the
 - **Deep-link scheme** `screenpipe://` → `<newname://>` across the dispatch sites in Rust
   (`main.rs`, `commands.rs`), Swift (`notification_panel.swift`), and JS (`ee/sdk/tauri`). Update the
   scheme registration in the bundle config.
-- **Data dir** `~/.screenpipe` → `~/.<newname>` (`crates/screenpipe-config/src/persistence.rs`,
+- **Data dir** `~/.daimonion` → `~/.<newname>` (`crates/screenpipe-config/src/persistence.rs`,
   `src-tauri/src/config.rs`, and ~192 ref sites). ⚠️ Ship a **one-time migration shim**: on startup,
   if the old dir exists and the new one does not, move (or symlink) it and log the result, so
   existing recordings/config survive.
@@ -137,7 +137,7 @@ the `docs/FORK_UNLOCK.md` §4 alternatives replace them. **Now:** centralize eac
 | 2 | Launch app + engine; confirm **no** outbound requests to `*.posthog.com` / `*.sentry.io` (network capture or `read_network_requests`); existing suites green |
 | 3 | `cargo build --release --features metal,apple-intelligence`; `cargo test`; **`bun run bindings:check` must pass** (proves the binding surface is intact); unit test for the env alias shim |
 | 4 | `npm pack` dry-run for each renamed package; `claude mcp add <newname>` smoke test; CLI invocation resolves the renamed binary |
-| 5 | Fresh-install permission re-grant walkthrough; deep link `<newname://meeting/{id}>` opens the app; **migration-shim test** — seed a fake `~/.screenpipe`, launch, assert contents now under `~/.<newname>` |
+| 5 | Fresh-install permission re-grant walkthrough; deep link `<newname://meeting/{id}>` opens the app; **migration-shim test** — seed a fake `~/.daimonion`, launch, assert contents now under `~/.<newname>` |
 | post-5 | Full `TESTING.md` regression checklist (window/tray/monitors/audio/Apple-Intelligence) |
 
 ## B4. Success signals (task complete)

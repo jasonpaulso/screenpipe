@@ -74,7 +74,7 @@ export interface TeamPipePayload {
   shared_at?: string;
 }
 
-/** Pipe names become directories under ~/.screenpipe/pipes — keys arrive from
+/** Pipe names become directories under ~/.daimonion/pipes — keys arrive from
  * teammates, so reject anything that could escape that directory. */
 export function isSafePipeName(name: string): boolean {
   return /^[a-zA-Z0-9][a-zA-Z0-9_-]*$/.test(name) && name.length <= 100;

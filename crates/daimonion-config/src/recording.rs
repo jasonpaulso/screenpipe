@@ -36,7 +36,7 @@ pub struct ScheduleRule {
 ///
 /// Used by:
 /// - **Desktop app**: embedded inside `SettingsStore` via `#[serde(flatten)]`
-/// - **CLI**: built from command-line args or loaded from `~/.screenpipe/config.toml`
+/// - **CLI**: built from command-line args or loaded from `~/.daimonion/config.toml`
 /// - **Engine**: consumed directly for audio, vision, and UI recording
 ///
 /// All field names use `camelCase` serde rename to match the existing frontend
@@ -358,7 +358,7 @@ pub struct RecordingSettings {
     /// default — orthogonal to `async_pii_redaction` (text path),
     /// independently togglable. Requires the `screenpipe-redact`
     /// crate to be built with one of the `onnx-*` cargo features and
-    /// the `rfdetr_v8.onnx` model present at `~/.screenpipe/models/`.
+    /// the `rfdetr_v8.onnx` model present at `~/.daimonion/models/`.
     #[serde(rename = "asyncImagePiiRedaction", default)]
     pub async_image_pii_redaction: bool,
 

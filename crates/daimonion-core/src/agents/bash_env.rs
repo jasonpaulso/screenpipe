@@ -113,7 +113,7 @@ curl() {
 }
 "#;
 
-/// Path to the bash wrapper under `~/.screenpipe/<WRAPPER_RELATIVE_PATH>`,
+/// Path to the bash wrapper under `~/.daimonion/<WRAPPER_RELATIVE_PATH>`,
 /// relative to the supplied screenpipe data dir.
 pub fn wrapper_path_under(screenpipe_dir: &Path) -> PathBuf {
     screenpipe_dir.join(WRAPPER_RELATIVE_PATH)
@@ -126,7 +126,7 @@ pub fn wrapper_path_under(screenpipe_dir: &Path) -> PathBuf {
 /// Intended caller pattern:
 /// ```no_run
 /// # use std::path::Path;
-/// let sp_dir = Path::new("/Users/me/.screenpipe");
+/// let sp_dir = Path::new("/Users/me/.daimonion");
 /// let p = daimonion_core::agents::bash_env::ensure_wrapper(sp_dir).unwrap();
 /// // cmd.env("BASH_ENV", p);
 /// ```
@@ -150,12 +150,12 @@ pub fn ensure_wrapper(screenpipe_dir: &Path) -> Result<PathBuf> {
     Ok(path)
 }
 
-/// Resolve `~/.screenpipe` using the same logic the rest of the app uses,
+/// Resolve `~/.daimonion` using the same logic the rest of the app uses,
 /// then `ensure_wrapper`. Convenience for spawn sites that don't already
 /// know the data dir.
 pub fn ensure_wrapper_in_default_dir() -> Result<PathBuf> {
     let home = dirs::home_dir().context("home dir not found")?;
-    ensure_wrapper(&home.join(".screenpipe"))
+    ensure_wrapper(&home.join(".daimonion"))
 }
 
 #[cfg(test)]

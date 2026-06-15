@@ -9,14 +9,14 @@ Query the customer's team telemetry. Data lives in the customer's own Azure Blob
 
 ## Auth
 
-The skill authenticates with an **enterprise admin API token** the admin minted once on `https://screenpi.pe/enterprise?tab=tokens` (with scopes `read:devices`, `read:search`, `read:records`) and pasted into Settings → Privacy → Admin Team API Token. The desktop stored it in `~/.screenpipe/enterprise.json` under `team_api_token`.
+The skill authenticates with an **enterprise admin API token** the admin minted once on `https://screenpi.pe/enterprise?tab=tokens` (with scopes `read:devices`, `read:search`, `read:records`) and pasted into Settings → Privacy → Admin Team API Token. The desktop stored it in `~/.daimonion/enterprise.json` under `team_api_token`.
 
 License-key + token are intentionally separate concerns:
 - `license_key` proves *which org* this machine belongs to (deployed by IT, same on every employee's device).
 - `team_api_token` proves *this user is an admin of that org* and grants the read scopes. Employees who don't have it can't query team data even though they have the same license_key.
 
 ```bash
-TEAM_TOKEN=$(jq -r .team_api_token ~/.screenpipe/enterprise.json)
+TEAM_TOKEN=$(jq -r .team_api_token ~/.daimonion/enterprise.json)
 SP_URL="https://screenpi.pe/api/enterprise/v1"
 AUTH_HEADERS=(-H "Authorization: Bearer $TEAM_TOKEN")
 ```

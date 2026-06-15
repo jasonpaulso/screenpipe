@@ -95,7 +95,7 @@ pub async fn handle_login_command() -> anyhow::Result<()> {
                     anyhow::bail!("authentication failed — no token received");
                 }
 
-                // Save to ~/.screenpipe/store.bin (same file the desktop app uses)
+                // Save to ~/.daimonion/store.bin (same file the desktop app uses)
                 let mut store: Value = super::store_file::read_store()?;
 
                 // Write to top-level `settings.user` — the canonical path the
@@ -235,7 +235,7 @@ pub async fn handle_whoami_command() -> anyhow::Result<()> {
             let source = if std::env::var("SCREENPIPE_API_KEY").is_ok() {
                 "SCREENPIPE_API_KEY env var"
             } else {
-                "~/.screenpipe/store.bin"
+                "~/.daimonion/store.bin"
             };
 
             println!();

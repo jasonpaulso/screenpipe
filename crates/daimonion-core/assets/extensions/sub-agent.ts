@@ -56,7 +56,7 @@ let pipeToken: string | null = null;
 try {
   const fs = require("fs");
   const path = require("path");
-  const permPath = path.join(process.cwd(), ".screenpipe-permissions.json");
+  const permPath = path.join(process.cwd(), ".daimonion-permissions.json");
   if (fs.existsSync(permPath)) {
     const parsed = JSON.parse(fs.readFileSync(permPath, "utf-8"));
     pipeToken = parsed.pipe_token || null;

@@ -218,7 +218,7 @@ impl PiExecutor {
     }
 
     /// User policy: when the marker file
-    /// `~/.screenpipe/cloud_media_analysis.disabled` exists, the
+    /// `~/.daimonion/cloud_media_analysis.disabled` exists, the
     /// screenpipe-api skill is installed WITHOUT the Gemma 4 E4B
     /// confidential-enclave block. Default (no marker) = enabled, so
     /// fresh installs ship the capability documented and Pi knows to
@@ -234,7 +234,7 @@ impl PiExecutor {
             None => return true,
         };
         !home
-            .join(".screenpipe")
+            .join(".daimonion")
             .join("cloud_media_analysis.disabled")
             .exists()
     }
@@ -268,7 +268,7 @@ impl PiExecutor {
     /// misleading (every call would 403) and dropping it onto a personal
     /// build leaks our enterprise affordances.
     ///
-    /// Source of truth: `~/.screenpipe/enterprise.json`. The Tauri host
+    /// Source of truth: `~/.daimonion/enterprise.json`. The Tauri host
     /// keeps that file populated with `{is_admin, license_active,
     /// team_api_token, ...}` based on the user's current license + role.
     /// We re-check on every pi-agent boot, so role downgrades + license
@@ -301,9 +301,9 @@ impl PiExecutor {
         Ok(())
     }
 
-    /// True when `~/.screenpipe/enterprise.json` declares this user as an
+    /// True when `~/.daimonion/enterprise.json` declares this user as an
     /// active admin AND the user is signed into screenpipe cloud (the
-    /// Clerk JWT at `~/.screenpipe/auth.json` is what authenticates the
+    /// Clerk JWT at `~/.daimonion/auth.json` is what authenticates the
     /// skill's HTTP calls to `screenpi.pe/api/enterprise/v1`).
     ///
     /// Conservative: any I/O or parse error means "no" so we fail closed —
@@ -317,7 +317,7 @@ impl PiExecutor {
             Some(h) => h,
             None => return false,
         };
-        let ent_path = home.join(".screenpipe").join("enterprise.json");
+        let ent_path = home.join(".daimonion").join("enterprise.json");
         let raw = match std::fs::read_to_string(&ent_path) {
             Ok(s) => s,
             Err(_) => return false,
@@ -421,7 +421,7 @@ impl PiExecutor {
     /// store, so [`Self::sync_user_skills`] can tell its own copies apart from
     /// baseline (`screenpipe-api`/`-cli`/`-team`) and hand-authored skills and
     /// safely remove ones the user has since deleted from the store.
-    const USER_SKILL_MARKER: &'static str = ".screenpipe-managed";
+    const USER_SKILL_MARKER: &'static str = ".daimonion-managed";
 
     /// Baseline skills screenpipe writes into every session itself
     /// ([`Self::ensure_screenpipe_skill`] / [`Self::ensure_screenpipe_team_skill`]).
@@ -598,10 +598,10 @@ impl PiExecutor {
     }
 
     /// Auto-detect whether to use filtered or unfiltered skill installation.
-    /// If PipeManager already wrote `.screenpipe-permissions.json`, use filtered.
+    /// If PipeManager already wrote `.daimonion-permissions.json`, use filtered.
     /// Otherwise install all skills (CLI / direct executor usage).
     pub fn ensure_screenpipe_skill_auto(project_dir: &Path) -> Result<()> {
-        let perms_path = project_dir.join(".screenpipe-permissions.json");
+        let perms_path = project_dir.join(".daimonion-permissions.json");
         if perms_path.exists() {
             // PipeManager already handled filtered installation — skip
             // to avoid overwriting with unfiltered skills.
@@ -1496,7 +1496,7 @@ impl AgentExecutor for PiExecutor {
 
         let pi_path = find_pi_executable().ok_or_else(|| {
             anyhow!(
-                "pi not found. try restarting the app or delete ~/.screenpipe/pi-agent and restart"
+                "pi not found. try restarting the app or delete ~/.daimonion/pi-agent and restart"
             )
         })?;
 
@@ -1609,7 +1609,7 @@ impl AgentExecutor for PiExecutor {
 
         let pi_path = find_pi_executable().ok_or_else(|| {
             anyhow!(
-                "pi not found. try restarting the app or delete ~/.screenpipe/pi-agent and restart"
+                "pi not found. try restarting the app or delete ~/.daimonion/pi-agent and restart"
             )
         })?;
 
@@ -1823,7 +1823,7 @@ pub fn find_bun_executable() -> Option<String> {
     paths.into_iter().find(|p| std::path::Path::new(p).exists())
 }
 
-/// Returns the screenpipe-managed pi install directory (`~/.screenpipe/pi-agent/` or SCREENPIPE_DATA_DIR/pi-agent).
+/// Returns the screenpipe-managed pi install directory (`~/.daimonion/pi-agent/` or SCREENPIPE_DATA_DIR/pi-agent).
 fn pi_local_install_dir() -> Option<PathBuf> {
     Some(crate::paths::default_screenpipe_data_dir().join("pi-agent"))
 }

@@ -1739,7 +1739,7 @@ export function RecordingSettings() {
   };
 
   // Per-app exclusions for the CoreAudio Process Tap. The list is owned by
-  // the audio engine (file at ~/.screenpipe/audio-exclusions.json); we just
+  // the audio engine (file at ~/.daimonion/audio-exclusions.json); we just
   // read/write it through Tauri commands. Hot-reload happens engine-side
   // on the existing 500ms tap-rebuild loop, so a write here propagates in
   // ~1 tick subject to the 60s REBUILD_COOLDOWN.
@@ -1957,7 +1957,7 @@ export function RecordingSettings() {
       toast({
         title: "custom data directory unavailable",
         description:
-          "the configured data directory could not be accessed. recordings are using the default directory (~/.screenpipe).",
+          "the configured data directory could not be accessed. recordings are using the default directory (~/.daimonion).",
         variant: "destructive",
         duration: 10000,
       });

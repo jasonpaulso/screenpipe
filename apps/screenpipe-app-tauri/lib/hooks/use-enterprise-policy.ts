@@ -335,7 +335,7 @@ export function useEnterprisePolicy() {
         }
       } catch {}
 
-      // Fallback: read directly from ~/.screenpipe/auth.json when the
+      // Fallback: read directly from ~/.daimonion/auth.json when the
       // in-memory store hasn't been hydrated yet (dev launches before
       // sign-in completes, or store resets). auth.json is the durable
       // on-disk copy maintained by the pi-agent configuration flow.
@@ -468,7 +468,7 @@ export function useEnterprisePolicy() {
         console.warn("[enterprise] failed to push sync streams to Rust:", e);
       }
 
-      // Persist admin status into ~/.screenpipe/enterprise.json so the
+      // Persist admin status into ~/.daimonion/enterprise.json so the
       // pi-agent can decide whether to install the screenpipe-team skill
       // on its next boot. Only meaningful when we sent a cloud token in
       // the request — without one, the server has no way to identify the
@@ -545,7 +545,7 @@ export function useEnterprisePolicy() {
 
   /**
    * Called from the license key prompt dialog. Validates the key against the
-   * API, saves it to ~/.screenpipe/enterprise.json, and starts fetching policy.
+   * API, saves it to ~/.daimonion/enterprise.json, and starts fetching policy.
    */
   const submitLicenseKey = useCallback(async (key: string): Promise<{ ok: boolean; error?: string }> => {
     const result = await fetchPolicy(key);
@@ -582,7 +582,7 @@ export function useEnterprisePolicy() {
     let cancelled = false;
 
     (async () => {
-      // Read license key from enterprise.json (MDM or ~/.screenpipe/)
+      // Read license key from enterprise.json (MDM or ~/.daimonion/)
       let key: string | null = null;
       try {
         key = await commands.getEnterpriseLicenseKey();

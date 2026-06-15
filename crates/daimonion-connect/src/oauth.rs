@@ -123,7 +123,7 @@ fn connection_manifest_key(integration_id: &str, instance: Option<&str>) -> Stri
 }
 
 // ---------------------------------------------------------------------------
-// Legacy plaintext file location  (~/.screenpipe/{id}-oauth.json)
+// Legacy plaintext file location  (~/.daimonion/{id}-oauth.json)
 //
 // Only used as a fallback when no SecretStore is available (CLI) or for
 // one-shot migration of pre-existing files into SecretStore.
@@ -1035,7 +1035,7 @@ mod tests {
     }
 
     // Each test uses a unique fake integration_id so the filesystem fallback
-    // in `load_oauth_json_exact` (which scans `~/.screenpipe/{id}*-oauth.json`)
+    // in `load_oauth_json_exact` (which scans `~/.daimonion/{id}*-oauth.json`)
     // never matches a real stored file on the developer's machine. Without
     // this, tests would pass/fail based on whether the tester happens to have
     // gmail connected locally.

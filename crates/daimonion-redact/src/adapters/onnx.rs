@@ -78,15 +78,15 @@ impl Default for OnnxConfig {
 }
 
 impl OnnxConfig {
-    /// `~/.screenpipe/models/v45_phase4_onnx/` by convention.
+    /// `~/.daimonion/models/v45_phase4_onnx/` by convention.
     pub fn default_model_dir() -> PathBuf {
         dirs::home_dir()
             .map(|h| {
-                h.join(".screenpipe")
+                h.join(".daimonion")
                     .join("models")
                     .join("v45_phase5_pruned")
             })
-            .unwrap_or_else(|| PathBuf::from(".screenpipe/models/v45_phase5_pruned"))
+            .unwrap_or_else(|| PathBuf::from(".daimonion/models/v45_phase5_pruned"))
     }
 
     fn resolve_model_file(&self) -> PathBuf {

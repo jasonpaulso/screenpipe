@@ -165,13 +165,13 @@ Returns `{"output_path": "...", "frame_count": N, "audio_chunk_count": N, "durat
 
 Audio files from search results (`file_path`). Common operations:
 ```bash
-ffmpeg -y -i /path/to/audio.mp4 -q:a 2 ~/.screenpipe/exports/output.mp3          # convert
+ffmpeg -y -i /path/to/audio.mp4 -q:a 2 ~/.daimonion/exports/output.mp3          # convert
 ffmpeg -y -i input.mp4 -ss 00:01:00 -to 00:05:00 -q:a 2 clip.mp3                 # trim
 ffmpeg -y -i input.mp4 -filter:v "setpts=0.5*PTS" -an fast.mp4                    # speed 2x
 ffmpeg -y -i input.mp4 -t 10 -vf "fps=10,scale=640:-1" output.gif                 # GIF
 ```
 
-Always use `-y`, save to `~/.screenpipe/exports/`.
+Always use `-y`, save to `~/.daimonion/exports/`.
 
 ---
 
@@ -571,5 +571,5 @@ Only use IDs/timestamps from actual search results. Never fabricate.
 
 Show `file_path` from search results as inline code for playable video:
 ```
-`/Users/name/.screenpipe/data/monitor_1_2024-01-15_10-30-00.mp4`
+`/Users/name/.daimonion/data/monitor_1_2024-01-15_10-30-00.mp4`
 ```

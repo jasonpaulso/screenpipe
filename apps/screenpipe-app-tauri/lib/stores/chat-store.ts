@@ -175,7 +175,7 @@ export interface SessionRecord {
 interface ChatStoreState {
   /** All known sessions, keyed by id. Includes both alive and on-disk-only. */
   sessions: Record<string, SessionRecord>;
-  /** True once the initial `~/.screenpipe/chats` scan has finished. */
+  /** True once the initial `~/.daimonion/chats` scan has finished. */
   diskHydrated: boolean;
   /** Currently FOCUSED session — i.e. the chat the user is actively
    *  looking at. Cleared when the user navigates away from the chat

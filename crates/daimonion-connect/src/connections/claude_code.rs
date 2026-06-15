@@ -45,7 +45,7 @@ impl Integration for ClaudeCode {
             .map_err(|e| anyhow::anyhow!("cannot create {}: {}", path.display(), e))?;
 
         // Round-trip a probe file to confirm we can actually write.
-        let probe = path.join(".screenpipe-write-probe");
+        let probe = path.join(".daimonion-write-probe");
         std::fs::write(&probe, "ok")
             .map_err(|e| anyhow::anyhow!("{} is not writable: {}", path.display(), e))?;
         let _ = std::fs::remove_file(&probe);
@@ -148,6 +148,6 @@ mod tests {
         assert!(result.contains("ready"));
         // Probe file must be cleaned up so the UI doesn't show stray
         // dotfiles next time the user opens their claude dir.
-        assert!(!target.join(".screenpipe-write-probe").exists());
+        assert!(!target.join(".daimonion-write-probe").exists());
     }
 }

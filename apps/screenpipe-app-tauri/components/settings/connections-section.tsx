@@ -417,11 +417,11 @@ async function installCursorMcp(): Promise<void> {
   let config: Record<string, unknown> = {};
   try { config = JSON.parse(await readTextFile(configPath)); } catch { /* fresh */ }
   if (!config.mcpServers || typeof config.mcpServers !== "object") config.mcpServers = {};
-  (config.mcpServers as Record<string, unknown>).screenpipe = await buildMcpConfig();
+  (config.mcpServers as Record<string, unknown>).daimonion = await buildMcpConfig();
   await writeFile(configPath, new TextEncoder().encode(JSON.stringify(config, null, 2)));
 }
 
-const CODEX_SCREENPIPE_TABLE = /(?:^|\n)\[mcp_servers\.screenpipe\][\s\S]*?(?=\n\[(?!mcp_servers\.screenpipe(?:\.|\]))[^\]]+\]|\s*$)/;
+const CODEX_SCREENPIPE_TABLE = /(?:^|\n)\[mcp_servers\.daimonion\][\s\S]*?(?=\n\[(?!mcp_servers\.daimonion(?:\.|\]))[^\]]+\]|\s*$)/;
 
 function tomlString(value: string): string {
   return JSON.stringify(value);
@@ -441,7 +441,7 @@ function removeCodexMcpConfig(content: string): string {
 
 function buildCodexMcpToml(config: McpCommand): string {
   const lines = [
-    "[mcp_servers.screenpipe]",
+    "[mcp_servers.daimonion]",
     `command = ${tomlString(config.command)}`,
     `args = [${config.args.map(tomlString).join(", ")}]`,
     "enabled = true",
@@ -1138,8 +1138,8 @@ async function uninstallClaudeMcp(): Promise<void> {
   let config: Record<string, unknown> = {};
   try { config = JSON.parse(await readTextFile(configPath)); } catch { return; }
   const servers = config.mcpServers as Record<string, unknown> | undefined;
-  if (!servers?.screenpipe) return;
-  delete servers.screenpipe;
+  if (!servers?.daimonion) return;
+  delete servers.daimonion;
   await writeFile(configPath, new TextEncoder().encode(JSON.stringify(config, null, 2)));
 }
 
@@ -1148,8 +1148,8 @@ async function uninstallCursorMcp(): Promise<void> {
   let config: Record<string, unknown> = {};
   try { config = JSON.parse(await readTextFile(configPath)); } catch { return; }
   const servers = config.mcpServers as Record<string, unknown> | undefined;
-  if (!servers?.screenpipe) return;
-  delete servers.screenpipe;
+  if (!servers?.daimonion) return;
+  delete servers.daimonion;
   await writeFile(configPath, new TextEncoder().encode(JSON.stringify(config, null, 2)));
 }
 
@@ -1186,7 +1186,7 @@ function ClaudePanel({ onConnected, onDisconnected }: { onConnected?: () => void
       let config: Record<string, unknown> = {};
       try { config = JSON.parse(await readTextFile(configPath)); } catch { /* fresh */ }
       if (!config.mcpServers || typeof config.mcpServers !== "object") config.mcpServers = {};
-      (config.mcpServers as Record<string, unknown>).screenpipe = await buildMcpConfig();
+      (config.mcpServers as Record<string, unknown>).daimonion = await buildMcpConfig();
       await mkdir(await dirname(configPath), { recursive: true });
       await writeFile(configPath, new TextEncoder().encode(JSON.stringify(config, null, 2)));
       setState("connected");
@@ -1357,7 +1357,7 @@ function CodexPanel({ onConnected, onDisconnected }: { onConnected?: () => void;
     } catch (error) {
       console.error("failed to install codex mcp:", error);
       await message(
-        "Failed to write Codex MCP config.\n\nManually add a [mcp_servers.screenpipe] block to ~/.codex/config.toml with command npx and args [\"-y\", \"screenpipe-mcp@latest\"].",
+        "Failed to write Codex MCP config.\n\nManually add a [mcp_servers.daimonion] block to ~/.codex/config.toml with command npx and args [\"-y\", \"screenpipe-mcp@latest\"].",
         { title: "Codex MCP Setup", kind: "error" }
       );
       setState("idle");

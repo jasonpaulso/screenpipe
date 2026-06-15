@@ -82,7 +82,7 @@ fn detect_os_version() -> Option<(u64, u64, u64)> {
 /// { "excluded_apps": [{ "bundle_id": "com.example.app", "name": "Example" }] }
 /// ```
 ///
-/// Path defaults to `$HOME/.screenpipe/audio-exclusions.json` and can be
+/// Path defaults to `$HOME/.daimonion/audio-exclusions.json` and can be
 /// overridden with the `SCREENPIPE_AUDIO_EXCLUSIONS_PATH` environment
 /// variable. The engine reads the file on every Process Tap rebuild and
 /// polls its mtime + the resolved AudioObjectID set on the existing 500ms
@@ -102,7 +102,7 @@ mod exclusions {
     use cidre::{arc, core_audio as ca, ns};
 
     pub const ENV_OVERRIDE: &str = "SCREENPIPE_AUDIO_EXCLUSIONS_PATH";
-    pub const DEFAULT_RELATIVE_PATH: &str = ".screenpipe/audio-exclusions.json";
+    pub const DEFAULT_RELATIVE_PATH: &str = ".daimonion/audio-exclusions.json";
 
     /// Snapshot of the exclusion state used by the rebuild loop to detect drift.
     ///
@@ -119,7 +119,7 @@ mod exclusions {
     }
 
     /// Returns the active config-file path: env override wins, else
-    /// `$HOME/.screenpipe/audio-exclusions.json`.
+    /// `$HOME/.daimonion/audio-exclusions.json`.
     pub fn config_path() -> PathBuf {
         let override_val = std::env::var(ENV_OVERRIDE).ok();
         let home = std::env::var("HOME").unwrap_or_default();
@@ -291,7 +291,7 @@ mod exclusions {
             let p = resolved_path(None, "/Users/anyone");
             assert_eq!(
                 p,
-                PathBuf::from("/Users/anyone/.screenpipe/audio-exclusions.json")
+                PathBuf::from("/Users/anyone/.daimonion/audio-exclusions.json")
             );
         }
     }

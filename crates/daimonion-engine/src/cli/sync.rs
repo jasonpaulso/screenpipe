@@ -219,7 +219,7 @@ fn build_sync_config(cfg: &RemoteSyncArgs) -> remote_sync::SyncConfig {
     }
 }
 
-/// Handle `screenpipe sync remote ...` — SFTP push of ~/.screenpipe to an SSH server.
+/// Handle `screenpipe sync remote ...` — SFTP push of ~/.daimonion to an SSH server.
 async fn handle_remote_sync_command(command: &RemoteSyncCommand) -> anyhow::Result<()> {
     match command {
         RemoteSyncCommand::Test { cfg } => {

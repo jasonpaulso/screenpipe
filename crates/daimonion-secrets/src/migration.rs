@@ -16,7 +16,7 @@ pub struct MigrationReport {
     pub errors: Vec<String>,
 }
 
-/// Migrate legacy secret files from `~/.screenpipe` into the unified SecretStore.
+/// Migrate legacy secret files from `~/.daimonion` into the unified SecretStore.
 ///
 /// - `*-oauth.json` files are migrated to `oauth:{name}` keys
 /// - `connections.json` tokens are extracted to `connection:{name}:token` keys

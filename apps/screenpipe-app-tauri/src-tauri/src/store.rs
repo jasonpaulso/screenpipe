@@ -242,7 +242,7 @@ fn decrypt_store_file(path: &Path) {
 /// app updates (code signing identity changes), causing settings loss on every update.
 /// The 0o600 file permissions are sufficient protection for now.
 ///
-/// To opt in: create ~/.screenpipe/.encrypt-store or set SCREENPIPE_ENCRYPT_STORE=1.
+/// To opt in: create ~/.daimonion/.encrypt-store or set SCREENPIPE_ENCRYPT_STORE=1.
 fn encrypt_store_file(path: &Path) {
     // Check opt-in flag
     let opted_in = std::env::var("SCREENPIPE_ENCRYPT_STORE")

@@ -6,7 +6,7 @@
  * Enterprise pipe sync — standalone module (not a React hook).
  *
  * Called from use-enterprise-policy.ts after each policy fetch.
- * Writes managed pipe.md files to ~/.screenpipe/pipes/{name}/
+ * Writes managed pipe.md files to ~/.daimonion/pipes/{name}/
  * and gathers execution status for the heartbeat.
  */
 
@@ -85,7 +85,7 @@ export async function syncManagedPipes(
 
   try {
     const home = await homeDir();
-    const pipesDir = await join(home, ".screenpipe", "pipes");
+    const pipesDir = await join(home, ".daimonion", "pipes");
 
     for (const pipe of pipesToSync) {
       try {
@@ -188,7 +188,7 @@ export async function gatherPipeStatuses(): Promise<PipeStatus[]> {
 
   try {
     const home = await homeDir();
-    const pipesDir = await join(home, ".screenpipe", "pipes");
+    const pipesDir = await join(home, ".daimonion", "pipes");
 
     // Fetch all pipe statuses from local API
     const res = await localFetch("/pipes", {

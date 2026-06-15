@@ -413,15 +413,15 @@ describe("parsePipeNdjsonToMessages", () => {
 
   it("parses a real focus-watch execution with tool calls", () => {
     const stdout = [
-      '{"type":"session","version":3,"id":"21fa1299","timestamp":"2026-03-19T14:41:45.453Z","cwd":"/Users/test/.screenpipe/pipes/focus-watch"}',
+      '{"type":"session","version":3,"id":"21fa1299","timestamp":"2026-03-19T14:41:45.453Z","cwd":"/Users/test/.daimonion/pipes/focus-watch"}',
       '{"type":"agent_start"}',
       '{"type":"turn_start"}',
       '{"type":"message_start","message":{"role":"user","content":[{"type":"text","text":"Time range: 2026-03-19T14:39:44Z to 2026-03-19T14:41:44Z\\nDate: 2026-03-19\\nTimezone: -07:00 (UTC-07:00)\\n"}],"timestamp":1773931305457}}',
       '{"type":"message_end","message":{"role":"user","content":[{"type":"text","text":"Time range: 2026-03-19T14:39:44Z to 2026-03-19T14:41:44Z\\nDate: 2026-03-19\\nTimezone: -07:00 (UTC-07:00)\\n"}],"timestamp":1773931305457}}',
       '{"type":"message_start","message":{"role":"assistant","content":[],"model":"gpt-5.4","stopReason":"stop","timestamp":1773931305462}}',
       '{"type":"message_update","assistantMessageEvent":{"type":"toolcall_start","contentIndex":0,"toolName":"read","partial":{}}}',
-      '{"type":"message_update","assistantMessageEvent":{"type":"toolcall_delta","contentIndex":0,"delta":"{\\"path\\":\\"/Users/test/.screenpipe/pipes/focus-watch/.pi/skills/screenpipe-api/SKILL.md\\"}","partial":{}}}',
-      '{"type":"message_update","assistantMessageEvent":{"type":"toolcall_end","contentIndex":0,"toolCall":{"type":"toolCall","id":"call_01","name":"read","arguments":{"path":"/Users/test/.screenpipe/pipes/focus-watch/.pi/skills/screenpipe-api/SKILL.md"}},"partial":{}}}',
+      '{"type":"message_update","assistantMessageEvent":{"type":"toolcall_delta","contentIndex":0,"delta":"{\\"path\\":\\"/Users/test/.daimonion/pipes/focus-watch/.pi/skills/screenpipe-api/SKILL.md\\"}","partial":{}}}',
+      '{"type":"message_update","assistantMessageEvent":{"type":"toolcall_end","contentIndex":0,"toolCall":{"type":"toolCall","id":"call_01","name":"read","arguments":{"path":"/Users/test/.daimonion/pipes/focus-watch/.pi/skills/screenpipe-api/SKILL.md"}},"partial":{}}}',
       '{"type":"message_end","message":{"role":"assistant","content":[{"type":"toolCall","id":"call_01","name":"read","arguments":{}}],"stopReason":"stop"}}',
       '{"type":"tool_execution_end","toolCallId":"call_01","toolName":"read","result":{"content":[{"type":"text","text":"# Screenpipe API Skill\\n\\nUse curl to query..."}]},"isError":false}',
       '{"type":"turn_end","message":{"role":"assistant","content":[],"stopReason":"stop"}}',
@@ -454,7 +454,7 @@ describe("parsePipeNdjsonToMessages", () => {
 
   it("parses a real obsidian-sync execution (text + tool + text)", () => {
     const stdout = [
-      '{"type":"session","version":3,"id":"6eba5e79","timestamp":"2026-03-19T14:00:17.501Z","cwd":"/Users/test/.screenpipe/pipes/obsidian-sync"}',
+      '{"type":"session","version":3,"id":"6eba5e79","timestamp":"2026-03-19T14:00:17.501Z","cwd":"/Users/test/.daimonion/pipes/obsidian-sync"}',
       '{"type":"agent_start"}',
       '{"type":"turn_start"}',
       '{"type":"message_start","message":{"role":"user","content":[{"type":"text","text":"Time range: 2026-03-19T13:00:17Z to 2026-03-19T14:00:17Z\\nDate: 2026-03-19"}],"timestamp":1773928817504}}',

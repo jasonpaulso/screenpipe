@@ -5,7 +5,7 @@
 //! `screenpipe search` — query the local SQLite history without the daemon.
 //!
 //! Mirrors `GET /search` so AI / shell / pipe callers don't have to choose
-//! between two vocabularies. Opens `~/.screenpipe/db.sqlite` directly; WAL
+//! between two vocabularies. Opens `~/.daimonion/db.sqlite` directly; WAL
 //! mode keeps this safe while the running server (if any) is writing.
 //!
 //! Output:

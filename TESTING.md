@@ -147,26 +147,26 @@ commits: `28e5c247`
 
 commits: device_monitor.rs atomic swap, tiered backoff, empty device list guard
 
-- [ ] **unplug monitor during active Zoom call** — output audio recovers within 15 seconds. Verify: `grep "DEVICE_RECOVERY.*output.*restored" ~/.screenpipe/screenpipe-app.*.log`. Verify: `curl localhost:3030/search?content_type=audio&limit=5` shows output device transcriptions resume.
+- [ ] **unplug monitor during active Zoom call** — output audio recovers within 15 seconds. Verify: `grep "DEVICE_RECOVERY.*output.*restored" ~/.daimonion/screenpipe-app.*.log`. Verify: `curl localhost:3030/search?content_type=audio&limit=5` shows output device transcriptions resume.
 - [ ] **unplug and replug monitor within 5 seconds** — no audio gap. both input and output continue. Verify: no "stopping" log for input device.
 - [ ] **unplug monitor, wait 2 minutes, replug** — output recovers both times. Verify: two `DEVICE_RECOVERY` log entries.
 - [ ] **switch audio output (AirPods → speakers) during call** — output audio continues with <5s gap. Old device kept running until new one starts (atomic swap).
 - [ ] **health endpoint during output recovery** — `curl localhost:3030/health` shows `device_status_details` with output device present within 15 seconds of recovery.
-- [ ] **SCK transient failure doesn't cascade** — if ScreenCaptureKit returns empty device list, running devices are NOT disconnected. Verify: `grep "device list returned empty" ~/.screenpipe/screenpipe-app.*.log` shows warning but no disconnections.
-- [ ] **DB gap query after device switch** — run: `sqlite3 ~/.screenpipe/db.sqlite "SELECT t1.timestamp as gap_start, t2.timestamp as gap_end, (julianday(t2.timestamp) - julianday(t1.timestamp)) * 86400 as gap_seconds FROM audio_transcriptions t1 JOIN audio_transcriptions t2 ON t2.id = (SELECT MIN(id) FROM audio_transcriptions WHERE id > t1.id AND is_input_device = 0) WHERE t1.is_input_device = 0 AND (julianday(t2.timestamp) - julianday(t1.timestamp)) * 86400 > 60 ORDER BY t1.timestamp;"` — should return no rows if output was continuously captured.
+- [ ] **SCK transient failure doesn't cascade** — if ScreenCaptureKit returns empty device list, running devices are NOT disconnected. Verify: `grep "device list returned empty" ~/.daimonion/screenpipe-app.*.log` shows warning but no disconnections.
+- [ ] **DB gap query after device switch** — run: `sqlite3 ~/.daimonion/db.sqlite "SELECT t1.timestamp as gap_start, t2.timestamp as gap_end, (julianday(t2.timestamp) - julianday(t1.timestamp)) * 86400 as gap_seconds FROM audio_transcriptions t1 JOIN audio_transcriptions t2 ON t2.id = (SELECT MIN(id) FROM audio_transcriptions WHERE id > t1.id AND is_input_device = 0) WHERE t1.is_input_device = 0 AND (julianday(t2.timestamp) - julianday(t1.timestamp)) * 86400 > 60 ORDER BY t1.timestamp;"` — should return no rows if output was continuously captured.
 - [ ] **Bluetooth audio device hijack recovery** — Join a video call (e.g., Zoom, Proton Meet) on AirPods, end the call, join another call ~1 min later on same AirPods. Verify the second call is fully captured (audio_chunks created throughout). CoreAudio sometimes delivers zero-fill when another app has exclusive claim; the watchdog detects sustained silence (>30s of exact zeros) after initial healthy audio and rebuilds the device. Regression: `a2e89b2ae` (initial detection), fixed by `357e4dfcc` (only trip watchdog after stream is healthy). USB devices that never produce real audio should NOT trigger rebuild storms.
-- [ ] **Manual-mode pinned-input fallback** — In manual mode (NOT "Follow System Default"), pin only AirPods (input) as your mic. Mid-recording, turn off the AirPods. Verify: within ~20-25s the monitor engages the system default mic as a substitute and capture continues. Re-connect AirPods. Verify the substitute is torn down and capture returns to AirPods. Log markers: `grep "PINNED_FALLBACK" ~/.screenpipe/screenpipe-app.*.log` shows `pinned input '...' missing > 20s, capturing from system default '...' until it returns` then `clearing fallback '...': pinned input returned`. Edge: if you also user-disabled the default mic (privacy mode), expect "system default ... is user-disabled — no fallback engaged" log + zero capture rather than auto-fallback.
+- [ ] **Manual-mode pinned-input fallback** — In manual mode (NOT "Follow System Default"), pin only AirPods (input) as your mic. Mid-recording, turn off the AirPods. Verify: within ~20-25s the monitor engages the system default mic as a substitute and capture continues. Re-connect AirPods. Verify the substitute is torn down and capture returns to AirPods. Log markers: `grep "PINNED_FALLBACK" ~/.daimonion/screenpipe-app.*.log` shows `pinned input '...' missing > 20s, capturing from system default '...' until it returns` then `clearing fallback '...': pinned input returned`. Edge: if you also user-disabled the default mic (privacy mode), expect "system default ... is user-disabled — no fallback engaged" log + zero capture rather than auto-fallback.
 
 #### meeting detection & speaker identification
 
 commits: calendar_speaker_id.rs, meetings.rs, meeting_persister.rs
 
-- [ ] **restart during active meeting** — start a 1:1 calendar meeting (2 attendees), quit app mid-meeting, relaunch. meeting re-detected via calendar event still in progress. speaker names assigned. verify: `grep "meeting detected via calendar" ~/.screenpipe/screenpipe-app.*.log` shows detection after restart. verify: `sqlite3 ~/.screenpipe/db.sqlite "SELECT id, name FROM speakers WHERE name != ''"` shows both user and attendee names.
-- [ ] **calendar-only meeting detection** — schedule a 1:1 meeting with 2 attendees, no meeting app (Zoom/Meet) open. meeting detected purely via calendar. verify: `grep "meeting_started" ~/.screenpipe/screenpipe-app.*.log`.
-- [ ] **calendar meeting auto-end** — calendar meeting detected, wait past the calendar event end time. meeting_ended fires. verify: `grep "meeting ended via calendar" ~/.screenpipe/screenpipe-app.*.log`.
+- [ ] **restart during active meeting** — start a 1:1 calendar meeting (2 attendees), quit app mid-meeting, relaunch. meeting re-detected via calendar event still in progress. speaker names assigned. verify: `grep "meeting detected via calendar" ~/.daimonion/screenpipe-app.*.log` shows detection after restart. verify: `sqlite3 ~/.daimonion/db.sqlite "SELECT id, name FROM speakers WHERE name != ''"` shows both user and attendee names.
+- [ ] **calendar-only meeting detection** — schedule a 1:1 meeting with 2 attendees, no meeting app (Zoom/Meet) open. meeting detected purely via calendar. verify: `grep "meeting_started" ~/.daimonion/screenpipe-app.*.log`.
+- [ ] **calendar meeting auto-end** — calendar meeting detected, wait past the calendar event end time. meeting_ended fires. verify: `grep "meeting ended via calendar" ~/.daimonion/screenpipe-app.*.log`.
 - [ ] **speaker naming in 1:1** — during 1:1 call with userName set in settings, input speaker named as user, output speaker named as other attendee. verify: `curl 'localhost:3030/search?content_type=audio&speaker_name=<attendee>&limit=5'` returns results.
-- [ ] **auto-name input speaker** — with userName set, after ~2 minutes of speaking into mic, dominant input speaker named. verify: `grep "auto speaker identification: named" ~/.screenpipe/screenpipe-app.*.log`.
-- [ ] **speaker names survive restart** — speaker named pre-restart stays named post-restart. verify: `sqlite3 ~/.screenpipe/db.sqlite "SELECT id, name FROM speakers WHERE name != ''"` shows same speakers before and after restart.
+- [ ] **auto-name input speaker** — with userName set, after ~2 minutes of speaking into mic, dominant input speaker named. verify: `grep "auto speaker identification: named" ~/.daimonion/screenpipe-app.*.log`.
+- [ ] **speaker names survive restart** — speaker named pre-restart stays named post-restart. verify: `sqlite3 ~/.daimonion/db.sqlite "SELECT id, name FROM speakers WHERE name != ''"` shows same speakers before and after restart.
 - [ ] **no duplicate speaker naming on restart** — restart during meeting, speakers already named aren't overwritten or duplicated. verify: no duplicate names in speakers table.
 - [ ] **meeting detection stability** — Verify that meeting detection does not drop when alt-tabbing during long calls. (`7684f1d47`)
 - [ ] **speaker search deduplication** — Search for speakers in the UI. Verify that results are deduplicated and reassignment targets are stable. (`34a62c053`)
@@ -814,37 +814,37 @@ run section 7 and 10.
 ## log locations
 
 ```
-macOS:   ~/.screenpipe/screenpipe-app.YYYY-MM-DD.log
-Windows: %USERPROFILE%\.screenpipe\screenpipe-app.YYYY-MM-DD.log
-Linux:   ~/.screenpipe/screenpipe-app.YYYY-MM-DD.log
+macOS:   ~/.daimonion/screenpipe-app.YYYY-MM-DD.log
+Windows: %USERPROFILE%\.daimonion\screenpipe-app.YYYY-MM-DD.log
+Linux:   ~/.daimonion/screenpipe-app.YYYY-MM-DD.log
 ```
 
 ### what to grep for
 
 ```bash
 # crashes/errors
-grep -E "panic|SIGABRT|ERROR|error" ~/.screenpipe/screenpipe-app.*.log
+grep -E "panic|SIGABRT|ERROR|error" ~/.daimonion/screenpipe-app.*.log
 
 # monitor events
-grep -E "Monitor.*disconnect|Monitor.*reconnect|Starting vision" ~/.screenpipe/screenpipe-app.*.log
+grep -E "Monitor.*disconnect|Monitor.*reconnect|Starting vision" ~/.daimonion/screenpipe-app.*.log
 
 # frame skip rate (debug level only)
-grep "Hash match" ~/.screenpipe/screenpipe-app.*.log
+grep "Hash match" ~/.daimonion/screenpipe-app.*.log
 
 # queue health
-grep "Queue stats" ~/.screenpipe/screenpipe-app.*.log
+grep "Queue stats" ~/.daimonion/screenpipe-app.*.log
 
 # DB contention
-grep "Slow DB" ~/.screenpipe/screenpipe-app.*.log
+grep "Slow DB" ~/.daimonion/screenpipe-app.*.log
 
 # audio issues
-grep -E "audio.*timeout|audio.*error|device.*disconnect" ~/.screenpipe/screenpipe-app.*.log
+grep -E "audio.*timeout|audio.*error|device.*disconnect" ~/.daimonion/screenpipe-app.*.log
 
 # window/overlay issues
-grep -E "show_existing|panel.*level|Accessory|activation_policy" ~/.screenpipe/screenpipe-app.*.log
+grep -E "show_existing|panel.*level|Accessory|activation_policy" ~/.daimonion/screenpipe-app.*.log
 
 # Apple Intelligence
-grep -E "FoundationModels|apple.intelligence|fm_generate" ~/.screenpipe/screenpipe-app.*.log
+grep -E "FoundationModels|apple.intelligence|fm_generate" ~/.daimonion/screenpipe-app.*.log
 ```
 
 ### 12. mainland china / great firewall

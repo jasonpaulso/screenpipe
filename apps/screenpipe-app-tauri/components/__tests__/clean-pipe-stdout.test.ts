@@ -251,7 +251,7 @@ describe("cleanPipeStdout", () => {
 
   it("handles a realistic successful execution flow", () => {
     const stdout = [
-      '{"type":"session","version":3,"id":"6b6edfcd-0b39-483f-bcb1-50e0d62f3f61","timestamp":"2026-03-01T17:45:15.448Z","cwd":"/Users/test/.screenpipe/pipes/obsidian-sync"}',
+      '{"type":"session","version":3,"id":"6b6edfcd-0b39-483f-bcb1-50e0d62f3f61","timestamp":"2026-03-01T17:45:15.448Z","cwd":"/Users/test/.daimonion/pipes/obsidian-sync"}',
       '{"type":"agent_start"}',
       '{"type":"turn_start"}',
       '{"type":"message_start","message":{"role":"user","content":[{"type":"text","text":"System prompt: ...long prompt..."}],"timestamp":1772387115458}}',

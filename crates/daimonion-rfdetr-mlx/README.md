@@ -35,7 +35,7 @@ diff 0.075.
 
 The runtime loads safetensors. The adapter
 (`screenpipe-redact::adapters::rfdetr_mlx`) looks for the file at
-`~/.screenpipe/models/rfdetr_v9.safetensors` by default.
+`~/.daimonion/models/rfdetr_v9.safetensors` by default.
 
 Until a safetensors sibling is published next to `rfdetr_v9.onnx` on
 [huggingface.co/screenpipe/pii-image-redactor][hf], convert from the

@@ -41,7 +41,7 @@ const CHAT_A = "e2e-aaaa-aaaa-aaaa-aaaa-browser-state";
 const CHAT_B = "e2e-bbbb-bbbb-bbbb-bbbb-browser-state";
 const BROWSER_URL = "about:blank";
 const A_USER_MARKER = "(e2e) BROWSER-STATE-CHAT-A";
-const CHATS_DIR = join(homedir(), ".screenpipe", "chats");
+const CHATS_DIR = join(homedir(), ".daimonion", "chats");
 
 function chatFilePath(id: string): string {
   return join(CHATS_DIR, `${id}.json`);

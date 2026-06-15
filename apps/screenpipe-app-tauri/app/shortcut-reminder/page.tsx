@@ -146,7 +146,7 @@ export default function ShortcutReminderPage() {
   }, []);
 
   // Read shortcuts via the store plugin. This page used to read
-  // ~/.screenpipe/store.bin RAW off disk (to skip a plugin roundtrip), but
+  // ~/.daimonion/store.bin RAW off disk (to skip a plugin roundtrip), but
   // that breaks completely when store encryption is on: the file starts with
   // the SPSTORE1 magic, JSON.parse throws, and the change-listener turned
   // that into hundreds of error lines per session (Windows enterprise log,

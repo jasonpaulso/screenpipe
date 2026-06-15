@@ -430,7 +430,7 @@ With OCR decoupled from capture, a frame can exist in the DB before OCR complete
 
 To not paint ourselves into a corner for cloud sync:
 
-1. **Video file paths must be relative.** Store `data/monitor_21_2026-02-13_02-24-24.mp4` in the DB, not `/Users/louis/.screenpipe/data/...`. The base directory is machine-specific; the relative path is portable. *(Note: check if this is already the case — if absolute paths are stored, this needs a migration.)*
+1. **Video file paths must be relative.** Store `data/monitor_21_2026-02-13_02-24-24.mp4` in the DB, not `/Users/louis/.daimonion/data/...`. The base directory is machine-specific; the relative path is portable. *(Note: check if this is already the case — if absolute paths are stored, this needs a migration.)*
 
 2. **`sync_id` should be set at DB insertion time.** The DB writer generates a UUID when inserting the frame row. Not at capture time (too early — frame might be dropped) and not at sync time (too late — other machines can't reference it).
 

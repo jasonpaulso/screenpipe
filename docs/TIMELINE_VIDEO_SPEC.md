@@ -78,7 +78,7 @@ We're spawning 28,800 ffmpeg processes per day for something the browser can do 
 -- video_chunks: one row per MP4 file
 CREATE TABLE video_chunks (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    file_path TEXT NOT NULL  -- e.g., ~/.screenpipe/data/monitor_1_2026-02-06_10-30-00.mp4
+    file_path TEXT NOT NULL  -- e.g., ~/.daimonion/data/monitor_1_2026-02-06_10-30-00.mp4
 );
 
 -- frames: one row per captured frame
@@ -147,12 +147,12 @@ interface DeviceFrameResponse {
 "security": {
     "assetProtocol": {
         "enable": true,
-        "scope": ["$APPDATA/**"]  // ⚠️ Does NOT include ~/.screenpipe/data/
+        "scope": ["$APPDATA/**"]  // ⚠️ Does NOT include ~/.daimonion/data/
     }
 }
 ```
 
-**Problem**: Video files are at `~/.screenpipe/data/`, which is outside `$APPDATA` (`~/Library/Application Support/`). The asset protocol scope must be expanded, or we serve videos through the HTTP server.
+**Problem**: Video files are at `~/.daimonion/data/`, which is outside `$APPDATA` (`~/Library/Application Support/`). The asset protocol scope must be expanded, or we serve videos through the HTTP server.
 
 ## 4. Proposed Architecture
 
@@ -198,7 +198,7 @@ PROPOSED:
          ▼                       ▼
 ┌─────────────────┐    ┌──────────────────────┐
 │ Backend Server   │    │ Local filesystem     │
-│ (localhost:3030) │    │ ~/.screenpipe/data/  │
+│ (localhost:3030) │    │ ~/.daimonion/data/  │
 │                  │    │  monitor_*.mp4       │
 │ Sends metadata:  │    └──────────────────────┘
 │  + file_path     │
@@ -214,7 +214,7 @@ PROPOSED:
 **Option A: Expand Tauri asset protocol scope**
 
 ```json
-"scope": ["$APPDATA/**", "$HOME/.screenpipe/**"]
+"scope": ["$APPDATA/**", "$HOME/.daimonion/**"]
 ```
 
 Then use `convertFileSrc(file_path)` → `asset://localhost/...` URL.
@@ -611,7 +611,7 @@ interface ChunkIndex {
 
 - [ ] Create `VideoFrameDisplay` component with `<video>` seeking
 - [ ] Implement double-buffer pool (active + preloaded)
-- [ ] Expand asset protocol scope for `~/.screenpipe/data/`
+- [ ] Expand asset protocol scope for `~/.daimonion/data/`
 - [ ] Handle `seeked` event for frame-ready signaling
 - [ ] Add ffmpeg `<img>` fallback on `<video>` error
 - [ ] Wire up to existing `CurrentFrameTimeline` props

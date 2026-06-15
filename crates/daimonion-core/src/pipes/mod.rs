@@ -4,7 +4,7 @@
 
 //! Pipe runtime — scheduled agent execution on screen data.
 //!
-//! A pipe is a `pipe.md` file inside `~/.screenpipe/pipes/{name}/`.  The
+//! A pipe is a `pipe.md` file inside `~/.daimonion/pipes/{name}/`.  The
 //! markdown body is the prompt; YAML front-matter carries config (schedule,
 //! model, agent, etc.).  The [`PipeManager`] scans the pipes directory,
 //! parses configs, runs the scheduler, and delegates execution to an
@@ -106,7 +106,7 @@ pub struct PipeConfig {
     /// LLM provider override.  Default: none (uses screenpipe cloud).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub provider: Option<String>,
-    /// AI preset id(s) from `~/.screenpipe/store.bin` → `settings.aiPresets`.
+    /// AI preset id(s) from `~/.daimonion/store.bin` → `settings.aiPresets`.
     /// When set, overrides `model` and `provider` at runtime.
     /// Accepts a single string or an array of strings for fallback.
     /// Example: `preset: "my-preset"` or `preset: ["primary", "fallback"]`
@@ -190,7 +190,7 @@ pub struct PipeConfig {
 
     /// Output files this pipe produces, surfaced in the Artifacts library.
     ///
-    /// Paths are relative to the pipe directory (`~/.screenpipe/pipes/<name>/`).
+    /// Paths are relative to the pipe directory (`~/.daimonion/pipes/<name>/`).
     /// Example:
     /// ```yaml
     /// artifacts:
@@ -484,7 +484,7 @@ fn remove_tombstone(pipes_dir: &Path, name: &str) -> Result<()> {
 
 // ---------------------------------------------------------------------------
 // Local enabled overrides — per-device enabled state that never syncs.
-// Stored in `~/.screenpipe/pipes/.local-overrides.json`.
+// Stored in `~/.daimonion/pipes/.local-overrides.json`.
 // ---------------------------------------------------------------------------
 
 /// File name for the local overrides registry inside the pipes directory.
@@ -991,11 +991,11 @@ fn read_store_bin(path: &Path) -> Option<serde_json::Value> {
     serde_json::from_slice(&data).ok()
 }
 
-/// Read `~/.screenpipe/store.bin` and find the preset by id.
+/// Read `~/.daimonion/store.bin` and find the preset by id.
 /// Falls back to the default preset if `preset_id` is `"default"`.
 /// Creates store.bin with a default preset if it doesn't exist (CLI mode).
 fn resolve_preset(pipes_dir: &Path, preset_id: &str) -> Option<ResolvedPreset> {
-    // store.bin lives at ~/.screenpipe/store.bin (sibling of pipes/)
+    // store.bin lives at ~/.daimonion/store.bin (sibling of pipes/)
     let store_path = pipes_dir.parent()?.join("store.bin");
 
     if !store_path.exists() {
@@ -1278,7 +1278,7 @@ async fn setup_pipe_permissions(
         }
 
         // Write permissions JSON for the extension to read
-        let perms_path = pipe_dir.join(".screenpipe-permissions.json");
+        let perms_path = pipe_dir.join(".daimonion-permissions.json");
         match serde_json::to_string(&perms) {
             Ok(json) => {
                 if let Err(e) = std::fs::write(&perms_path, &json) {
@@ -1291,7 +1291,7 @@ async fn setup_pipe_permissions(
         Some(t)
     } else {
         // No restrictions — clean up any stale permissions file
-        let _ = std::fs::remove_file(pipe_dir.join(".screenpipe-permissions.json"));
+        let _ = std::fs::remove_file(pipe_dir.join(".daimonion-permissions.json"));
         None
     }
 }
@@ -1311,7 +1311,7 @@ fn cleanup_pipe_token(
 }
 
 pub struct PipeManager {
-    /// `~/.screenpipe/pipes/`
+    /// `~/.daimonion/pipes/`
     pipes_dir: PathBuf,
     /// Registered agent executors keyed by name (e.g. `"pi"`).
     executors: HashMap<String, Arc<dyn AgentExecutor>>,
@@ -1400,7 +1400,7 @@ impl PipeManager {
         }
     }
 
-    /// Returns the pipes directory (e.g. `~/.screenpipe/pipes/`).
+    /// Returns the pipes directory (e.g. `~/.daimonion/pipes/`).
     pub fn pipes_dir(&self) -> &Path {
         &self.pipes_dir
     }
@@ -4875,7 +4875,7 @@ fn copy_dir_recursive(src: &Path, dst: &Path) -> Result<()> {
 /// Encode a working-directory path the same way Pi does for session storage.
 /// Pi uses the CWD as a key: `~/.pi/agent/sessions/<encoded-cwd>/`.
 /// The encoding wraps the path with `--` and replaces `/` (or `\`) with `-`.
-/// Example: `/Users/me/.screenpipe/pipes/foo/` → `--Users-me-.screenpipe-pipes-foo--`
+/// Example: `/Users/me/.daimonion/pipes/foo/` → `--Users-me-.daimonion-pipes-foo--`
 fn encode_pi_session_dir(working_dir: &Path) -> Option<PathBuf> {
     let home = dirs::home_dir()?;
     let sessions_base = home.join(".pi").join("agent").join("sessions");
@@ -5917,24 +5917,24 @@ mod tests {
     #[test]
     fn test_encode_pi_session_dir_unix_path() {
         // Verify the encoding matches Pi's actual format:
-        // /Users/me/.screenpipe/pipes/foo → --Users-me-.screenpipe-pipes-foo--
-        let dir = Path::new("/Users/me/.screenpipe/pipes/foo");
+        // /Users/me/.daimonion/pipes/foo → --Users-me-.daimonion-pipes-foo--
+        let dir = Path::new("/Users/me/.daimonion/pipes/foo");
         let result = encode_pi_session_dir(dir);
         // We can't assert the full path (depends on $HOME), but we can check
         // the directory name component
         if let Some(path) = result {
             let dir_name = path.file_name().unwrap().to_str().unwrap();
-            assert_eq!(dir_name, "--Users-me-.screenpipe-pipes-foo--");
+            assert_eq!(dir_name, "--Users-me-.daimonion-pipes-foo--");
         }
     }
 
     #[test]
     fn test_encode_pi_session_dir_trailing_slash() {
-        let dir = Path::new("/Users/me/.screenpipe/pipes/foo/");
+        let dir = Path::new("/Users/me/.daimonion/pipes/foo/");
         if let Some(path) = encode_pi_session_dir(dir) {
             let dir_name = path.file_name().unwrap().to_str().unwrap();
             // Trailing slash is stripped
-            assert_eq!(dir_name, "--Users-me-.screenpipe-pipes-foo--");
+            assert_eq!(dir_name, "--Users-me-.daimonion-pipes-foo--");
         }
     }
 

@@ -488,7 +488,7 @@ impl ServerCore {
                     }
                     analytics::capture_event_nonblocking("pipe_scheduled_run", props);
 
-                    // Auto-register pipe outputs to ~/.screenpipe/outputs/
+                    // Auto-register pipe outputs to ~/.daimonion/outputs/
                     if success {
                         let db = db_for_cb.clone();
                         let dir = screenpipe_dir_for_cb.clone();
@@ -851,7 +851,7 @@ impl ServerCore {
             } else {
                 // Local mode: rfdetr ONNX. First-run downloads ~108 MB
                 // from huggingface.co/screenpipe/pii-image-redactor and
-                // verifies SHA-256 before landing in ~/.screenpipe/models/.
+                // verifies SHA-256 before landing in ~/.daimonion/models/.
                 // The concrete model name + version are logged once it
                 // loads, so they never drift on a model bump.
                 let shutdown = redact_shutdown.clone();

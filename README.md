@@ -193,7 +193,7 @@ Instead of recording every second, screenpipe listens for meaningful events — 
 ### Audio transcription
 Captures system audio (what you hear) and microphone input (what you say). Real-time speech-to-text using Whisper (Large-V3-Turbo) running locally on your device, or Deepgram for cloud transcription. Speaker identification and diarization. Works with any audio source — Zoom, Google Meet, Teams, or any other application.
 
-On macOS 14.4+, you can exclude specific apps from system-audio capture by listing their bundle IDs in `~/.screenpipe/audio-exclusions.json`. Enable Experimental CoreAudio System Audio in Settings → Recording first; the picker UI only appears once that flag is on.
+On macOS 14.4+, you can exclude specific apps from system-audio capture by listing their bundle IDs in `~/.daimonion/audio-exclusions.json`. Enable Experimental CoreAudio System Audio in Settings → Recording first; the picker UI only appears once that flag is on.
 
 ```json
 { "excluded_apps": [{ "bundle_id": "com.spotify.client", "name": "Spotify" }] }
@@ -216,7 +216,7 @@ Pipes are scheduled AI agents defined as markdown files. Each pipe is a `pipe.md
 - **ai-prompt-journal**: Captures every prompt you send to AI tools, saved to Obsidian or local markdown
 - **video-export**: Create a video of your recent screen activity
 
-Developers can create pipes by writing a markdown file in `~/.screenpipe/pipes/`.
+Developers can create pipes by writing a markdown file in `~/.daimonion/pipes/`.
 
 #### Pipe data permissions
 Each pipe supports YAML frontmatter fields that give admins deterministic, OS-level control over what data AI agents can access:

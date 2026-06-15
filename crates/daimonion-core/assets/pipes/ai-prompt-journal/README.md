@@ -12,7 +12,7 @@ AI Prompt Journal watches your screen and captures every prompt you type into AI
 - **Extracts only YOUR prompts** — smart heuristics separate what you typed from AI responses
 - **Auto-classifies** each prompt by tool, category (coding, writing, research, brainstorming...), topic, and length
 - **Saves to Obsidian** — daily notes with YAML frontmatter and tags, ready for search and backlinks
-- **Falls back gracefully** — no Obsidian? Saves to `~/.screenpipe/ai-prompts/` as plain markdown
+- **Falls back gracefully** — no Obsidian? Saves to `~/.daimonion/ai-prompts/` as plain markdown
 - **Deduplicates** — won't log the same prompt twice even if the page is captured multiple times
 - **Cross-platform** — works on macOS, Windows, and Linux
 
@@ -96,4 +96,4 @@ Everything runs locally. Your prompts never leave your machine.
 - Runs 100% locally — no data sent anywhere
 - Only reads screen data already captured by screenpipe
 - Prompts are saved to your local filesystem only
-- You control the output location (Obsidian vault or ~/.screenpipe/)
+- You control the output location (Obsidian vault or ~/.daimonion/)

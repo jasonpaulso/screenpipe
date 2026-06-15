@@ -466,7 +466,7 @@ mod imp {
             .unwrap_or_else(|| "unknown".to_string());
 
         // Resolve license key from the canonical file location the
-        // in-app license prompt writes to (~/.screenpipe/enterprise.json,
+        // in-app license prompt writes to (~/.daimonion/enterprise.json,
         // or the MDM Resources/ copy). Without this the env-var-only
         // discovery in `from_env` silently no-ops on every standard
         // install — the telemetry pipeline would never start, even with
@@ -482,7 +482,7 @@ mod imp {
             Some(c) => c,
             None => {
                 info!(
-                    "enterprise sync: no license key in env or ~/.screenpipe/enterprise.json — skipping"
+                    "enterprise sync: no license key in env or ~/.daimonion/enterprise.json — skipping"
                 );
                 return None;
             }

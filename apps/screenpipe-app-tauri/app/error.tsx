@@ -32,7 +32,7 @@ export default function GlobalError({
     // Rust log — the buffer flush may never fire if the error boundary
     // unmounts Providers before the 2s flush timer (which is what was happening
     // for the enterprise #185 crash on MBP — error.tsx logged but the entry
-    // never reached ~/.screenpipe/screenpipe-app.<date>.log).
+    // never reached ~/.daimonion/screenpipe-app.<date>.log).
     commands.writeBrowserLogs([
       {
         level: "error",

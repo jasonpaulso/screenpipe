@@ -17,7 +17,7 @@ vi.mock("@tauri-apps/api/path", () => ({
 
 vi.mock("@tauri-apps/plugin-fs", () => ({
   exists: vi.fn(async (path: string) =>
-    path === "/Users/test/.screenpipe/chats" || fsMock.files.has(path)
+    path === "/Users/test/.daimonion/chats" || fsMock.files.has(path)
   ),
   mkdir: vi.fn(async () => undefined),
   readDir: vi.fn(async (dir: string) =>
@@ -54,7 +54,7 @@ import {
   type ConversationMeta,
 } from "../chat-storage";
 
-const CHATS_DIR = "/Users/test/.screenpipe/chats";
+const CHATS_DIR = "/Users/test/.daimonion/chats";
 
 function putConversation(
   id: string,

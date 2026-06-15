@@ -20,7 +20,7 @@ export default function GlobalError({
     // straight to the Rust log via write_browser_logs. The 2s buffer flush
     // does not reliably fire when an error boundary tears down its parent
     // tree (e.g. the enterprise-build React #185 boot crash), so the stack
-    // was never landing in ~/.screenpipe/screenpipe-app.<date>.log.
+    // was never landing in ~/.daimonion/screenpipe-app.<date>.log.
     const serialized = {
       name: error?.name,
       message: error?.message,

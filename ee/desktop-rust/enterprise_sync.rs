@@ -109,7 +109,7 @@ impl EnterpriseSyncConfig {
     }
 
     /// Same as `from_env` but lets the caller pass a license key resolved
-    /// from somewhere else (e.g. `~/.screenpipe/enterprise.json` populated
+    /// from somewhere else (e.g. `~/.daimonion/enterprise.json` populated
     /// by the desktop's in-app prompt). Env var still wins when set — that
     /// keeps MDM rollouts working — but a missing env no longer disables
     /// enterprise sync when the user has signed in normally through the
