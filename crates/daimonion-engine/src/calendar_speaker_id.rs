@@ -1249,7 +1249,7 @@ mod tests {
         let db = daimonion_db::DatabaseManager::new("sqlite::memory:", Default::default())
             .await
             .unwrap();
-        sqlx::migrate!("../../crates/screenpipe-db/src/migrations")
+        sqlx::migrate!("../../crates/daimonion-db/src/migrations")
             .run(&db.pool)
             .await
             .unwrap();

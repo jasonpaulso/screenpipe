@@ -100,7 +100,7 @@ async fn main() -> Result<()> {
     // Models live in screenpipe-audio's models dir (kept there so the prod
     // app and eval crate can share the same on-disk artifacts).
     let project_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-    let audio_crate_dir = project_dir.parent().unwrap().join("screenpipe-audio");
+    let audio_crate_dir = project_dir.parent().unwrap().join("daimonion-audio");
     let segmentation_model_path = audio_crate_dir
         .join("models")
         .join("pyannote")

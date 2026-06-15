@@ -324,7 +324,7 @@ fn discover_fixtures(suite_dir: &Path) -> Result<Vec<Fixture>> {
 
 async fn run_local_predictions(fixtures: &[Fixture]) -> Result<HashMap<String, PredictionSet>> {
     let project_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-    let audio_crate_dir = project_dir.parent().unwrap().join("screenpipe-audio");
+    let audio_crate_dir = project_dir.parent().unwrap().join("daimonion-audio");
     let segmentation_model_path = audio_crate_dir
         .join("models")
         .join("pyannote")

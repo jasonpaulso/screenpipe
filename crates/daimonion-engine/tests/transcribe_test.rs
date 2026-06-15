@@ -192,11 +192,11 @@ mod tests {
     async fn test_transcribe_real_audio_returns_text() {
         let app = setup_test_app().await;
 
-        // Use the test WAV file from screenpipe-audio
+        // Use the test WAV file from daimonion-audio
         let test_file = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
             .parent()
             .unwrap()
-            .join("screenpipe-audio/test_data/poetic_kapil_gupta.wav");
+            .join("daimonion-audio/test_data/poetic_kapil_gupta.wav");
 
         if !test_file.exists() {
             eprintln!("skipping: test file not found at {:?}", test_file);
