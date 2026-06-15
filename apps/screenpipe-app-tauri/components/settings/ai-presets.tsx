@@ -199,7 +199,7 @@ export interface AIModel {
   recommended_for?: string[];
   warning?: string;
   /** How many daily-quota units one message on this model consumes.
-   *  0 = free / doesn't count. Populated by the screenpipe worker. */
+   *  0 = free / doesn't count. Populated by the daimonion worker. */
   query_weight?: number;
 }
 
@@ -1245,8 +1245,8 @@ const AISection = ({
           {piAvailable && (!isEnterprise || aiPresetPolicy.allow_screenpipe_cloud) && (
             <AIProviderCard
               type="screenpipe-cloud"
-              title="Screenpipe Cloud"
-              description="AI coding agent powered by Screenpipe Cloud. Requires login."
+              title="Daimonion Cloud"
+              description="AI coding agent powered by Daimonion Cloud. Requires login."
               imageSrc="/images/screenpipe.png"
               selected={settingsPreset?.provider === "screenpipe-cloud"}
               onClick={() => handleAiProviderChange("screenpipe-cloud")}
@@ -1505,7 +1505,7 @@ const AISection = ({
                           ))}
                         </CommandGroup>
                       )}
-                      <CommandGroup heading={models?.some((m) => m.free) ? "Included with Screenpipe" : "Available Models"}>
+                      <CommandGroup heading={models?.some((m) => m.free) ? "Included with Daimonion" : "Available Models"}>
                         {models?.filter((m) => !m.free).map((model) => {
                           const costLabel = model.cost_tier === 'low' ? '$' : model.cost_tier === 'medium' ? '$$' : model.cost_tier === 'high' ? '$$$' : model.cost_tier === 'very_high' ? '$$$$' : '';
                           // Pro cloud models (Opus 4.8, Fable 5) are server-bound and
@@ -1613,7 +1613,7 @@ const AISection = ({
               </p>
               <p>
                 GPU strongly recommended. without a dedicated GPU, local models will be very slow and pipes may time out.
-                for best results consider screenpipe cloud or groq as custom provider.
+                for best results consider daimonion cloud or groq as custom provider.
               </p>
             </div>
           )}

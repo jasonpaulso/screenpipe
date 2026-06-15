@@ -73,7 +73,7 @@ export function getCliPath() {
   const os = platform();
   switch (os) {
     case "windows":
-      return "%LOCALAPPDATA%\\screenpipe\\screenpipe.exe";
+      return "%LOCALAPPDATA%\\daimonion\\daimonion.exe";
     case "macos":
       return "/Applications/screenpipe.app/Contents/MacOS/screenpipe";
     case "linux":

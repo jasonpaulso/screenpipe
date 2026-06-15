@@ -682,7 +682,7 @@ export function NoteView({
     });
     try {
       // Calls the engine export core in-process via Tauri (no HTTP, no daemon
-      // dependency) — the in-app twin of the `screenpipe export` CLI. Reuses
+      // dependency) — the in-app twin of the `daimonion export` CLI. Reuses
       // the running server core's DB handle. Rejects with the engine's error
       // string on failure.
       const res = await commands.exportRecording(meeting.id, null, null, target);
@@ -1771,14 +1771,14 @@ function providerLabel(
       return "deepgram live";
     case "screenpipe-cloud":
     default:
-      return "screenpipe cloud";
+      return "daimonion cloud";
   }
 }
 
 function transcriptionEngineLabel(engine: string) {
   switch (engine) {
     case "screenpipe-cloud":
-      return "screenpipe cloud";
+      return "daimonion cloud";
     case "deepgram":
       return "deepgram";
     case "whisper-large-v3-turbo":

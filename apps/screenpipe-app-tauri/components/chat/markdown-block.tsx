@@ -134,7 +134,7 @@ export function MarkdownBlock({
                   }
                 }
               } catch (error) {
-                console.error("Failed to open screenpipe link:", error);
+                console.error("Failed to open daimonion link:", error);
               }
             };
 

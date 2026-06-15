@@ -129,9 +129,9 @@ describe("systemFallbackTitle", () => {
 
   it("returns cleaned content slice for wrapper + real content", () => {
     const content =
-      "<role>You are an expert</role> Create a custom screenpipe automation";
+      "<role>You are an expert</role> Create a custom daimonion automation";
     expect(systemFallbackTitle(content)).toBe(
-      "Create a custom screenpipe automation"
+      "Create a custom daimonion automation"
     );
   });
 
@@ -188,7 +188,7 @@ describe("deriveFallbackConversationTitle", () => {
     expect(
       deriveFallbackConversationTitle({
         displayContent: "Summarize meeting: Design Review",
-        content: "search screenpipe for what happened during this meeting and summarize it",
+        content: "search daimonion for what happened during this meeting and summarize it",
       })
     ).toBe("Summarize meeting: Design Review");
   });
@@ -196,9 +196,9 @@ describe("deriveFallbackConversationTitle", () => {
   it("falls back to cleaned prompt text when no displayContent exists", () => {
     expect(
       deriveFallbackConversationTitle({
-        content: "<role>expert</role> Create a custom screenpipe automation",
+        content: "<role>expert</role> Create a custom daimonion automation",
       })
-    ).toBe("Create a custom screenpipe automation");
+    ).toBe("Create a custom daimonion automation");
   });
 
   it("ignores blank displayContent and still derives from content", () => {

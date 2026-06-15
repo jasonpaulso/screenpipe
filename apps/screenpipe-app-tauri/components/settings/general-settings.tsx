@@ -111,8 +111,8 @@ export default function GeneralSettings() {
       toast({
         title: checked ? "auto-start enabled" : "auto-start disabled",
         description: checked
-          ? "screenpipe will launch when your computer starts"
-          : "screenpipe won't launch at startup",
+          ? "daimonion will launch when your computer starts"
+          : "daimonion won't launch at startup",
       });
     } catch (e: any) {
       handleSettingsChange({ autoStartEnabled: !checked });
@@ -305,10 +305,10 @@ export default function GeneralSettings() {
                 <div>
                   <h3 className="text-sm font-medium text-foreground">Enhanced AI</h3>
                   <p className="text-xs text-muted-foreground">
-                    Use Screenpipe Cloud for smarter suggestions
+                    Use Daimonion Cloud for smarter suggestions
                   </p>
                   <p className="text-[10px] text-muted-foreground/60 mt-0.5">
-                    sends recent activity to screenpipe cloud for processing. we don&apos;t store your data (zero retention).
+                    sends recent activity to daimonion cloud for processing. we don&apos;t store your data (zero retention).
                   </p>
                 </div>
               </div>

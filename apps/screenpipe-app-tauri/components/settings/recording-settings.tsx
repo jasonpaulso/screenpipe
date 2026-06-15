@@ -169,7 +169,7 @@ const getAppIconUrl = (appName: string): string => {
 const FALLBACK_TRANSCRIPTION_ENGINE = "whisper-large-v3-turbo-quantized";
 
 const TRANSCRIPTION_ENGINE_LABELS: Record<string, string> = {
-  "screenpipe-cloud": "Screenpipe Cloud",
+  "screenpipe-cloud": "Daimonion Cloud",
   deepgram: "Deepgram",
   "whisper-large-v3-turbo": "Whisper Turbo",
   "whisper-large-v3-turbo-quantized": "Whisper Turbo (fast)",
@@ -239,7 +239,7 @@ const getAudioFallbackMessage = (reason: AudioEngineFallbackReason) => {
     case "notLoggedIn":
       return "You are not logged in, so audio is being transcribed locally.";
     case "notSubscribed":
-      return "Screenpipe Cloud is coming soon, so audio is being transcribed locally.";
+      return "Daimonion Cloud is coming soon, so audio is being transcribed locally.";
     case "missingDeepgramKey":
       return "Deepgram has no API key configured, so audio is being transcribed locally.";
   }
@@ -1311,7 +1311,7 @@ function TranscriptionDictionary({
             <Textarea
               value={bulkText}
               onChange={(e) => setBulkText(e.target.value)}
-              placeholder={"paste terms separated by commas, newlines, semicolons, or tabs\n\ne.g. kubernetes, posthog, screenpipe, terraform"}
+              placeholder={"paste terms separated by commas, newlines, semicolons, or tabs\n\ne.g. kubernetes, posthog, daimonion, terraform"}
               className="text-xs font-mono min-h-[80px] resize-y"
               spellCheck={false}
               autoCorrect="off"
@@ -1439,7 +1439,7 @@ function TranscriptionDictionary({
             replacementInput.value = "";
           }}
         >
-          <Input name="vocab-word" placeholder="e.g. screenpipe" className="h-7 text-xs flex-1" spellCheck={false} autoCorrect="off" autoCapitalize="off" />
+          <Input name="vocab-word" placeholder="e.g. daimonion" className="h-7 text-xs flex-1" spellCheck={false} autoCorrect="off" autoCapitalize="off" />
           <Input name="vocab-replacement" placeholder="replacement (optional)" className="h-7 text-xs flex-1" spellCheck={false} autoCorrect="off" autoCapitalize="off" />
           <Button type="submit" size="sm" variant="outline" className="h-7 text-xs px-2">
             add
@@ -2148,7 +2148,7 @@ export function RecordingSettings() {
       toast({
         title: "Settings updated successfully",
         description: needsServerRestart
-          ? "Screenpipe server restarted with new settings"
+          ? "Daimonion server restarted with new settings"
           : "Recording restarted with new settings",
       });
     } catch (error) {
@@ -2195,7 +2195,7 @@ export function RecordingSettings() {
       return;
     }
 
-    // If trying to use cloud but not subscribed: Screenpipe Cloud is a
+    // If trying to use cloud but not subscribed: Daimonion Cloud is a
     // server-bound feature we haven't re-enabled in this fork. No checkout,
     // no billing — just keep the previous engine. The <SelectItem> stays
     // disabled and surfaces a "coming soon" badge instead.
@@ -2260,11 +2260,11 @@ export function RecordingSettings() {
 
 Most of this data gets quietly filtered away before you're even conscious of it. Your visual cortex silently discards ninety-nine percent of what hits your retina, keeping only the fragments it judges important: a familiar face in a crowd, a flash of movement at the edge of your peripheral vision, the subtle shift in someone's expression during a conversation.
 
-Screenpipe works on a similar philosophy. It watches everything that flows through your digital world — every window, every tab, every meeting, every notification — and distills it into searchable, meaningful memory. Think of it as a second brain that never forgets, never gets tired, and never loses track of that important thing someone said three weeks ago on a Tuesday afternoon.
+Daimonion works on a similar philosophy. It watches everything that flows through your digital world — every window, every tab, every meeting, every notification — and distills it into searchable, meaningful memory. Think of it as a second brain that never forgets, never gets tired, and never loses track of that important thing someone said three weeks ago on a Tuesday afternoon.
 
 The average knowledge worker switches between four hundred different windows per day and types roughly forty words per minute across dozens of applications. Without a system to capture and organize this firehose of information, most of it simply evaporates.
 
-Your screen is a pipe. Everything you see, hear, and type flows through it. Screenpipe just makes sure nothing valuable leaks away.`;
+Your screen is a pipe. Everything you see, hear, and type flows through it. Daimonion just makes sure nothing valuable leaks away.`;
 
   const handleIgnoredWindowsChange = (values: string[]) => {
     // Convert all values to lowercase for comparison
@@ -2461,7 +2461,7 @@ Your screen is a pipe. Everything you see, hear, and type flows through it. Scre
                 <User className="h-4 w-4 text-muted-foreground shrink-0" />
                 <h3 className="text-sm font-medium text-foreground flex items-center gap-1.5">
                   Your name
-                  <HelpTooltip text="Your name in transcripts. Click 'train' and speak for 30 seconds to teach screenpipe your voice — it will recognize you across all devices using voice matching." />
+                  <HelpTooltip text="Your name in transcripts. Click 'train' and speak for 30 seconds to teach daimonion your voice — it will recognize you across all devices using voice matching." />
                 </h3>
               </div>
               <div className="flex items-center gap-1.5">
@@ -2536,7 +2536,7 @@ Your screen is a pipe. Everything you see, hear, and type flows through it. Scre
                       <SelectLabel className="text-[10px] text-muted-foreground/70 uppercase tracking-wider">cloud</SelectLabel>
                       <SelectItem value="screenpipe-cloud" disabled={!settings.user?.cloud_subscribed}>
                         <span className="inline-flex items-center gap-1.5">
-                          Screenpipe Cloud
+                          Daimonion Cloud
                           {!settings.user?.cloud_subscribed && <ComingSoonBadge />}
                           {hwCapability?.recommendedEngine === "screenpipe-cloud" && " ★"}
                         </span>
@@ -2889,7 +2889,7 @@ Your screen is a pipe. Everything you see, hear, and type flows through it. Scre
                 <div>
                   <h3 className="text-sm font-medium text-foreground flex items-center gap-1.5">
                     Live meeting notes
-                    <HelpTooltip text="Streams only the active meeting into the live note. This is separate from background 24/7 recording and can use your selected transcription engine, screenpipe cloud, or a direct provider." />
+                    <HelpTooltip text="Streams only the active meeting into the live note. This is separate from background 24/7 recording and can use your selected transcription engine, daimonion cloud, or a direct provider." />
                   </h3>
                   <p className="text-xs text-muted-foreground">Meeting-only live captions, separate from background transcription</p>
                 </div>
@@ -2931,7 +2931,7 @@ Your screen is a pipe. Everything you see, hear, and type flows through it. Scre
                         disabled={!settings.user?.cloud_subscribed}
                       >
                         <span className="inline-flex items-center gap-1.5">
-                          screenpipe cloud live
+                          daimonion cloud live
                           {!settings.user?.cloud_subscribed && <ComingSoonBadge />}
                         </span>
                       </SelectItem>
@@ -2942,7 +2942,7 @@ Your screen is a pipe. Everything you see, hear, and type flows through it. Scre
                 {(settings.meetingLiveTranscriptionProvider ?? "selected-engine") === "screenpipe-cloud" &&
                   !settings.user?.cloud_subscribed && (
                   <p className="text-xs text-muted-foreground">
-                    Screenpipe cloud live is coming soon — a local alternative is on the way.
+                    Daimonion cloud live is coming soon — a local alternative is on the way.
                   </p>
                 )}
                 {(settings.meetingLiveTranscriptionProvider ?? "selected-engine") === "selected-engine" &&
@@ -2957,7 +2957,7 @@ Your screen is a pipe. Everything you see, hear, and type flows through it. Scre
               <div>
                 <h3 className="text-sm font-medium text-foreground flex items-center gap-1.5">
                   Append typed text to note
-                  <HelpTooltip text="When the meeting stops, screenpipe appends what you typed (and the files you edited) during the meeting to the meeting note. Turn off to keep notes clean." />
+                  <HelpTooltip text="When the meeting stops, daimonion appends what you typed (and the files you edited) during the meeting to the meeting note. Turn off to keep notes clean." />
                 </h3>
                 <p className="text-xs text-muted-foreground">Auto-add your typed text + edited files at the end of the note</p>
               </div>
@@ -3654,7 +3654,7 @@ Your screen is a pipe. Everything you see, hear, and type flows through it. Scre
         <DialogContent className="max-w-lg">
           <DialogTitle className="text-sm font-medium">Read this aloud</DialogTitle>
           <DialogDescription className="text-xs text-muted-foreground">
-            speak naturally at your normal pace — this helps screenpipe learn your voice
+            speak naturally at your normal pace — this helps daimonion learn your voice
           </DialogDescription>
           <div className="space-y-4">
 

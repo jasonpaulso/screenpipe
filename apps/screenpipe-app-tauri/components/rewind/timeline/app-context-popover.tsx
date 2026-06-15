@@ -304,7 +304,7 @@ export function AppContextPopover({
 						<div className="pl-4 space-y-0.5">
 							{data.topUrls.map((u, i) => {
 								const domain = extractDomain(u.url);
-								// browser_url from screenpipe often lacks a protocol (e.g. "github.com/foo");
+								// browser_url from daimonion often lacks a protocol (e.g. "github.com/foo");
 								// openUrl rejects such inputs silently, so normalize before opening.
 								const openableUrl = u.url.includes("://") ? u.url : `https://${u.url}`;
 								return (

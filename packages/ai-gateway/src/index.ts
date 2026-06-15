@@ -692,7 +692,7 @@ curl -X POST $HOST/v1/listen \
   -H "Content-Type: audio/wav" \
   -H "detect_language: en" \
   -H "Authorization: Bearer $TOKEN" \
-  --data-binary "@./crates/screenpipe-audio/test_data/poetic_kapil_gupta.wav"
+  --data-binary "@./crates/daimonion-audio/test_data/poetic_kapil_gupta.wav"
 
 # Test free tier (no auth)
 curl -X POST $HOST/v1/chat/completions \

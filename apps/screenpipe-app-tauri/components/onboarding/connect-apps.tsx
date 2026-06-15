@@ -73,7 +73,7 @@ function CursorIcon({ className = "w-5 h-5" }: { className?: string }) {
 // ─── MCP helpers (shared pattern for Claude Desktop & Cursor) ────────────────
 
 /**
- * MCP install config for screenpipe.
+ * MCP install config for daimonion.
  *
  * Prefers our bundled `bun` binary (always present when the desktop app
  * is installed) over `npx`. Falls back to `npx` only if bun isn't found.
@@ -342,7 +342,7 @@ const INTEGRATIONS: Integration[] = [
     id: "chatgpt",
     cardKey: "chatgpt",
     name: "ChatGPT",
-    valueProp: "use ChatGPT Plus as screenpipe's AI brain",
+    valueProp: "use ChatGPT Plus as daimonion's AI brain",
     ahaCopy: "ChatGPT connected",
     isPro: false,
     type: "chatgpt",
@@ -733,7 +733,7 @@ export default function ConnectApps({ handleNextSlide }: ConnectAppsProps) {
         <p className="font-mono text-[10px] text-muted-foreground/60 mt-1 max-w-[300px]">
           {isPro
             ? "everything is unlocked — connect what you use"
-            : "screenpipe sees your screen — connect the tools it acts on"}
+            : "daimonion sees your screen — connect the tools it acts on"}
         </p>
       </motion.div>
 

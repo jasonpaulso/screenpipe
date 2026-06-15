@@ -74,7 +74,7 @@ describe("sqlTables / sqlVerb", () => {
 });
 
 describe("url helpers", () => {
-  it("identifies the local screenpipe server", () => {
+  it("identifies the local daimonion server", () => {
     expect(isLocalScreenpipeUrl(new URL(`${LOCAL}/search`))).toBe(true);
     expect(isLocalScreenpipeUrl(new URL("https://example.com"))).toBe(false);
   });
@@ -138,7 +138,7 @@ describe("endpointFamily", () => {
     expect(endpointFamily("/connections/google-calendar/events")).toBe("Calendar");
     expect(endpointFamily("/connections/slack/x")).toBe("Slack");
     expect(endpointFamily("/pipes")).toBe("Pipes");
-    expect(endpointFamily("/anything-else")).toBe("Screenpipe");
+    expect(endpointFamily("/anything-else")).toBe("Daimonion");
   });
 });
 

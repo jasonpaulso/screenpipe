@@ -43,9 +43,9 @@ describe("screenpipeViewerPathFromHref", () => {
     // viewer doesn't open with a literal `%5C` in place of `\`.
     expect(
       screenpipeViewerPathFromHref(
-        "daimonion://view?path=C%3A%5Cscreenpipe%5Cdata%5Cframe.jpg",
+        "daimonion://view?path=C%3A%5Cdaimonion%5Cdata%5Cframe.jpg",
       ),
-    ).toBe("C:\\screenpipe\\data\\frame.jpg");
+    ).toBe("C:\\daimonion\\data\\frame.jpg");
   });
 
   it("returns null for non-screenpipe protocols", () => {
@@ -74,7 +74,7 @@ describe("screenpipeViewerPathFromHref", () => {
     // the helper must swallow the URL parser exception and return null.
     expect(screenpipeViewerPathFromHref("not a url")).toBeNull();
     expect(screenpipeViewerPathFromHref("")).toBeNull();
-    expect(screenpipeViewerPathFromHref("screenpipe:")).toBeNull();
+    expect(screenpipeViewerPathFromHref("daimonion:")).toBeNull();
   });
 });
 

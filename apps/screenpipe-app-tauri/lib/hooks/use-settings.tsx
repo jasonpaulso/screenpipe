@@ -254,7 +254,7 @@ export type Settings = SettingsStore & {
 	openaiCompatibleRawAudio?: boolean;
 	/** Let Pi / Claude Code call the confidential cloud enclave
 	 * (Gemma 4 E4B inside an attested Tinfoil CVM) to analyze audio,
-	 * video frames, and images from screenpipe data. Default true. When
+	 * video frames, and images from daimonion data. Default true. When
 	 * false, the "Cloud audio + video + image analysis" section is
 	 * stripped from `~/.claude/skills/screenpipe-api/SKILL.md` so agents
 	 * literally cannot see the endpoint and won't try to call it. */
@@ -359,7 +359,7 @@ export type Settings = SettingsStore & {
 	 */
 	listenOnLan?: boolean;
 	encryptStore?: boolean;
-	/** Global blanket permission: allow screenpipe to copy browser cookies
+	/** Global blanket permission: allow daimonion to copy browser cookies
 	 *  into the owned browser so the agent can browse sites the user is
 	 *  logged into. Revocable from the owned-browser cookie menu.
 	 *  Undefined = not decided yet, false = disabled, true = enabled. */
@@ -381,7 +381,7 @@ export function getEffectiveFilters(settings: Settings) {
 
 export const DEFAULT_PROMPT = `Rules:
 - Media: use standard markdown with angle-bracket local paths, like ![description](</path/to/file.mp4>) for videos and ![description](</path/to/image.jpg>) for images
-- Always wrap local file paths in angle brackets because screenpipe paths often contain spaces or parentheses
+- Always wrap local file paths in angle brackets because daimonion paths often contain spaces or parentheses
 - Diagrams: use \`\`\`mermaid blocks for visual summaries (flowchart, gantt, mindmap, graph)
 - Activity summaries: gantt charts with apps/duration
 - Workflows: flowcharts showing steps taken
@@ -837,7 +837,7 @@ function createSettingsStore() {
 		}
 
 		// Post-migration: when a logged-in Pro user is first confirmed, default
-		// both background and live transcription to Screenpipe Cloud. The marker
+		// both background and live transcription to Daimonion Cloud. The marker
 		// prevents future user refreshes from overriding a manual engine choice.
 		if (isLoggedInProUser(settings.user) && !(settings as any)._proCloudAudioDefaultsAppliedV2) {
 			applyProCloudAudioDefaults(settings);

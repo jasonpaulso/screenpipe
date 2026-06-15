@@ -124,7 +124,7 @@ interface OpenAIModel {
 export const DEFAULT_PROMPT = `Rules:
 - Media: use standard markdown with angle-bracket local paths, like ![description](</path/to/file.mp4>) for videos and ![description](</path/to/image.jpg>) for images
 - Use the exact absolute file_path from search results inside the angle brackets, do not modify it
-- Always wrap local file paths in angle brackets because screenpipe paths often contain spaces or parentheses
+- Always wrap local file paths in angle brackets because daimonion paths often contain spaces or parentheses
 - Always answer my question/intent, do not make up things
 `;
 
@@ -502,7 +502,7 @@ export function AIProviderConfig({
                 className="flex h-8 w-full items-center justify-center gap-1.5 text-xs px-3"
               >
                 <Icons.terminal className="h-3.5 w-3.5" />
-                <span>screenpipe cloud</span>
+                <span>daimonion cloud</span>
               </Button>
             </ComingSoon>
           )}
@@ -997,7 +997,7 @@ export const AIPresetDialog = ({
       prompt: providerData.prompt,
     };
 
-    // Screenpipe Cloud: max output is defined per model in the gateway catalog (see screenpipe_cloud_models in Rust).
+    // Daimonion Cloud: max output is defined per model in the gateway catalog (see screenpipe_cloud_models in Rust).
     // Do not persist or override maxTokens from this dialog — avoids defaulting to 4096 and matches Settings.
     if (providerData.provider !== "screenpipe-cloud") {
       (newPreset as any).maxTokens = (providerData as any).maxTokens ?? 4096;
@@ -1386,7 +1386,7 @@ export const AIPresetsSelector = ({
           <div className="flex items-center gap-2 p-2 text-sm bg-muted border border-border rounded-lg">
             <AlertTriangle className="h-4 w-4 text-muted-foreground shrink-0" />
             <span className="text-foreground flex-1">
-              Screenpipe Cloud is coming soon
+              Daimonion Cloud is coming soon
             </span>
             <ComingSoonBadge />
           </div>

@@ -22,7 +22,7 @@ export function HermesCard() {
     <AgentCard
       name="Hermes"
       iconSrc="/images/hermes.png"
-      description="Self-improving agent with messaging gateways (Telegram, Discord, Slack, WhatsApp). Three ways to wire it to screenpipe."
+      description="Self-improving agent with messaging gateways (Telegram, Discord, Slack, WhatsApp). Three ways to wire it to daimonion."
       homepage="https://hermes-agent.nousresearch.com"
       mcp={{
         format: "yaml",
@@ -39,7 +39,7 @@ export function HermesCard() {
           downloadName: "screenpipe-api-SKILL.md",
           localPath: "~/.hermes/skills/screenpipe-api/SKILL.md",
           cliInstall:
-            "hermes skills install github:screenpipe/screenpipe/.claude/skills/screenpipe-api",
+            "hermes skills install github:daimonion/screenpipe/.claude/skills/screenpipe-api",
         },
         {
           id: "cli",
@@ -50,7 +50,7 @@ export function HermesCard() {
           downloadName: "screenpipe-cli-SKILL.md",
           localPath: "~/.hermes/skills/screenpipe-cli/SKILL.md",
           cliInstall:
-            "hermes skills install github:screenpipe/screenpipe/.claude/skills/screenpipe-cli",
+            "hermes skills install github:daimonion/screenpipe/.claude/skills/screenpipe-cli",
         },
       ]}
       sync={{

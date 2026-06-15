@@ -45,7 +45,7 @@ describe("source citations", () => {
     ]);
   });
 
-  it("derives a screenpipe search citation from bash curl calls", () => {
+  it("derives a daimonion search citation from bash curl calls", () => {
     const citations = sourceCitationsFromMessage({
       contentBlocks: [
         {
@@ -65,12 +65,12 @@ describe("source citations", () => {
 
     expect(citations).toHaveLength(1);
     expect(citations[0].kind).toBe("screenpipe");
-    expect(citations[0].title).toBe("Screenpipe search");
+    expect(citations[0].title).toBe("Daimonion search");
     expect(citations[0].subtitle).toContain("audio");
     expect(citations[0].subtitle).toContain("query: pricing");
   });
 
-  it("names connector calls instead of collapsing them to generic screenpipe api", () => {
+  it("names connector calls instead of collapsing them to generic daimonion api", () => {
     const citations = sourceCitationsFromMessage({
       contentBlocks: [
         {
@@ -92,11 +92,11 @@ describe("source citations", () => {
     expect(citations[0]).toMatchObject({
       kind: "connector",
       title: "Perplexity search",
-      subtitle: "external web context via Screenpipe connection",
+      subtitle: "external web context via Daimonion connection",
     });
   });
 
-  it("labels screenpipe memory endpoint citations as memory", () => {
+  it("labels daimonion memory endpoint citations as memory", () => {
     const citations = sourceCitationsFromMessage({
       contentBlocks: [
         {
@@ -117,7 +117,7 @@ describe("source citations", () => {
     expect(citations).toHaveLength(1);
     expect(citations[0]).toMatchObject({
       kind: "memory",
-      title: "Screenpipe memories",
+      title: "Daimonion memories",
       subtitle: "memory query: Jill Benaglio",
     });
   });
@@ -135,7 +135,7 @@ describe("source citations", () => {
             },
             result: JSON.stringify({
               search_results: [
-                { title: "Screenpipe docs", url: "https://docs.screenpi.pe/chat" },
+                { title: "Daimonion docs", url: "https://docs.screenpi.pe/chat" },
               ],
             }),
             isRunning: false,
@@ -151,7 +151,7 @@ describe("source citations", () => {
     });
     expect(citations[1]).toMatchObject({
       kind: "web",
-      title: "Screenpipe docs",
+      title: "Daimonion docs",
       href: "https://docs.screenpi.pe/chat",
     });
   });
@@ -305,7 +305,7 @@ describe("source citations", () => {
     expect(citations).toHaveLength(1);
     expect(citations[0]).toMatchObject({
       kind: "screenpipe",
-      title: "Screenpipe search",
+      title: "Daimonion search",
     });
     expect(citations[0].subtitle).toContain("ocr");
     expect(citations[0].subtitle).toContain("app: Slack");
@@ -336,7 +336,7 @@ describe("source citations", () => {
     expect(citations[0].timestamp).toBe("2026-05-15T17:00:00Z");
   });
 
-  it("anchors bash screenpipe /search citations to the url-encoded start_time", () => {
+  it("anchors bash daimonion /search citations to the url-encoded start_time", () => {
     const citations = sourceCitationsFromMessage({
       contentBlocks: [
         {

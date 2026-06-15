@@ -19,7 +19,7 @@ import { commands, type DeviceSkill, type ImportedSkill } from "@/lib/utils/taur
 
 /**
  * Manage the agent's skills: a skill is a folder with a `SKILL.md` (the same
- * format Claude Code uses). Imported skills are copied into the screenpipe
+ * format Claude Code uses). Imported skills are copied into the daimonion
  * store and loaded by the agent in chat and every pipe.
  */
 export function SkillsCard({ onChanged }: { onChanged?: () => void }) {
@@ -107,7 +107,7 @@ export function SkillsCard({ onChanged }: { onChanged?: () => void }) {
         Skills are reusable{" "}
         <code className="text-[11px] bg-muted px-1 rounded">SKILL.md</code>{" "}
         playbooks — the same format Claude Code uses. Import them here and
-        screenpipe&apos;s agent loads them in chat and in every pipe.
+        daimonion&apos;s agent loads them in chat and in every pipe.
       </p>
 
       {error && (

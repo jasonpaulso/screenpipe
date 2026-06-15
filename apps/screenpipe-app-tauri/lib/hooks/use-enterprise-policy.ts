@@ -301,7 +301,7 @@ type FetchResult =
  *
  * Enterprise builds: reads the license key from `enterprise.json` (pushed via
  * Intune/MDM, or entered manually via in-app prompt), fetches the policy from
- * the screenpipe API, and exposes which sections/settings to hide.
+ * the daimonion API, and exposes which sections/settings to hide.
  * Re-fetches every 5 minutes. Caches in localStorage for offline resilience.
  *
  * If no license key is found (or the saved key is invalid), sets
@@ -487,7 +487,7 @@ export function useEnterprisePolicy() {
         }
       } else {
         console.warn(
-          "[enterprise] no cloud token available — skipping team-config persist (sign in to screenpipe cloud to enable team queries)"
+          "[enterprise] no cloud token available — skipping team-config persist (sign in to daimonion cloud to enable team queries)"
         );
       }
       return { ok: true, policy: result };

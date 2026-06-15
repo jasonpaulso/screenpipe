@@ -367,7 +367,7 @@ export function useDeviceMonitor() {
     []
   );
 
-  // Auto-discover screenpipe instances on the network
+  // Auto-discover daimonion instances on the network
   const [discovering, setDiscovering] = useState(false);
   const hasDiscoveredRef = useRef(false);
 
@@ -392,7 +392,7 @@ export function useDeviceMonitor() {
           const localHealth: HealthResponse = await localRes.json();
           localHostname = localHealth.hostname || null;
         }
-      } catch { /* no local screenpipe */ }
+      } catch { /* no local daimonion */ }
 
       // Dedup Tailscale hosts: prefer IP over DNS name, group by alias
       const seenAliases = new Set<string>();
@@ -405,12 +405,12 @@ export function useDeviceMonitor() {
         return true;
       });
 
-      // Probe each host on port 3030 to find screenpipe instances
+      // Probe each host on port 3030 to find daimonion instances
       const PROBE_TIMEOUT_MS = 3_000;
       const seenHostnames = new Set<string>();
       if (localHostname) seenHostnames.add(localHostname);
 
-      // Try common screenpipe ports
+      // Try common daimonion ports
       const PORTS = [3030, 3333];
       const probes = dedupedHosts.map(async (h) => {
         for (const port of PORTS) {

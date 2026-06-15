@@ -35,11 +35,11 @@ function showSignedOutToast() {
 
   toast({
     title: "signed out — app paused",
-    description: "sign in with an active plan to keep using screenpipe.",
+    description: "sign in with an active plan to keep using daimonion.",
     variant: "destructive",
     duration: 30000,
     action: (
-      <ToastAction altText="Sign in to screenpipe" onClick={openLogin}>
+      <ToastAction altText="Sign in to daimonion" onClick={openLogin}>
         sign in
       </ToastAction>
     ),
@@ -101,7 +101,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
 }
 
 // --- Global fetch interceptor ---
-// Patches window.fetch once to detect 401s from screenpipe API calls.
+// Patches window.fetch once to detect 401s from daimonion API calls.
 // Does not block or modify requests — only observes responses.
 
 let _patched = false;

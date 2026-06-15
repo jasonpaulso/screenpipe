@@ -33,7 +33,7 @@ import posthog from "posthog-js";
 import { useSettings } from "@/lib/hooks/use-settings";
 
 // ---------------------------------------------------------------------------
-// Canonical screenpipe SKILL.md content. Re-exported from a generated module so
+// Canonical daimonion SKILL.md content. Re-exported from a generated module so
 // the "copy / save SKILL.md" text the cards serve is always the source of truth
 // from the repo: .claude/skills/{screenpipe-api,screenpipe-cli}/SKILL.md
 // (the same folders the `... skills install github:...` one-liners install from).
@@ -57,7 +57,7 @@ export type ConnectField = {
   helpUrl?: string;
 };
 
-/** One installable screenpipe skill (e.g. the API skill or the CLI skill). */
+/** One installable daimonion skill (e.g. the API skill or the CLI skill). */
 export type SkillVariant = {
   /** Stable id — sub-tab value + posthog suffix. */
   id: string;
@@ -81,7 +81,7 @@ export type AgentCardProps = {
   description: string;
   homepage?: string;
   mcp: { format: "json" | "yaml"; configPath: string; snippet: string };
-  /** One or more installable screenpipe skills (e.g. API + CLI). First is shown by default. */
+  /** One or more installable daimonion skills (e.g. API + CLI). First is shown by default. */
   skills: SkillVariant[];
   sync: {
     /** Default remote path on the VPS where ~/.daimonion gets pushed. */
@@ -89,7 +89,7 @@ export type AgentCardProps = {
     /** Prefix used for localStorage keys + posthog event names. */
     storageKeyPrefix: string;
   };
-  /** If set, renders a "Connect" tab for entering credentials that screenpipe pipes use to call this agent. */
+  /** If set, renders a "Connect" tab for entering credentials that daimonion pipes use to call this agent. */
   connect?: {
     integrationId: string;
     fields: ConnectField[];
@@ -113,8 +113,8 @@ function McpSection({ name, mcp }: { name: string; mcp: AgentCardProps["mcp"] })
   return (
     <div className="space-y-3">
       <p className="text-xs text-muted-foreground leading-relaxed">
-        Register screenpipe as an MCP server in {name}. Best when {name} runs on the
-        same machine as screenpipe.
+        Register daimonion as an MCP server in {name}. Best when {name} runs on the
+        same machine as daimonion.
       </p>
       <p className="text-xs text-muted-foreground">
         1. Open <code className="bg-muted px-1 rounded">{mcp.configPath}</code>
@@ -144,7 +144,7 @@ function McpSection({ name, mcp }: { name: string; mcp: AgentCardProps["mcp"] })
 }
 
 // ---------------------------------------------------------------------------
-// Skill section — install screenpipe SKILL.md into the agent's skills dir
+// Skill section — install daimonion SKILL.md into the agent's skills dir
 // ---------------------------------------------------------------------------
 
 function SkillSection({ name, skills }: { name: string; skills: SkillVariant[] }) {
@@ -155,7 +155,7 @@ function SkillSection({ name, skills }: { name: string; skills: SkillVariant[] }
   return (
     <div className="space-y-3">
       <p className="text-xs text-muted-foreground leading-relaxed">
-        Drop a screenpipe SKILL.md into {name}&apos;s skills directory and {name} loads it
+        Drop a daimonion SKILL.md into {name}&apos;s skills directory and {name} loads it
         as a new skill. {skills.length > 1 ? "Install either — or both." : ""}
       </p>
 
@@ -321,7 +321,7 @@ function SkillVariantBody({ name, variant }: { name: string; variant: SkillVaria
         <p className="text-xs text-muted-foreground leading-relaxed">
           Copy the SKILL.md contents above and paste them into{" "}
           <code className="bg-muted px-1 rounded">{variant.localPath}</code> on the remote
-          host. To let {name} reach the screenpipe data on <em>this</em> machine, use the{" "}
+          host. To let {name} reach the daimonion data on <em>this</em> machine, use the{" "}
           <strong>Sync (remote)</strong> tab to push it over, or point any{" "}
           <code>localhost:3030</code> calls at this machine&apos;s IP/Tailscale name.
         </p>
@@ -779,7 +779,7 @@ function RemoteSyncSection({
 
 // ---------------------------------------------------------------------------
 // ---------------------------------------------------------------------------
-// ConnectSection — credential form for screenpipe pipes calling back to the agent
+// ConnectSection — credential form for daimonion pipes calling back to the agent
 // ---------------------------------------------------------------------------
 
 function ConnectSection({ integrationId, fields }: { integrationId: string; fields: ConnectField[] }) {
@@ -840,7 +840,7 @@ function ConnectSection({ integrationId, fields }: { integrationId: string; fiel
   return (
     <div className="space-y-3">
       <p className="text-xs text-muted-foreground leading-relaxed">
-        Let screenpipe pipes call back to this agent. Enter the gateway credentials so pipes can send events and messages directly to it.
+        Let daimonion pipes call back to this agent. Enter the gateway credentials so pipes can send events and messages directly to it.
       </p>
       {fields.map((field) => (
         <div key={field.key} className="space-y-1">

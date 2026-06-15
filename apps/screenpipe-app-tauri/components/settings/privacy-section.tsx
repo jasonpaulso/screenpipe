@@ -398,7 +398,7 @@ export function PrivacySection() {
 
       toast({
         title: "Settings updated successfully",
-        description: "Screenpipe has been restarted with new settings",
+        description: "Daimonion has been restarted with new settings",
       });
     } catch (error) {
       console.error("Failed to update settings:", error);
@@ -983,7 +983,7 @@ export function PrivacySection() {
               <div>
                 <h3 className="text-sm font-medium text-foreground flex items-center gap-1.5">
                   Capture clipboard
-                  <HelpTooltip text="when on, screenpipe records clipboard copy/paste events and contents. turn off if you ship ~/.daimonion to a remote LLM or share it — passwords, API keys, and private keys frequently pass through the clipboard." />
+                  <HelpTooltip text="when on, daimonion records clipboard copy/paste events and contents. turn off if you ship ~/.daimonion to a remote LLM or share it — passwords, API keys, and private keys frequently pass through the clipboard." />
                 </h3>
                 <p className="text-xs text-muted-foreground">
                   Skip if your data leaves the machine (passwords, keys often
@@ -1009,7 +1009,7 @@ export function PrivacySection() {
               <div>
                 <h3 className="text-sm font-medium text-foreground flex items-center gap-1.5">
                   Capture keyboard
-                  <HelpTooltip text="when on, screenpipe records what you type (your keystrokes). off by default. the accessibility tree and OCR still capture on-screen text either way, so Rewind and Ask keep working — this only controls the raw keystroke stream, where passwords, API keys, and secrets you type would otherwise be logged." />
+                  <HelpTooltip text="when on, daimonion records what you type (your keystrokes). off by default. the accessibility tree and OCR still capture on-screen text either way, so Rewind and Ask keep working — this only controls the raw keystroke stream, where passwords, API keys, and secrets you type would otherwise be logged." />
                 </h3>
                 <p className="text-xs text-muted-foreground">
                   Off by default. Records the raw keystroke stream (secrets
@@ -1176,7 +1176,7 @@ export function PrivacySection() {
                   <span>
                     <span className="font-medium text-foreground">Cloud (enclave)</span>
                     <span className="text-muted-foreground">
-                      {" "}— screenpipe&apos;s confidential-compute enclave. Fast everywhere; your device cryptographically verifies the enclave is running the open-source build before sending anything.
+                      {" "}— daimonion&apos;s confidential-compute enclave. Fast everywhere; your device cryptographically verifies the enclave is running the open-source build before sending anything.
                     </span>
                   </span>
                 </label>
@@ -1241,7 +1241,7 @@ export function PrivacySection() {
                 <div>
                   <h3 className="text-sm font-medium text-foreground flex items-center gap-1.5">
                     AI audio &amp; video analysis
-                    <HelpTooltip text="Lets Pi and Claude Code call screenpipe's confidential enclave (Gemma 4 E4B inside a Tinfoil-attested AMD SEV-SNP container, encrypted in flight + at rest, no plaintext at the provider) to transcribe meetings, describe video clips, and analyze image frames from your screenpipe data. When off, the capability is stripped from the agent skill markdown so Pi won't try to use it." />
+                    <HelpTooltip text="Lets Pi and Claude Code call daimonion's confidential enclave (Gemma 4 E4B inside a Tinfoil-attested AMD SEV-SNP container, encrypted in flight + at rest, no plaintext at the provider) to transcribe meetings, describe video clips, and analyze image frames from your daimonion data. When off, the capability is stripped from the agent skill markdown so Pi won't try to use it." />
                   </h3>
                   <p className="text-xs text-muted-foreground">
                     Confidential enclave for transcription, video, and image understanding.

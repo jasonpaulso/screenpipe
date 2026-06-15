@@ -39,7 +39,7 @@ export function FeedbackSection() {
           <div className="relative shrink-0">
             <img
               src="/tutorial-thumbnail.jpg"
-              alt="screenpipe tutorial"
+              alt="daimonion tutorial"
               className="w-[124px] h-[70px] object-cover border border-border"
             />
             <span className="absolute inset-0 flex items-center justify-center">
@@ -56,7 +56,7 @@ export function FeedbackSection() {
               </span>
             </div>
             <p className="text-xs text-muted-foreground mt-0.5">
-              the complete screenpipe tutorial, setup to pipes
+              the complete daimonion tutorial, setup to pipes
             </p>
           </div>
           <span className="text-xs text-muted-foreground group-hover:text-foreground transition-colors duration-150 shrink-0">

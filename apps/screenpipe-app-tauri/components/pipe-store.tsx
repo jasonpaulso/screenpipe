@@ -1264,7 +1264,7 @@ here is the original pipe content (pipe.md):
 ${pipeSource}
 \`\`\`
 
-IMPORTANT: first read the screenpipe skill file to understand how pipes work, then ask the user how they want to customize/improve this pipe for their specific needs. do NOT auto-send or auto-create — have a conversation first to understand what they want to change.
+IMPORTANT: first read the daimonion skill file to understand how pipes work, then ask the user how they want to customize/improve this pipe for their specific needs. do NOT auto-send or auto-create — have a conversation first to understand what they want to change.
 
 if the original or customized pipe creates a user-facing output file, make sure the forked pipe.md includes an \`artifacts:\` block in frontmatter declaring the output path under \`./output/\`, and instruct the prompt to write results to that exact path. if the pipe doesn't create files, omit \`artifacts:\`.
 
@@ -1619,7 +1619,7 @@ export function PublishDialog({
     }
     onOpenChange(false);
     navigateHomeAndPrefill({
-      context: `the user wants to publish their pipe "${pipeName}" to the screenpipe store. here is their current pipe.md:
+      context: `the user wants to publish their pipe "${pipeName}" to the daimonion store. here is their current pipe.md:
 
 \`\`\`
 ${sourceMd}
@@ -1628,7 +1628,7 @@ ${sourceMd}
 IMPORTANT — follow these steps exactly:
 
 STEP 1: READ THE SKILL FILE
-- read the screenpipe pipe skill file first to understand how pipes, connections, permissions, and the store work
+- read the daimonion pipe skill file first to understand how pipes, connections, permissions, and the store work
 
 STEP 2: CREATE A GENERIC VERSION
 - DO NOT modify the user's existing installed pipe
@@ -1639,7 +1639,7 @@ STEP 2: CREATE A GENERIC VERSION
   - hardcoded API keys or tokens → remove, use connections instead
   - machine-specific config (specific ports, paths) → make configurable
 - set permissions preset appropriately (e.g. "reader", "writer", "none" — NOT left undefined)
-- if the pipe needs external services (Obsidian, Notion, Slack, etc.), use screenpipe connections properly
+- if the pipe needs external services (Obsidian, Notion, Slack, etc.), use daimonion connections properly
 - keep ALL original functionality intact
 
 STEP 3: PREPARE STORE METADATA

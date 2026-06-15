@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-// Screenpipe brand theme — outlined minimalist (DESIGN.md):
+// Daimonion brand theme — outlined minimalist (DESIGN.md):
 // white fills, black 1px borders, black text in light mode (inverted in dark).
 // Avoids the heavy filled-black-box look; matches the rest of the app's flat,
 // high-contrast, color-free aesthetic.

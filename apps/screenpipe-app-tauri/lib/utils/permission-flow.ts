@@ -90,7 +90,7 @@ export interface WatchAuthorizationStatusOptions {
    */
   pollIntervalMs?: number | false
   /**
-   * Continue polling even when `document.hidden` is true (e.g. the screenpipe
+   * Continue polling even when `document.hidden` is true (e.g. the daimonion
    * window is occluded by system settings). Defaults to `false`.
    */
   pollWhenHidden?: boolean
@@ -314,11 +314,11 @@ export async function createPermissionFlow(): Promise<PermissionFlow> {
 }
 
 // ---------------------------------------------------------------------------
-// Controller — Screenpipe-facing wrappers around the permission-flow plugin
+// Controller — Daimonion-facing wrappers around the permission-flow plugin
 // ---------------------------------------------------------------------------
 
 /**
- * Screenpipe-facing alias: every OS permission we surface in onboarding,
+ * Daimonion-facing alias: every OS permission we surface in onboarding,
  * recovery, or settings cards. Some entries (microphone, automation,
  * calendar) do not have an app-list drag UI; those fall back to opening
  * Privacy & Security directly via our typed Tauri commands.
@@ -403,7 +403,7 @@ async function restoreAlwaysOnTopWhenScreenpipeRefocuses(): Promise<void> {
         try { state.pendingFocusUnlisten(); } catch {}
         state.pendingFocusUnlisten = null;
       }
-      // Hide the drag panel when screenpipe is frontmost — it should only
+      // Hide the drag panel when daimonion is frontmost — it should only
       // be visible in system settings, not alongside our own windows.
       if (state.flow) {
         try { await state.flow.stopCurrentFlow(); } catch {}
@@ -447,7 +447,7 @@ async function reclaimScreenpipeWindow(): Promise<void> {
     await window.setFocus();
   } catch (error) {
     console.error(
-      "failed to refocus screenpipe window after permission flow:",
+      "failed to refocus daimonion window after permission flow:",
       error,
     );
   }

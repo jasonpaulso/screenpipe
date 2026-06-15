@@ -10,7 +10,7 @@
 // intuitive group.
 //
 // Keys MUST match the tile id: for backend integrations that is the
-// `IntegrationDef.id` (see crates/screenpipe-connect/src/connections/*.rs,
+// `IntegrationDef.id` (see crates/daimonion-connect/src/connections/*.rs,
 // e.g. github -> "github", google docs -> "google-docs"); for frontend-only
 // tiles it is the hardcoded id in connections-section.tsx.
 //

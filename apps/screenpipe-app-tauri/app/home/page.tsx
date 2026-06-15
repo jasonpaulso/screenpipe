@@ -799,8 +799,8 @@ function HomeContent() {
     if (isSectionHidden(activeSection) && activeSection !== "help") {
       return (
         <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
-          <img src="/128x128.png" alt="screenpipe" className="w-16 h-16 opacity-30 mb-4" />
-          <p className="text-sm font-mono">screenpipe</p>
+          <img src="/128x128.png" alt="daimonion" className="w-16 h-16 opacity-30 mb-4" />
+          <p className="text-sm font-mono">daimonion</p>
         </div>
       );
     }
@@ -853,8 +853,8 @@ function HomeContent() {
       default:
         return (
           <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
-            <img src="/128x128.png" alt="screenpipe" className="w-16 h-16 opacity-30 mb-4" />
-            <p className="text-sm font-mono">screenpipe</p>
+            <img src="/128x128.png" alt="daimonion" className="w-16 h-16 opacity-30 mb-4" />
+            <p className="text-sm font-mono">daimonion</p>
           </div>
         );
     }
@@ -976,7 +976,7 @@ function HomeContent() {
               {/* Row 1: name (collapse moved out — pinned top-left next
                   to the traffic lights, see above). */}
               <div className={cn("flex items-center", sidebarCollapsed ? "justify-center" : "justify-between")}>
-                {!sidebarCollapsed && <h1 className={cn("text-lg font-bold", isTranslucent ? "vibrant-heading" : "text-foreground")}>screenpipe</h1>}
+                {!sidebarCollapsed && <h1 className={cn("text-lg font-bold", isTranslucent ? "vibrant-heading" : "text-foreground")}>daimonion</h1>}
               </div>
               {/* Row 2: device status + action buttons */}
               {!sidebarCollapsed && (() => {

@@ -82,7 +82,7 @@ export function UpdateBanner({ className, compact = false, variant = "default" }
         if (gate !== "proceed") {
           setIsInstalling(false);
           toast({
-            title: "screenpipe is still starting up",
+            title: "daimonion is still starting up",
             description:
               gate === "errored"
                 ? "startup error — open settings to see details before restarting"
@@ -97,7 +97,7 @@ export function UpdateBanner({ className, compact = false, variant = "default" }
           duration: Infinity,
         });
 
-        // Stop screenpipe before update on Windows
+        // Stop daimonion before update on Windows
         try {
           await commands.stopScreenpipe();
         } catch (e) {
@@ -133,7 +133,7 @@ export function UpdateBanner({ className, compact = false, variant = "default" }
         // gates internally, so no separate `awaitSafeRestart` call needed.
         toast({
           title: "installing update...",
-          description: "screenpipe will restart automatically",
+          description: "daimonion will restart automatically",
           duration: 10000,
         });
         const res = await commands.restartForUpdate(60);
@@ -141,7 +141,7 @@ export function UpdateBanner({ className, compact = false, variant = "default" }
         if (outcome !== "proceed") {
           setIsInstalling(false);
           toast({
-            title: "screenpipe is still starting up",
+            title: "daimonion is still starting up",
             description:
               outcome === "errored"
                 ? "startup error — open settings to see details before restarting"
@@ -190,7 +190,7 @@ export function UpdateBanner({ className, compact = false, variant = "default" }
         <div className="flex items-center gap-2 flex-1">
           <Sparkles className="h-4 w-4 text-primary" />
           <span>
-            screenpipe <span className="font-medium">v{authRequired.version}</span> is available — sign in to download
+            daimonion <span className="font-medium">v{authRequired.version}</span> is available — sign in to download
           </span>
         </div>
         <div className="flex items-center gap-2">
@@ -269,7 +269,7 @@ export function UpdateBanner({ className, compact = false, variant = "default" }
       <div className="flex items-center gap-2 flex-1">
         <Sparkles className="h-4 w-4 text-primary" />
         <span>
-          screenpipe <span className="font-medium">v{updateInfo.version}</span> is ready
+          daimonion <span className="font-medium">v{updateInfo.version}</span> is ready
         </span>
       </div>
       <div className="flex items-center gap-2">

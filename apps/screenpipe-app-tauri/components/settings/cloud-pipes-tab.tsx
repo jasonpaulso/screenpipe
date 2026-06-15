@@ -84,7 +84,7 @@ export function CloudPipesTab({ active }: { active: boolean }) {
     return (
       <EmptyState
         title="no enterprise license on this device"
-        body="cloud pipes run your org's managed pipes on screenpipe infrastructure. activate your enterprise license first, then come back here."
+        body="cloud pipes run your org's managed pipes on daimonion infrastructure. activate your enterprise license first, then come back here."
       />
     );
   }

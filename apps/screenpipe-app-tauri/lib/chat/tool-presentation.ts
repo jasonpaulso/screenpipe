@@ -159,7 +159,7 @@ export function externalCurlLabel(method: string, target: WebTargetPresentation)
   return `${method} ${target.domain}`;
 }
 
-// Maps pi's bash curl calls to the local screenpipe API into a human label.
+// Maps pi's bash curl calls to the local daimonion API into a human label.
 // Pi only emits raw curl (no MCP), so the action lives in the URL + body —
 // every endpoint family pi actually uses (sampled from ~/.pi/agent/sessions)
 // gets its own rewrite here. Unknown endpoints fall back to "<METHOD> <path>".
@@ -417,7 +417,7 @@ export function endpointFamily(path: string): string {
   if (path.startsWith("/meetings")) return "Meetings";
   if (path.startsWith("/speakers")) return "Speakers";
   if (path.startsWith("/pipes")) return "Pipes";
-  return "Screenpipe";
+  return "Daimonion";
 }
 
 export function parseToolResultJson(result: string | undefined): any | null {

@@ -149,7 +149,7 @@ export const RegionOcrOverlay: FC<RegionOcrOverlayProps> = ({
         const dataUrl = canvas.toDataURL("image/jpeg", 0.9);
         const base64 = dataUrl.replace(/^data:image\/jpeg;base64,/, "");
 
-        // Call screenpipe cloud API
+        // Call daimonion cloud API
         const response = await fetch(
           "https://api.screenpipe.com/v1/chat/completions",
           {

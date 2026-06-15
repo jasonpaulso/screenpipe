@@ -50,7 +50,7 @@ export function TeamSection() {
               <Users className="size-5 text-primary" />
             </div>
             <div>
-              <h2 className="text-lg font-semibold leading-tight">Bring your team to Screenpipe</h2>
+              <h2 className="text-lg font-semibold leading-tight">Bring your team to Daimonion</h2>
               <p className="text-sm text-muted-foreground mt-0.5">
                 Team management lives on the web.
               </p>
@@ -59,7 +59,7 @@ export function TeamSection() {
 
           <p className="text-sm text-muted-foreground leading-relaxed">
             Manage members, view team workflows and SOPs, and run org-wide
-            queries from the Screenpipe website. The desktop app stays
+            queries from the Daimonion website. The desktop app stays
             focused on capture and your personal activity.
           </p>
 

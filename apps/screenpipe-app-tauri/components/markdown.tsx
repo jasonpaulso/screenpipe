@@ -15,7 +15,7 @@ export function createScreenpipeUrlTransform(allowedHosts: readonly string[]) {
   return (url: string): string => {
     try {
       const parsed = new URL(url);
-      if (parsed.protocol === "screenpipe:" && allowed.has(parsed.host)) {
+      if (parsed.protocol === "daimonion:" && allowed.has(parsed.host)) {
         return url;
       }
     } catch {
@@ -33,7 +33,7 @@ export const chatUrlTransform = createScreenpipeUrlTransform(["timeline", "frame
 export function screenpipeViewerPathFromHref(href: string): string | null {
   try {
     const url = new URL(href);
-    if (url.protocol !== "screenpipe:" || url.host !== "view") {
+    if (url.protocol !== "daimonion:" || url.host !== "view") {
       return null;
     }
     return url.searchParams.get("path");

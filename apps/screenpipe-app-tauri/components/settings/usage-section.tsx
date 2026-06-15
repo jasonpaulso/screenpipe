@@ -250,7 +250,7 @@ export function UsageSection() {
           }
         }
       } catch {
-        // screenpipe not running
+        // daimonion not running
       }
 
       // Merge new entries with cached entries and hard-dedupe to prevent inflation.
@@ -314,7 +314,7 @@ export function UsageSection() {
       case "screenpipe-cloud":
       case "screenpipe":
       case "pi":
-        return "Screenpipe Cloud";
+        return "Daimonion Cloud";
       case "native-ollama":
       case "ollama":
         return "Ollama";

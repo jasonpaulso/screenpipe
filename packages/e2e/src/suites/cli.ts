@@ -98,7 +98,7 @@ const tests: TestDef[] = [
       if (!stdout.toLowerCase().includes("team"))
         throw new Error("missing 'team' in help output");
       // The three subcommands the skill at
-      // crates/screenpipe-core/assets/skills/screenpipe-team/SKILL.md
+      // crates/daimonion-core/assets/skills/screenpipe-team/SKILL.md
       // documents — if one disappears, agents written against the skill
       // start failing.
       for (const sub of ["devices", "search", "records"]) {

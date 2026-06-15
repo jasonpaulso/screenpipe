@@ -67,7 +67,7 @@ describe("isAudioMediaPath", () => {
     expect(isAudioMediaPath("/tmp/chunk.mp4")).toBe(false);
   });
 
-  it("recognizes Screenpipe audio chunks stored in mp4 containers", () => {
+  it("recognizes Daimonion audio chunks stored in mp4 containers", () => {
     expect(
       isAudioMediaPath(
         "/Users/ansh/.daimonion/data/System Audio (output)_2026-05-25_11-27-00.mp4",

@@ -301,7 +301,7 @@ async deleteCloudData() : Promise<Result<null, string>> {
 },
 /**
  * Delete all locally-stored data that was synced from a specific remote device.
- * This calls the local screenpipe server's /data/delete-device endpoint.
+ * This calls the local daimonion server's /data/delete-device endpoint.
  * Refuses to delete data for the current device as a safety guard.
  */
 async deleteDeviceLocalData(machineId: string) : Promise<Result<string, string>> {
@@ -514,7 +514,7 @@ async getCachedSuggestions() : Promise<Result<CachedSuggestions, string>> {
 }
 },
 /**
- * Read the user's screenpipe cloud session JWT from `~/.daimonion/
+ * Read the user's daimonion cloud session JWT from `~/.daimonion/
  * auth.json`. Returns None when the file is missing, malformed, or the
  * token field is empty.
  *
@@ -741,7 +741,7 @@ async icsCalendarTestUrl(url: string) : Promise<Result<number, string>> {
 }
 },
 /**
- * Copy a skill folder into the screenpipe store. `source_path` is the folder
+ * Copy a skill folder into the daimonion store. `source_path` is the folder
  * that directly contains `SKILL.md` (from a scan result or the folder picker).
  * Re-importing the same name refreshes it.
  */
@@ -792,7 +792,7 @@ async listCacheFiles() : Promise<Result<CacheFile[], string>> {
 }
 },
 /**
- * List skills currently in the screenpipe store.
+ * List skills currently in the daimonion store.
  */
 async listImportedSkills() : Promise<Result<ImportedSkill[], string>> {
     try {
@@ -1496,7 +1496,7 @@ async removeSyncDevice(deviceId: string) : Promise<Result<null, string>> {
 },
 /**
  * Request macOS Automation permission for Arc browser.
- * In production: triggers "screenpipe wants to control Arc" prompt via direct FFI.
+ * In production: triggers "daimonion wants to control Arc" prompt via direct FFI.
  * In dev mode: runs the binary itself via launchctl to trigger the prompt with
  * the correct binary identity (not Terminal's). Also opens System Settings as fallback.
  */
@@ -1784,7 +1784,7 @@ async setCloudToken(token: string | null) : Promise<Result<null, string>> {
 }
 },
 /**
- * Enable or disable enhanced AI suggestions (uses screenpipe cloud).
+ * Enable or disable enhanced AI suggestions (uses daimonion cloud).
  */
 async setEnhancedAiSuggestions(enabled: boolean, token: string) : Promise<Result<null, string>> {
     try {
@@ -1845,7 +1845,7 @@ async setTrayUnhealthIcon() : Promise<void> {
  * Programmatically adjust a window's always-on-top level after creation.
  *
  * Tauri's JS `setAlwaysOnTop` can be unreliable for macOS panel-style
- * windows. For permission flows we need Screenpipe to stay normally
+ * windows. For permission flows we need Daimonion to stay normally
  * always-on-top, but temporarily drop below System Settings while the user is
  * granting permissions. On macOS this directly sets the underlying NSWindow
  * level: floating when enabled, normal when disabled.
@@ -2002,7 +2002,7 @@ async trainVoice(name: string, startTime: string, endTime: string) : Promise<Res
 }
 },
 /**
- * Trigger an immediate sync via the screenpipe server.
+ * Trigger an immediate sync via the daimonion server.
  */
 async triggerSync() : Promise<Result<null, string>> {
     try {
@@ -2236,7 +2236,7 @@ export type ExcludedApp = { bundleId: string; name: string | null; icon: string 
 export type HardwareCapability = { hasGpu: boolean; cpuCores: number; totalMemoryGb: number; recommendedEngine: string; reason: string }
 export type IcsCalendarEntry = { name: string; url: string; enabled: boolean }
 /**
- * A skill currently sitting in the screenpipe store.
+ * A skill currently sitting in the daimonion store.
  */
 export type ImportedSkill = { name: string; description: string;
 /**
@@ -2675,7 +2675,7 @@ asyncImagePiiRedaction?: boolean;
  * construction — pixels and text never leave the box. Slower,
  * especially on weak hardware (~1-3 s per text row, ~60-180 ms
  * per frame).
- * - `"tinfoil"`: send to the screenpipe Tinfoil enclave (H200,
+ * - `"tinfoil"`: send to the daimonion Tinfoil enclave (H200,
  * confidential compute). Much faster (~30-100 ms per row /
  * frame). Data leaves the device but is end-to-end encrypted
  * into an attested confidential-compute enclave that even
@@ -2703,7 +2703,7 @@ piiBackend?: string;
  */
 piiRedactionLabels?: string[];
 /**
- * Screenpipe cloud user ID. Empty string means not logged in.
+ * Daimonion cloud user ID. Empty string means not logged in.
  * Kept as String (not Option) to match existing store.bin schema.
  */
 userId: string;
@@ -2739,7 +2739,7 @@ openaiCompatibleHeaders?: { [key in string]: string } | null;
  */
 openaiCompatibleRawAudio?: boolean;
 /**
- * HTTP server port for the screenpipe API.
+ * HTTP server port for the daimonion API.
  */
 port: number;
 /**
@@ -2787,7 +2787,7 @@ apiAuth?: boolean;
 apiKey?: string;
 /**
  * When true, the HTTP server binds to `0.0.0.0` so other devices on the
- * LAN can reach the screenpipe API. Off by default — the server binds
+ * LAN can reach the daimonion API. Off by default — the server binds
  * `127.0.0.1` (localhost only) which is the safe choice.
  *
  * `api_auth` is force-enabled whenever this is true; [`RecordingConfig::from_settings`]
@@ -2818,7 +2818,7 @@ autoUpdate?: boolean;
  */
 autoUpdatePipes?: boolean;
 /**
- * Use screenpipe cloud for AI-powered features like suggestions.
+ * Use daimonion cloud for AI-powered features like suggestions.
  * Better quality but sends activity context to the cloud (zero data retention).
  */
 enhancedAI?: boolean;
@@ -2829,7 +2829,7 @@ enhancedAI?: boolean;
 overlayMode?: string;
 /**
  * Allow screen recording apps to capture the overlay.
- * Disabled by default so the overlay doesn't appear in screenpipe's own recordings.
+ * Disabled by default so the overlay doesn't appear in daimonion's own recordings.
  */
 showOverlayInScreenRecording?: boolean;
 /**

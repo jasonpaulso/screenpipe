@@ -35,7 +35,7 @@ export function DisplaySection() {
   const { toast } = useToast();
   const { isMac, isWindows } = usePlatform();
   // Guards the Disable-Timeline toggle against double-invoke (rapid toggle /
-  // re-render) so we never fire two overlapping screenpipe restarts.
+  // re-render) so we never fire two overlapping daimonion restarts.
   const timelineRestartingRef = React.useRef(false);
 
   const handleSettingsChange = (newSettings: Partial<Settings>) => {
@@ -138,7 +138,7 @@ export function DisplaySection() {
         {/* Disable Timeline / rewind. Gates timeline-only backend work
             (hot-cache warm-up + frame/audio buffering) and the native macOS
             Live Text overlay. Lives in Display next to Timeline Mode, but
-            unlike the other display toggles it needs a full screenpipe restart
+            unlike the other display toggles it needs a full daimonion restart
             to take effect, so the handler restarts the server inline. */}
         <Card className="border-border bg-card">
           <CardContent className="px-3 py-2.5">
@@ -148,7 +148,7 @@ export function DisplaySection() {
                 <div>
                   <h3 className="text-sm font-medium text-foreground flex items-center gap-1.5">
                     Disable Timeline
-                    <HelpTooltip text="Turn off the timeline / rewind feature. Skips the in-memory hot frame cache (warm-up + per-frame/audio buffering) that only the timeline uses, and disables the native macOS Live Text overlay that can otherwise leak a selection layer over other windows (e.g. the chat input) and block typing. Restarts screenpipe to apply." />
+                    <HelpTooltip text="Turn off the timeline / rewind feature. Skips the in-memory hot frame cache (warm-up + per-frame/audio buffering) that only the timeline uses, and disables the native macOS Live Text overlay that can otherwise leak a selection layer over other windows (e.g. the chat input) and block typing. Restarts daimonion to apply." />
                   </h3>
                   <p className="text-xs text-muted-foreground">Hide rewind and skip its background work</p>
                 </div>
@@ -165,7 +165,7 @@ export function DisplaySection() {
                     // Persist first (awaited) so the backend reads the new value
                     // on restart and the shortcut-reminder guard sees it.
                     await updateSettings({ disableTimeline: checked });
-                    // The screenpipe shortcut only opens the timeline, so its
+                    // The daimonion shortcut only opens the timeline, so its
                     // reminder overlay is meaningless once the timeline is off —
                     // tear it down on disable, restore it on re-enable.
                     try {
@@ -177,19 +177,19 @@ export function DisplaySection() {
                     } catch {}
                     // disableTimeline gates timeline-only backend work (hot-cache
                     // warm-up + frame/audio buffering) wired at server startup, so
-                    // it needs a full screenpipe restart to take effect.
+                    // it needs a full daimonion restart to take effect.
                     try {
                       await commands.stopScreenpipe();
                       await new Promise((r) => setTimeout(r, 500));
                       await commands.spawnScreenpipe(null);
                       toast({
                         title: checked ? "timeline disabled" : "timeline enabled",
-                        description: "screenpipe restarted to apply the change.",
+                        description: "daimonion restarted to apply the change.",
                       });
                     } catch (e) {
                       toast({
-                        title: "failed to restart screenpipe",
-                        description: "restart screenpipe manually to apply the change.",
+                        title: "failed to restart daimonion",
+                        description: "restart daimonion manually to apply the change.",
                         variant: "destructive",
                       });
                     }
@@ -304,7 +304,7 @@ export function DisplaySection() {
                 <div>
                   <h3 className="text-sm font-medium text-foreground flex items-center gap-1.5">
                     Show Overlay in Screen Recording
-                    <HelpTooltip text="When enabled, the screenpipe overlay will be visible in screen recordings and screenshots made by other apps like OBS or Screen Studio." />
+                    <HelpTooltip text="When enabled, the daimonion overlay will be visible in screen recordings and screenshots made by other apps like OBS or Screen Studio." />
                   </h3>
                   <p className="text-xs text-muted-foreground">Let OBS, Screen Studio capture the overlay</p>
                 </div>
@@ -370,7 +370,7 @@ export function DisplaySection() {
                   <div>
                     <h3 className="text-sm font-medium text-foreground flex items-center gap-1.5">
                       Minimize to System Tray on Close
-                      <HelpTooltip text="When enabled, clicking the X on the Home window hides it and removes it from the Windows taskbar. screenpipe keeps running in the system tray — click the tray icon to bring the window back." />
+                      <HelpTooltip text="When enabled, clicking the X on the Home window hides it and removes it from the Windows taskbar. daimonion keeps running in the system tray — click the tray icon to bring the window back." />
                     </h3>
                     <p className="text-xs text-muted-foreground">
                       Keep running in the tray when the window is closed
@@ -386,7 +386,7 @@ export function DisplaySection() {
                         ? "Close button will hide to system tray"
                         : "Close button will minimize to taskbar",
                       description: checked
-                        ? "Click the tray icon to bring screenpipe back."
+                        ? "Click the tray icon to bring daimonion back."
                         : undefined,
                     });
                   }}
@@ -396,7 +396,7 @@ export function DisplaySection() {
           </Card>
         )}
 
-        {/* Shortcut reminder advertises the screenpipe shortcut, which only
+        {/* Shortcut reminder advertises the daimonion shortcut, which only
             opens the timeline — hide the whole section when the timeline is off. */}
         {!(settings?.disableTimeline ?? false) && (
         <>
@@ -407,7 +407,7 @@ export function DisplaySection() {
                 <Monitor className="h-4 w-4 text-muted-foreground shrink-0" />
                 <div>
                   <h3 className="text-sm font-medium text-foreground">Show Shortcut Reminder</h3>
-                  <p className="text-xs text-muted-foreground">Overlay showing the screenpipe shortcut</p>
+                  <p className="text-xs text-muted-foreground">Overlay showing the daimonion shortcut</p>
                 </div>
               </div>
               <Switch

@@ -4579,7 +4579,7 @@ export function StandaloneChat({
   const buildProviderConfig = useCallback((preset?: AIPreset | null) => {
     const p = preset || activePreset;
     if (!p) return null;
-    // Combine the screenpipe search instructions with the user's preset prompt.
+    // Combine the daimonion search instructions with the user's preset prompt.
     // This is passed via --append-system-prompt to Pi, enabling Anthropic prompt
     // caching (90% input cost reduction on subsequent messages).
     const presetPrompt = p.prompt || "";

@@ -270,7 +270,7 @@ describe("round-trip: disable then enable", () => {
     {
       name: "pipe with connections and preset",
       input:
-        "---\nschedule: '*/30 15-23,0-3 * * *'\nenabled: true\npreset:\n  - screenpipe-cloud\nconnections:\n  - obsidian\nhistory: false\npermissions:\n---\n\nSync screenpipe activity to an Obsidian vault",
+        "---\nschedule: '*/30 15-23,0-3 * * *'\nenabled: true\npreset:\n  - screenpipe-cloud\nconnections:\n  - obsidian\nhistory: false\npermissions:\n---\n\nSync daimonion activity to an Obsidian vault",
     },
     {
       name: "pipe with empty permissions block",
@@ -364,7 +364,7 @@ history: false
 permissions:
 ---
 
-Sync screenpipe activity to an Obsidian vault`;
+Sync daimonion activity to an Obsidian vault`;
 
     const disabled = toggleNotificationInContent(input, false);
     expect(isNotificationsDenied(disabled)).toBe(true);
@@ -376,7 +376,7 @@ Sync screenpipe activity to an Obsidian vault`;
     expect(isNotificationsDenied(reenabled)).toBe(false);
     expect(reenabled).not.toContain("deny:");
     expect(reenabled).toContain("schedule:");
-    expect(reenabled).toContain("Sync screenpipe activity");
+    expect(reenabled).toContain("Sync daimonion activity");
   });
 });
 

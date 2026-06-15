@@ -941,7 +941,7 @@ export function BrowserSidebar({
                   </div>
                   <p className="text-xs leading-5 text-muted-foreground">
                     {sessionAccessRequest.alreadyGranted
-                      ? "Screenpipe is about to copy browser session cookies. macOS may ask for browser Safe Storage access next."
+                      ? "Daimonion is about to copy browser session cookies. macOS may ask for browser Safe Storage access next."
                       : "ScreenPipe can use your browser sessions so the agent opens sites already signed in. This applies to all sites. It does not read saved passwords."}
                   </p>
                   {isMac && !sessionAccessRequest.alreadyGranted && (
@@ -999,11 +999,11 @@ export function BrowserSidebar({
                           ? v20CookieBlock.sources.join(", ")
                           : "Your browser"}{" "}
                         is running and holds an exclusive lock on its cookie
-                        database. Screenpipe cannot read it while the browser is
+                        database. Daimonion cannot read it while the browser is
                         open.
                       </p>
                       <p className="mt-2 text-xs leading-5 text-muted-foreground">
-                        Connect the Screenpipe Browser Bridge extension to share
+                        Connect the Daimonion Browser Bridge extension to share
                         this login directly — no passwords, no closing your
                         browser.
                       </p>
@@ -1012,11 +1012,11 @@ export function BrowserSidebar({
                     <>
                       <p className="text-xs leading-5 text-muted-foreground">
                         Chrome or Edge has matching session cookies, but Windows
-                        app-bound encryption prevents Screenpipe from reusing
+                        app-bound encryption prevents Daimonion from reusing
                         them directly.
                       </p>
                       <p className="mt-2 text-xs leading-5 text-muted-foreground">
-                        Connect the Screenpipe Browser Bridge extension to reuse
+                        Connect the Daimonion Browser Bridge extension to reuse
                         this login without sharing passwords.
                       </p>
                       <div className="mt-3 text-[11px] leading-4 text-muted-foreground">

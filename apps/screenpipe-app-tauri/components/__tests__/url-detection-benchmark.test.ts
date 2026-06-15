@@ -1,7 +1,7 @@
 /**
  * URL Detection Benchmark
  *
- * Measures accuracy of URL detection from real screenpipe OCR data.
+ * Measures accuracy of URL detection from real daimonion OCR data.
  * Uses 200 random frames from the local database with ground-truth labels.
  *
  * Metrics:

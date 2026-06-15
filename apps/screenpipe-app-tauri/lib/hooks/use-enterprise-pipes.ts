@@ -180,7 +180,7 @@ async function disableUnlistedManagedPipes(
 }
 
 /**
- * Gather pipe execution statuses from the local screenpipe API.
+ * Gather pipe execution statuses from the local daimonion API.
  * Returns only enterprise-managed pipes.
  */
 export async function gatherPipeStatuses(): Promise<PipeStatus[]> {

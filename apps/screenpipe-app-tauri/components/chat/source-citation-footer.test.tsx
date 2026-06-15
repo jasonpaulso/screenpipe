@@ -53,7 +53,7 @@ describe("SourceCitationFooter", () => {
             id: "screenpipe-connections-perplexity-proxy-chat-completions",
             kind: "connector",
             title: "Perplexity search",
-            subtitle: "external web context via Screenpipe connection",
+            subtitle: "external web context via Daimonion connection",
           },
         ]}
       />
@@ -64,7 +64,7 @@ describe("SourceCitationFooter", () => {
     expect(container.querySelector('img[src="/images/perplexity.svg"]')).toBeTruthy();
   });
 
-  it("uses branded icons for other connector and screenpipe sources", () => {
+  it("uses branded icons for other connector and daimonion sources", () => {
     const { container } = render(
       <SourceCitationFooter
         citations={[
@@ -76,7 +76,7 @@ describe("SourceCitationFooter", () => {
           {
             id: "screenpipe-memories-jill-benaglio",
             kind: "screenpipe",
-            title: "Screenpipe memories",
+            title: "Daimonion memories",
             subtitle: "memory query: Jill Benaglio",
           },
         ]}

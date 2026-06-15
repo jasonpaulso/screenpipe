@@ -57,7 +57,7 @@ function EntitlementShell({
       <div className="w-full max-w-[440px] border border-border bg-background px-8 py-7 shadow-sm">
         <div className="mb-7">
           <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-muted-foreground">
-            screenpipe
+            daimonion
           </p>
           <h1 className="mt-3 text-2xl font-semibold tracking-tight">{title}</h1>
           <p className="mt-3 text-sm leading-6 text-muted-foreground">{description}</p>
@@ -106,7 +106,7 @@ export function AppEntitlementGate({ children }: { children: React.ReactNode }) 
     if (stoppedForGateRef.current) return;
     stoppedForGateRef.current = true;
     commands.stopScreenpipe().catch((err) => {
-      console.warn("failed to stop screenpipe after entitlement gate:", err);
+      console.warn("failed to stop daimonion after entitlement gate:", err);
     });
   }, [devBypass, isEntitled, isSettingsLoaded]);
 
@@ -212,7 +212,7 @@ export function AppEntitlementGate({ children }: { children: React.ReactNode }) 
         await new Promise((r) => setTimeout(r, 500));
         await commands.spawnScreenpipe(null);
       } catch (err) {
-        console.warn("failed to restart screenpipe after entitlement restored:", err);
+        console.warn("failed to restart daimonion after entitlement restored:", err);
       } finally {
         resumingRef.current = false;
       }
@@ -252,7 +252,7 @@ export function AppEntitlementGate({ children }: { children: React.ReactNode }) 
     return (
       <EntitlementShell
         title="loading"
-        description="checking local settings before starting screenpipe."
+        description="checking local settings before starting daimonion."
       >
         <div className="h-10 w-full animate-pulse bg-muted" />
       </EntitlementShell>
@@ -267,7 +267,7 @@ export function AppEntitlementGate({ children }: { children: React.ReactNode }) 
     return (
       <EntitlementShell
         title="sign in required"
-        description="screenpipe now needs an account with an active plan before recording starts."
+        description="daimonion now needs an account with an active plan before recording starts."
       >
         <div className="flex flex-col gap-3">
           <Button onClick={openLogin} className="w-full gap-2">
@@ -289,7 +289,7 @@ export function AppEntitlementGate({ children }: { children: React.ReactNode }) 
       title={needsRefresh ? "refresh access" : "subscription required"}
       description={
         needsRefresh
-          ? `${email} has saved app access, but screenpipe needs to verify it again before recording starts.`
+          ? `${email} has saved app access, but daimonion needs to verify it again before recording starts.`
           : `${email} is signed in, but ${planLabel} does not include active app access.`
       }
     >

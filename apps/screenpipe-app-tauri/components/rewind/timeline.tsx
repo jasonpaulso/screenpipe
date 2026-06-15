@@ -1169,7 +1169,7 @@ export default function Timeline({ embedded = false }: { embedded?: boolean }) {
 										Building Your Memory
 									</h3>
 									<p className="text-muted-foreground mb-6 leading-relaxed">
-										Screenpipe is recording your screen activity. Your timeline will appear here as frames are captured.
+										Daimonion is recording your screen activity. Your timeline will appear here as frames are captured.
 									</p>
 
 									{/* Friendly suggestion */}
@@ -1236,7 +1236,7 @@ export default function Timeline({ embedded = false }: { embedded?: boolean }) {
 				{(() => {
 					const browserUrl = currentFrame?.devices?.[0]?.metadata?.browser_url;
 					if (!browserUrl) return null;
-					// browser_url from screenpipe often lacks a protocol (e.g. "github.com/foo");
+					// browser_url from daimonion often lacks a protocol (e.g. "github.com/foo");
 					// both tauri shell.open and window.open reject/misroute schemeless inputs.
 					const openableUrl = browserUrl.includes("://") ? browserUrl : `https://${browserUrl}`;
 					const isHttps = openableUrl.startsWith("https://");
@@ -1335,8 +1335,8 @@ export default function Timeline({ embedded = false }: { embedded?: boolean }) {
 								<h3 className="font-medium text-destructive">Connection Error</h3>
 							</div>
 							<p className="text-sm text-foreground">
-								Unable to reach your screenpipe data. Please verify that the
-								screenpipe turned on.
+								Unable to reach your daimonion data. Please verify that the
+								daimonion turned on.
 							</p>
 							<button
 								onClick={handleRefresh}

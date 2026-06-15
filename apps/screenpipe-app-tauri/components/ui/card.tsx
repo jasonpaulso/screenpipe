@@ -9,7 +9,7 @@ const Card = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      // Screenpipe Brand: 1px border, sharp corners, no shadow
+      // Daimonion Brand: 1px border, sharp corners, no shadow
       "border border-border bg-card text-card-foreground",
       className
     )}
@@ -37,7 +37,7 @@ const CardTitle = React.forwardRef<
   <h3
     ref={ref}
     className={cn(
-      // Screenpipe Brand: Monospace, lowercase
+      // Daimonion Brand: Monospace, lowercase
       "text-xl font-mono font-medium leading-none tracking-tight lowercase",
       className
     )}

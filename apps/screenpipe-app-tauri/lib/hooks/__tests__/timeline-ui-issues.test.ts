@@ -166,7 +166,7 @@ describe("Image Error State Handling", () => {
         suggestion = "The server encountered an error. The recording may be corrupted.";
       } else if (httpStatus === 0) {
         errorType = "network";
-        suggestion = "Check your connection to the screenpipe server.";
+        suggestion = "Check your connection to the daimonion server.";
       }
 
       return {

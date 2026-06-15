@@ -508,7 +508,7 @@ export default function NotificationPanelPage() {
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/32x32.png" alt="" width={14} height={14} style={{ borderRadius: "3px" }} />
-            screenpipe
+            daimonion
           </span>
           <button
             onClick={() => hide(false)}
@@ -785,17 +785,17 @@ export default function NotificationPanelPage() {
   );
 }
 
-const PIPE_SUGGESTION_PROMPT = `you are a screenpipe automation advisor. the user wants ideas for pipes (scheduled AI agents) they can create based on their actual workflow.
+const PIPE_SUGGESTION_PROMPT = `you are a daimonion automation advisor. the user wants ideas for pipes (scheduled AI agents) they can create based on their actual workflow.
 
-## what is screenpipe?
+## what is daimonion?
 
-screenpipe is a desktop app that continuously captures screen text (via accessibility APIs) and audio (transcription).
+daimonion is a desktop app that continuously captures screen text (via accessibility APIs) and audio (transcription).
 it runs a local API at http://localhost:3030 that lets you query everything you've seen, said, or heard.
 
 ## what is a pipe?
 
 a pipe is a scheduled AI agent defined as a single markdown file: ~/.daimonion/pipes/{name}/pipe.md
-every N minutes, screenpipe runs a coding agent with the pipe's prompt.
+every N minutes, daimonion runs a coding agent with the pipe's prompt.
 the agent can query screen data, write files, call external APIs, send notifications, etc.
 
 ## your task

@@ -297,7 +297,7 @@ export function scrollToSettingsField(label: string, root: ParentNode = document
     }
 
     // Scroll the nearest card/row wrapper into view, centered, so the field
-    // isn't jammed against the top edge. Screenpipe Cards render with a `border`
+    // isn't jammed against the top edge. Daimonion Cards render with a `border`
     // + `bg-card` (sharp corners, no rounded class), so we climb to the nearest
     // bordered card if present, else use the heading itself.
     const scrollTarget =

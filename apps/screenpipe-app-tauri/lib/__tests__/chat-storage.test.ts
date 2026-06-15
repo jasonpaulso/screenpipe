@@ -361,13 +361,13 @@ describe("listConversations duplicate collapsing", () => {
     putConversation("morning", {
       updatedAt: 1_700_000_000_000,
       createdAt: 1_700_000_000_000,
-      content: "search screenpipe for what happened during this meeting",
+      content: "search daimonion for what happened during this meeting",
       assistantContent: "here is what I found",
     });
     putConversation("evening", {
       updatedAt: 1_700_006_400_000,
       createdAt: 1_700_006_400_000, // ~1.7h later, well past the dedup window
-      content: "search screenpipe for what happened during this meeting",
+      content: "search daimonion for what happened during this meeting",
       assistantContent: "here is what I found",
     });
 

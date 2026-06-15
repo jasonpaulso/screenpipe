@@ -423,7 +423,7 @@ describe("parsePipeNdjsonToMessages", () => {
       '{"type":"message_update","assistantMessageEvent":{"type":"toolcall_delta","contentIndex":0,"delta":"{\\"path\\":\\"/Users/test/.daimonion/pipes/focus-watch/.pi/skills/screenpipe-api/SKILL.md\\"}","partial":{}}}',
       '{"type":"message_update","assistantMessageEvent":{"type":"toolcall_end","contentIndex":0,"toolCall":{"type":"toolCall","id":"call_01","name":"read","arguments":{"path":"/Users/test/.daimonion/pipes/focus-watch/.pi/skills/screenpipe-api/SKILL.md"}},"partial":{}}}',
       '{"type":"message_end","message":{"role":"assistant","content":[{"type":"toolCall","id":"call_01","name":"read","arguments":{}}],"stopReason":"stop"}}',
-      '{"type":"tool_execution_end","toolCallId":"call_01","toolName":"read","result":{"content":[{"type":"text","text":"# Screenpipe API Skill\\n\\nUse curl to query..."}]},"isError":false}',
+      '{"type":"tool_execution_end","toolCallId":"call_01","toolName":"read","result":{"content":[{"type":"text","text":"# Daimonion API Skill\\n\\nUse curl to query..."}]},"isError":false}',
       '{"type":"turn_end","message":{"role":"assistant","content":[],"stopReason":"stop"}}',
       '{"type":"turn_start"}',
       '{"type":"message_start","message":{"role":"assistant","content":[],"stopReason":"stop"}}',

@@ -515,7 +515,7 @@ function markdownImageDataUrlRegex(): RegExp {
  *   - the in-app "summarize with AI" button (chat path) — passes the known
  *     meeting id and asks for the speaker/connector follow-up
  *   - the bundled meeting-summary pipe (background event-triggered path) —
- *     keep the wording in sync with crates/screenpipe-core/assets/pipes/meeting-summary/pipe.md
+ *     keep the wording in sync with crates/daimonion-core/assets/pipes/meeting-summary/pipe.md
  *
  * The agent decides whether to PATCH. Empty transcript / nothing worth saving
  * → say so out loud, skip the PATCH. Useful summary → append under "## Summary"
@@ -526,7 +526,7 @@ export function buildMeetingSummarizeInstructions(
   options?: { followUpAsk?: boolean },
 ): string {
   const lines = [
-    `search screenpipe for what happened during this meeting and summarize it: key topics, decisions, action items.`,
+    `search daimonion for what happened during this meeting and summarize it: key topics, decisions, action items.`,
     ``,
     `meeting id: ${meetingId}`,
     `primary transcript source: GET "http://localhost:3030/meetings/${meetingId}/transcript" and use each row's "transcript", "speakerName", "capturedAt", and "source" fields. sort rows by capturedAt before summarizing.`,

@@ -10,7 +10,7 @@ import React, { useState } from "react";
  */
 export function extractDomain(url: string): string | null {
 	try {
-		// Add protocol if missing — browser_url from screenpipe often lacks it
+		// Add protocol if missing — browser_url from daimonion often lacks it
 		const normalized = url.includes("://") ? url : `https://${url}`;
 		const hostname = new URL(normalized).hostname;
 		return hostname.replace(/^www\./, "") || null;

@@ -372,7 +372,7 @@ describe("pi-event-router: agent_terminated", () => {
           id: "user-1",
           role: "user",
           content:
-            "search screenpipe for what happened during this meeting and summarize it",
+            "search daimonion for what happened during this meeting and summarize it",
           displayContent: "Summarize meeting: Design Review",
           timestamp: 1_234,
         },

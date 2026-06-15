@@ -137,7 +137,7 @@ export interface AppWindowNode {
 const TREE_CACHE: { data?: AppWindowNode[]; ts?: number } = {};
 
 /**
- * Fetch apps + their top windows from local screenpipe, grouped for the
+ * Fetch apps + their top windows from local daimonion, grouped for the
  * Browse picker. Returns one node per app with up to 20 windows.
  *
  * Why a separate hook: the existing `useSqlAutocomplete("window")` flattens
