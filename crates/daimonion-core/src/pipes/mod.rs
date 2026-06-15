@@ -5389,7 +5389,11 @@ mod tests {
         // slot (within CRON_GRACE_WINDOW). Anchor to the current hour:minute
         // so the slot is "right now" regardless of when the test runs.
         let now = Utc::now();
-        let cron_str = format!("0 {} {} * * * *", now.minute(), now.hour());
+        // should_run evaluates cron in Local time, so anchor the slot to the
+        // local hour:minute — anchoring to UTC lands the slot tz-offset hours
+        // away and outside the grace window on any non-UTC machine.
+        let local = chrono::Local::now();
+        let cron_str = format!("0 {} {} * * * *", local.minute(), local.hour());
         let yesterday = now - chrono::Duration::hours(25);
         // Last run was yesterday, current minute's slot just passed → fire.
         assert!(should_run(&cron_str, yesterday));
@@ -5438,7 +5442,9 @@ mod tests {
         // Slot was hit moments ago (typical: scheduler tick lag, brief sleep).
         // Within grace → fire even though last_run is far in the past.
         let now = Utc::now();
-        let cron_str = format!("0 {} {} * * * *", now.minute(), now.hour());
+        // Anchor the slot to Local time (should_run evaluates in Local).
+        let local = chrono::Local::now();
+        let cron_str = format!("0 {} {} * * * *", local.minute(), local.hour());
         let yesterday = now - chrono::Duration::hours(25);
         assert!(should_run(&cron_str, yesterday));
     }
@@ -5451,8 +5457,9 @@ mod tests {
         // the app started at 7:12am after missing the 7am slot.
         use chrono::Timelike;
         let now = Utc::now();
-        // Build a cron expression whose last slot was ~12 minutes ago
-        let slot_time = now - chrono::Duration::minutes(12);
+        // Build a cron expression whose last slot was ~12 minutes ago, anchored
+        // to Local time (should_run evaluates in Local, not UTC).
+        let slot_time = chrono::Local::now() - chrono::Duration::minutes(12);
         let cron_str = format!("0 {} {} * * * *", slot_time.minute(), slot_time.hour());
         let last_run = now - chrono::Duration::hours(25); // ran yesterday
         assert!(
